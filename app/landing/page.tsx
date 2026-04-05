@@ -526,11 +526,34 @@ export default function LandingPage() {
               <motion.div variants={fadeUp} custom={2} className="p-6 rounded-2xl bg-white border border-gray-100 hover:shadow-lg hover:border-green-200 transition-all duration-300">
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
-                    <Sparkles className="w-5 h-5 text-green-600" />
+                    <ArrowRight className="w-5 h-5 text-green-600" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900">Templates personnalisés</h3>
-                    <p className="mt-1 text-sm text-gray-500 leading-relaxed">Créez des messages avec images, vidéos et boutons d'action. Soumettez-les à Meta et envoyez en un clic à toute votre base.</p>
+                    <h3 className="font-bold text-gray-900">Boutons cliquables vers n'importe quel lien</h3>
+                    <p className="mt-1 text-sm text-gray-500 leading-relaxed">Chaque message peut contenir des boutons qui redirigent vos clients exactement où vous voulez.</p>
+                    {/* Examples */}
+                    <div className="mt-3 space-y-2">
+                      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-50/80 text-xs">
+                        <span className="text-green-600 font-bold">Restaurant</span>
+                        <span className="text-gray-400">—</span>
+                        <span className="text-gray-600">"Voir le menu du jour" → lien vers votre carte en ligne</span>
+                      </div>
+                      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-50/80 text-xs">
+                        <span className="text-green-600 font-bold">Hôtel</span>
+                        <span className="text-gray-400">—</span>
+                        <span className="text-gray-600">"Réserver maintenant" → lien vers votre page de réservation</span>
+                      </div>
+                      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-50/80 text-xs">
+                        <span className="text-green-600 font-bold">Boutique</span>
+                        <span className="text-gray-400">—</span>
+                        <span className="text-gray-600">"Voir la promo" → lien vers votre page Instagram ou site web</span>
+                      </div>
+                      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-50/80 text-xs">
+                        <span className="text-green-600 font-bold">Salon</span>
+                        <span className="text-gray-400">—</span>
+                        <span className="text-gray-600">"Prendre RDV" → lien vers votre agenda en ligne</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -541,8 +564,8 @@ export default function LandingPage() {
                     <TrendingUp className="w-5 h-5 text-green-600" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900">Fidélisation intelligente</h3>
-                    <p className="mt-1 text-sm text-gray-500 leading-relaxed">Promotions ciblées, rappels de points, offres anniversaire — relancez vos clients au bon moment avec le bon message.</p>
+                    <h3 className="font-bold text-gray-900">Fidélisation plus pertinente</h3>
+                    <p className="mt-1 text-sm text-gray-500 leading-relaxed">Contrairement aux pubs Facebook ou Google qui ciblent des inconnus, vos campagnes WhatsApp touchent des clients qui ont déjà franchi votre porte. Résultat : un coût par conversion 5× plus bas.</p>
                   </div>
                 </div>
               </motion.div>
@@ -550,11 +573,23 @@ export default function LandingPage() {
               <motion.div variants={fadeUp} custom={4} className="p-6 rounded-2xl bg-white border border-gray-100 hover:shadow-lg hover:border-green-200 transition-all duration-300">
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
+                    <Sparkles className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900">Messages riches : texte, image, vidéo</h3>
+                    <p className="mt-1 text-sm text-gray-500 leading-relaxed">Créez des templates avec photo de votre plat du jour, vidéo de votre nouvelle collection, ou simple texte promotionnel. Ajoutez jusqu'à 3 boutons d'action par message.</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div variants={fadeUp} custom={5} className="p-6 rounded-2xl bg-white border border-gray-100 hover:shadow-lg hover:border-green-200 transition-all duration-300">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
                     <BarChart3 className="w-5 h-5 text-green-600" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900">Rapports en temps réel</h3>
-                    <p className="mt-1 text-sm text-gray-500 leading-relaxed">Suivez la délivrance, l'ouverture et les clics de chaque campagne. Optimisez vos messages pour un ROI maximal.</p>
+                    <h3 className="font-bold text-gray-900">Rapports de délivrance et clics</h3>
+                    <p className="mt-1 text-sm text-gray-500 leading-relaxed">Suivez en temps réel combien de messages sont délivrés, lus, et combien de clients ont cliqué sur vos boutons. Optimisez chaque campagne.</p>
                   </div>
                 </div>
               </motion.div>
