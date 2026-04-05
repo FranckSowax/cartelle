@@ -11,12 +11,11 @@ import { Card } from '@/components/ui/card';
 import { Download, Copy, Share2, QrCode, Printer, ArrowRight, CheckCircle2 } from 'lucide-react';
 import QRCode from 'qrcode';
 
+/**
+ * Always use window.location.origin for QR codes.
+ * process.env.NEXT_PUBLIC_APP_URL is baked at build time and may contain localhost.
+ */
 function getBaseUrl() {
-  // NEXT_PUBLIC_APP_URL is baked at build time
-  if (process.env.NEXT_PUBLIC_APP_URL && !process.env.NEXT_PUBLIC_APP_URL.includes('localhost')) {
-    return process.env.NEXT_PUBLIC_APP_URL;
-  }
-  // Fallback: use current origin (works in production)
   if (typeof window !== 'undefined') {
     return window.location.origin;
   }
