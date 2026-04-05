@@ -323,11 +323,28 @@ export async function POST(request: NextRequest) {
       headerText = businessName;
     }
 
-    // 13. Try sending interactive message with URL button(s)
+    // 13. Build CTA buttons for Whapi (call_to_action format with URL)
+    const ctaButtons = [
+      {
+        type: 'url',
+        title: spinButtonText.substring(0, 25),
+        url: spinUrl,
+      }
+    ];
+
+    if (cardUrl) {
+      ctaButtons.push({
+        type: 'url',
+        title: cardButtonText.substring(0, 25),
+        url: cardUrl,
+      });
+    }
+
     const interactivePayload = {
       to: formattedPhone,
-      type: 'button',
+      type: 'cta_url',
       header: {
+        type: 'text',
         text: headerText.substring(0, 60)
       },
       body: {
@@ -337,11 +354,15 @@ export async function POST(request: NextRequest) {
         text: 'Cartelle'
       },
       action: {
-        buttons
+        name: 'cta_url',
+        parameters: {
+          display_text: spinButtonText.substring(0, 25),
+          url: spinUrl,
+        }
       }
     };
 
-    console.log('[WHATSAPP SEND] Sending with', buttons.length, 'button(s), isNewClient:', isNewClient);
+    console.log('[WHATSAPP SEND] Sending CTA URL button, spinUrl:', spinUrl, '| cardUrl:', cardUrl);
 
     let whapiResponse = await fetch(WHAPI_INTERACTIVE_URL, {
       method: 'POST',
@@ -352,30 +373,28 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify(interactivePayload),
     });
 
-    // 14. If interactive message fails, fallback to text message
+    // 14. If interactive fails, send text message with clickable URLs
     if (!whapiResponse.ok) {
       const errorText = await whapiResponse.text();
       console.error('Interactive message failed, trying text fallback:', whapiResponse.status, errorText);
 
-      // Prepare fallback text message with header
       let textMessage = `*${headerText}*
 
 ${bodyText}
 
-👉 ${spinButtonText}
+🎰 *${spinButtonText}*
 ${spinUrl}`;
 
-      // Add card link if available
       if (cardUrl) {
         textMessage += `
 
-👉 ${cardButtonText}
+🎁 *${cardButtonText}*
 ${cardUrl}`;
       }
 
       textMessage += `
 
-Cartelle`;
+_Cartelle_`;
 
       whapiResponse = await fetch(WHAPI_TEXT_URL, {
         method: 'POST',
