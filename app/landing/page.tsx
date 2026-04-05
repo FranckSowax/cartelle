@@ -226,7 +226,7 @@ export default function LandingPage() {
 
           <div className="hidden md:flex items-center gap-8">
             {NAV.map((l) => (
-              <a key={l.href} href={l.href} className="text-sm font-medium text-gray-600 transition-colors hover:text-teal-600">{l.label}</a>
+              <a key={l.href} href={l.href} className="nav-link-underline text-sm font-medium text-gray-600 transition-colors hover:text-teal-600">{l.label}</a>
             ))}
           </div>
 
@@ -326,12 +326,12 @@ export default function LandingPage() {
                 transition={{ duration: 0.7, delay: 0.5 }}
                 className="mt-8 flex flex-wrap gap-4"
               >
-                <Link href="/auth/signup" className="group inline-flex items-center gap-2 px-7 py-4 rounded-2xl bg-gradient-to-r from-teal-600 to-emerald-500 text-white font-semibold text-base hover:shadow-2xl hover:shadow-teal-500/25 hover:-translate-y-0.5 transition-all">
+                <Link href="/auth/signup" className="animate-cta-glow group inline-flex items-center gap-2 px-7 py-4 rounded-2xl bg-gradient-to-r from-teal-600 to-emerald-500 text-white font-semibold text-base hover:shadow-2xl hover:shadow-teal-500/25 hover:-translate-y-0.5 hover:scale-[1.03] transition-all">
                   Créer mon compte gratuit
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
-                <Link href="/contact" className="inline-flex items-center gap-2 px-7 py-4 rounded-2xl border border-gray-200 text-gray-600 font-medium hover:border-teal-300 hover:text-teal-700 hover:bg-teal-50/50 transition-all">
-                  <Play className="w-4 h-4" />
+                <Link href="/contact" className="group inline-flex items-center gap-2 px-7 py-4 rounded-2xl border border-gray-200 text-gray-600 font-medium hover:border-teal-300 hover:text-teal-700 hover:bg-teal-50/50 transition-all">
+                  <Play className="w-4 h-4 group-hover:scale-110 transition-transform" />
                   Découvrir en 2 min
                 </Link>
               </motion.div>
@@ -355,23 +355,31 @@ export default function LandingPage() {
               transition={{ duration: 1, delay: 0.3, ease: EASE }}
               className="relative flex items-center justify-center"
             >
-              <img src="/hero-cartelle.png" alt="Cartelle — Roue, carte fidélité, QR code, WhatsApp" className="w-full max-w-lg lg:max-w-xl xl:max-w-2xl drop-shadow-2xl" />
+              <img src="/hero-cartelle.png" alt="Cartelle — Roue, carte fidélité, QR code, WhatsApp" className="w-full max-w-lg lg:max-w-xl xl:max-w-2xl drop-shadow-2xl animate-hero-float-product" />
             </motion.div>
           </div>
         </motion.div>
       </section>
 
       {/* ═══════════ LOGOS / SOCIAL PROOF BAR ═══════════ */}
-      <Reveal className="py-10 border-y border-gray-100 bg-gray-50/50">
-        <motion.div variants={fadeUp} className="max-w-5xl mx-auto px-5 text-center">
-          <p className="text-xs uppercase tracking-widest text-gray-400 font-semibold mb-6">Ils nous font confiance</p>
-          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-4">
-            {['Restaurant Le Baobab', 'Hôtel Akwa Palace', 'Boutique Afro Chic', 'Salon Beauté Divine', 'Café de la Paix', 'Market Express'].map((name, i) => (
-              <span key={i} className="text-gray-300 font-bold text-lg tracking-tight" style={{ fontFamily: 'Sora, sans-serif' }}>{name}</span>
+      <section className="py-10 border-y border-gray-100 bg-gray-50/50 overflow-hidden">
+        <p className="text-xs uppercase tracking-widest text-gray-400 font-semibold mb-6 text-center">Ils nous font confiance</p>
+        <div className="relative">
+          {/* Fade edges */}
+          <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-gray-50 to-transparent z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-gray-50 to-transparent z-10" />
+          {/* Scrolling logos */}
+          <div className="animate-scroll-logos flex items-center gap-16 whitespace-nowrap w-max">
+            {[...Array(2)].map((_, rep) => (
+              <div key={rep} className="flex items-center gap-16">
+                {['Restaurant Le Baobab', 'Hôtel Akwa Palace', 'Boutique Afro Chic', 'Salon Beauté Divine', 'Café de la Paix', 'Market Express', 'Boulangerie Étoile', 'Spa Zenith'].map((name, i) => (
+                  <span key={i} className="text-gray-300 hover:text-gray-400 font-bold text-lg tracking-tight transition-colors cursor-default" style={{ fontFamily: 'Sora, sans-serif' }}>{name}</span>
+                ))}
+              </div>
             ))}
           </div>
-        </motion.div>
-      </Reveal>
+        </div>
+      </section>
 
       {/* ═══════════ BÉNÉFICES (3 cards + stats) ═══════════ */}
       <Reveal id="benefices" className="py-24 px-5 sm:px-8">
@@ -743,11 +751,11 @@ export default function LandingPage() {
               </div>
 
               <div className="mt-10 flex flex-wrap justify-center gap-4">
-                <Link href="/auth/signup" className="group inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-teal-500 to-emerald-500 text-white font-semibold hover:shadow-2xl hover:shadow-teal-500/30 hover:-translate-y-0.5 transition-all">
+                <Link href="/auth/signup" className="animate-cta-glow group inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-teal-500 to-emerald-500 text-white font-semibold hover:shadow-2xl hover:shadow-teal-500/30 hover:-translate-y-0.5 hover:scale-[1.03] transition-all">
                   Créer mon compte gratuit
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
-                <Link href="/contact" className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl border border-white/15 text-white/80 font-medium hover:bg-white/[0.06] transition-all">
+                <Link href="/contact" className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl border border-white/15 text-white/80 font-medium hover:bg-white/[0.06] hover:scale-[1.02] transition-all">
                   Parler à un expert
                 </Link>
               </div>

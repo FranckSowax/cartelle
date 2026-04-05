@@ -153,7 +153,56 @@
   }
 }
 
-/* ===== STARSPIN CUSTOM ANIMATIONS ===== */
+/* ===== CARTELLE CUSTOM ANIMATIONS ===== */
+
+/* Infinite logo scroll */
+@keyframes scroll-logos {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-scroll-logos {
+  animation: scroll-logos 25s linear infinite;
+}
+.animate-scroll-logos:hover {
+  animation-play-state: paused;
+}
+
+/* CTA glow pulse */
+@keyframes cta-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.3), 0 0 60px rgba(16, 185, 129, 0.1); }
+  50% { box-shadow: 0 0 30px rgba(16, 185, 129, 0.5), 0 0 80px rgba(16, 185, 129, 0.2); }
+}
+.animate-cta-glow {
+  animation: cta-glow 2.5s ease-in-out infinite;
+}
+
+/* Hero float (for product image) */
+@keyframes hero-product-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-14px); }
+}
+.animate-hero-float-product {
+  animation: hero-product-float 5s ease-in-out infinite;
+}
+
+/* Nav link underline */
+.nav-link-underline {
+  position: relative;
+}
+.nav-link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #0d9488, #10b981);
+  border-radius: 1px;
+  transition: width 0.3s ease;
+}
+.nav-link-underline:hover::after {
+  width: 100%;
+}
 
 /* Hero Wheel Float Animation */
 @keyframes hero-float {
