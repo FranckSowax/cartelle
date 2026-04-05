@@ -26,7 +26,8 @@ import {
   Store,
   Award,
   UserCircle,
-  Shield
+  Shield,
+  Send
 } from 'lucide-react';
 
 interface DashboardLayoutProps {
@@ -58,14 +59,14 @@ export function DashboardLayout({ children, merchant }: DashboardLayoutProps) {
       ],
     },
     {
-      label: i18n.language === 'fr' ? 'Operations' : 'Operations',
+      label: 'Opérations',
       items: [
         { name: t('dashboard.nav.scanner'), href: '/dashboard/scan', icon: ScanLine },
         { name: t('dashboard.nav.qrCode'), href: '/dashboard/qr', icon: QrCode },
       ],
     },
     {
-      label: i18n.language === 'fr' ? 'Engagement' : 'Engagement',
+      label: 'Engagement',
       items: [
         { name: t('dashboard.nav.prizes'), href: '/dashboard/prizes', icon: Gift },
         { name: t('dashboard.nav.loyalty'), href: '/dashboard/loyalty', icon: Award },
@@ -74,14 +75,20 @@ export function DashboardLayout({ children, merchant }: DashboardLayoutProps) {
       ],
     },
     {
-      label: i18n.language === 'fr' ? 'Analyse' : 'Analytics',
+      label: 'Marketing',
+      items: [
+        { name: 'Campagnes WhatsApp', href: '/dashboard/marketing/whatsapp-campaign', icon: Send },
+      ],
+    },
+    {
+      label: 'Analyse',
       items: [
         { name: t('dashboard.nav.analytics'), href: '/dashboard/analytics', icon: BarChart3 },
         { name: t('dashboard.nav.customers'), href: '/dashboard/customers', icon: Users },
       ],
     },
     {
-      label: i18n.language === 'fr' ? 'Compte' : 'Account',
+      label: 'Compte',
       items: [
         { name: t('dashboard.nav.account'), href: '/dashboard/account', icon: Shield },
         { name: t('dashboard.nav.profile'), href: '/dashboard/profile', icon: UserCircle },
