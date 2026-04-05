@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -25,12 +25,22 @@ import {
   FlaskConical,
   Plus,
   X,
+  LayoutTemplate,
+  Wallet,
+  TrendingUp,
+  Eye,
 } from 'lucide-react';
 import { PhoneInputWithCountry } from '@/components/ui/PhoneInputWithCountry';
 
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
+
 interface WhatsAppCustomer {
-  user_token: string;
+  user_token?: string;
   phone: string;
+  name?: string;
+  source: 'feedback' | 'loyalty' | 'both';
   total_reviews: number;
   avg_rating: number;
   last_review: string;
@@ -43,9 +53,32 @@ interface SendResult {
   error?: string;
 }
 
-export default function SendCampaignPage() {
+// ---------------------------------------------------------------------------
+// Main Component
+// ---------------------------------------------------------------------------
+
+export default function SendCampaignPageWrapper() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-10 h-10 border-3 border-teal-600 border-t-transparent rounded-full animate-spin" /></div>}>
+      <SendCampaignPage />
+    </Suspense>
+  );
+}
+
+function SendCampaignPage() {
   const { t } = useTranslation();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Detect mode from URL params
+  const urlMode = searchParams.get('mode');
+  const templateId = searchParams.get('templateId');
+  const templateName = searchParams.get('templateName');
+  const templateLanguage = searchParams.get('templateLanguage');
+  const variablesJson = searchParams.get('variables');
+  const isTemplateMode = urlMode === 'template' && !!templateId;
+
+  const templateVariables = variablesJson ? JSON.parse(variablesJson) : {};
 
   const [merchant, setMerchant] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -54,7 +87,7 @@ export default function SendCampaignPage() {
   const [selectedCustomers, setSelectedCustomers] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Campaign data from URL params or localStorage
+  // Campaign data from localStorage (carousel mode)
   const [campaignData, setCampaignData] = useState<any>(null);
 
   // Sending state
@@ -62,12 +95,16 @@ export default function SendCampaignPage() {
   const [sendProgress, setSendProgress] = useState(0);
   const [sendResults, setSendResults] = useState<SendResult[]>([]);
   const [showResults, setShowResults] = useState(false);
+  const [campaignResultId, setCampaignResultId] = useState<string | null>(null);
 
   // Test send state
   const [showTestModal, setShowTestModal] = useState(false);
   const [testNumbers, setTestNumbers] = useState<string[]>(['']);
   const [isTestSending, setIsTestSending] = useState(false);
   const [testResults, setTestResults] = useState<SendResult[]>([]);
+
+  // Cost
+  const COST_PER_MESSAGE = 50; // FCFA
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,53 +122,138 @@ export default function SendCampaignPage() {
         .single();
       setMerchant(merchantData);
 
-      // Fetch WhatsApp customers
-      const { data: feedbackData } = await supabase
-        .from('feedback')
-        .select('*')
-        .eq('merchant_id', user.id)
-        .not('customer_phone', 'is', null)
-        .order('created_at', { ascending: false });
+      if (isTemplateMode) {
+        // ─── Template mode: fetch from BOTH feedback + loyalty_clients ───
+        await fetchAllRecipients(user.id);
+      } else {
+        // ─── Carousel mode: fetch from feedback only (existing) ────────
+        await fetchFeedbackCustomers(user.id);
+      }
 
-      // Group by customer phone
-      const customersMap = new Map<string, WhatsAppCustomer>();
-      feedbackData?.forEach((feedback) => {
-        if (!feedback.customer_phone) return;
-
-        const existing = customersMap.get(feedback.customer_phone);
-        if (!existing) {
-          customersMap.set(feedback.customer_phone, {
-            user_token: feedback.user_token,
-            phone: feedback.customer_phone,
-            total_reviews: 1,
-            avg_rating: feedback.rating,
-            last_review: feedback.created_at,
-            is_positive: feedback.is_positive,
-          });
-        } else {
-          existing.total_reviews += 1;
-          existing.avg_rating = (existing.avg_rating * (existing.total_reviews - 1) + feedback.rating) / existing.total_reviews;
-          if (new Date(feedback.created_at) > new Date(existing.last_review)) {
-            existing.last_review = feedback.created_at;
-          }
+      // Load carousel campaign data from localStorage (if not template mode)
+      if (!isTemplateMode) {
+        const savedCampaign = localStorage.getItem('whatsapp_campaign_draft');
+        if (savedCampaign) {
+          setCampaignData(JSON.parse(savedCampaign));
         }
-      });
-
-      const customersList = Array.from(customersMap.values());
-      setCustomers(customersList);
-      setFilteredCustomers(customersList);
-
-      // Load campaign data from localStorage
-      const savedCampaign = localStorage.getItem('whatsapp_campaign_draft');
-      if (savedCampaign) {
-        setCampaignData(JSON.parse(savedCampaign));
       }
 
       setLoading(false);
     };
 
     fetchData();
-  }, [router]);
+  }, [router, isTemplateMode]);
+
+  // ─── Fetch from feedback only (carousel legacy) ─────────────────────
+  const fetchFeedbackCustomers = async (userId: string) => {
+    const { data: feedbackData } = await supabase
+      .from('feedback')
+      .select('*')
+      .eq('merchant_id', userId)
+      .not('customer_phone', 'is', null)
+      .order('created_at', { ascending: false });
+
+    const customersMap = new Map<string, WhatsAppCustomer>();
+    feedbackData?.forEach((feedback) => {
+      if (!feedback.customer_phone) return;
+
+      const existing = customersMap.get(feedback.customer_phone);
+      if (!existing) {
+        customersMap.set(feedback.customer_phone, {
+          user_token: feedback.user_token,
+          phone: feedback.customer_phone,
+          source: 'feedback',
+          total_reviews: 1,
+          avg_rating: feedback.rating,
+          last_review: feedback.created_at,
+          is_positive: feedback.is_positive,
+        });
+      } else {
+        existing.total_reviews += 1;
+        existing.avg_rating = (existing.avg_rating * (existing.total_reviews - 1) + feedback.rating) / existing.total_reviews;
+        if (new Date(feedback.created_at) > new Date(existing.last_review)) {
+          existing.last_review = feedback.created_at;
+        }
+      }
+    });
+
+    const customersList = Array.from(customersMap.values());
+    setCustomers(customersList);
+    setFilteredCustomers(customersList);
+  };
+
+  // ─── Fetch from feedback + loyalty_clients (template mode) ──────────
+  const fetchAllRecipients = async (userId: string) => {
+    const customersMap = new Map<string, WhatsAppCustomer>();
+
+    // 1. Feedback customers
+    const { data: feedbackData } = await supabase
+      .from('feedback')
+      .select('*')
+      .eq('merchant_id', userId)
+      .not('customer_phone', 'is', null)
+      .order('created_at', { ascending: false });
+
+    feedbackData?.forEach((feedback) => {
+      if (!feedback.customer_phone) return;
+      const phone = feedback.customer_phone;
+
+      const existing = customersMap.get(phone);
+      if (!existing) {
+        customersMap.set(phone, {
+          user_token: feedback.user_token,
+          phone,
+          name: feedback.customer_name || undefined,
+          source: 'feedback',
+          total_reviews: 1,
+          avg_rating: feedback.rating,
+          last_review: feedback.created_at,
+          is_positive: feedback.is_positive,
+        });
+      } else {
+        existing.total_reviews += 1;
+        existing.avg_rating = (existing.avg_rating * (existing.total_reviews - 1) + feedback.rating) / existing.total_reviews;
+        if (new Date(feedback.created_at) > new Date(existing.last_review)) {
+          existing.last_review = feedback.created_at;
+        }
+      }
+    });
+
+    // 2. Loyalty clients
+    const { data: loyaltyData } = await supabase
+      .from('loyalty_clients')
+      .select('*')
+      .eq('merchant_id', userId)
+      .not('phone', 'is', null);
+
+    loyaltyData?.forEach((client) => {
+      if (!client.phone) return;
+      const phone = client.phone;
+
+      const existing = customersMap.get(phone);
+      if (!existing) {
+        customersMap.set(phone, {
+          phone,
+          name: client.name || client.first_name || undefined,
+          source: 'loyalty',
+          total_reviews: 0,
+          avg_rating: 0,
+          last_review: client.created_at || new Date().toISOString(),
+          is_positive: true,
+        });
+      } else {
+        // Already exists from feedback — mark as both
+        existing.source = 'both';
+        if (!existing.name && (client.name || client.first_name)) {
+          existing.name = client.name || client.first_name;
+        }
+      }
+    });
+
+    const customersList = Array.from(customersMap.values());
+    setCustomers(customersList);
+    setFilteredCustomers(customersList);
+  };
 
   // Filter customers based on search
   useEffect(() => {
@@ -140,7 +262,10 @@ export default function SendCampaignPage() {
     } else {
       const query = searchQuery.toLowerCase();
       setFilteredCustomers(
-        customers.filter(c => c.phone.includes(query))
+        customers.filter(c =>
+          c.phone.includes(query) ||
+          (c.name && c.name.toLowerCase().includes(query))
+        )
       );
     }
   }, [searchQuery, customers]);
@@ -169,10 +294,88 @@ export default function SendCampaignPage() {
     ));
   };
 
-  const sendCampaign = async () => {
-    if (!campaignData || selectedCustomers.size === 0) {
-      return;
+  // ─── Template campaign send ─────────────────────────────────────────
+  const sendTemplateCampaign = async () => {
+    if (!templateId || selectedCustomers.size === 0 || !merchant) return;
+
+    setIsSending(true);
+    setSendProgress(0);
+    setSendResults([]);
+    setShowResults(false);
+
+    const recipients = Array.from(selectedCustomers).map(phone => {
+      const customer = customers.find(c => c.phone === phone);
+      return { phone, name: customer?.name || '' };
+    });
+
+    try {
+      // Build template components from variables
+      const components: any[] = [];
+      const bodyParams = Object.entries(templateVariables)
+        .filter(([key]) => key.startsWith('BODY_'))
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([, val]) => ({ type: 'text', text: val || '' }));
+
+      if (bodyParams.length > 0) {
+        components.push({ type: 'body', parameters: bodyParams });
+      }
+
+      const headerParams = Object.entries(templateVariables)
+        .filter(([key]) => key.startsWith('HEADER_'))
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([, val]) => ({ type: 'text', text: val || '' }));
+
+      if (headerParams.length > 0) {
+        components.push({ type: 'header', parameters: headerParams });
+      }
+
+      const response = await fetch('/api/whatsapp/campaign/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          merchantId: merchant.id,
+          templateId,
+          recipients,
+          variables: { components },
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        const results: SendResult[] = [];
+        // Mark results based on API response
+        for (const r of recipients) {
+          // We don't have per-recipient info from the batch API, so approximate
+          results.push({ phone: r.phone, success: true });
+        }
+        // Adjust for failures
+        for (let i = 0; i < (data.failed || 0); i++) {
+          if (results[results.length - 1 - i]) {
+            results[results.length - 1 - i].success = false;
+            results[results.length - 1 - i].error = 'Echec envoi';
+          }
+        }
+
+        setSendResults(results);
+        setSendProgress(100);
+        setCampaignResultId(data.campaignId);
+      } else {
+        setSendResults(recipients.map(r => ({ phone: r.phone, success: false, error: data.error || 'Erreur serveur' })));
+        setSendProgress(100);
+      }
+    } catch (error: any) {
+      setSendResults([{ phone: 'all', success: false, error: error.message }]);
+      setSendProgress(100);
     }
+
+    setIsSending(false);
+    setShowResults(true);
+  };
+
+  // ─── Carousel campaign send (existing) ──────────────────────────────
+  const sendCarouselCampaign = async () => {
+    if (!campaignData || selectedCustomers.size === 0) return;
 
     setIsSending(true);
     setSendProgress(0);
@@ -187,7 +390,6 @@ export default function SendCampaignPage() {
       const phone = selectedArray[i];
 
       try {
-        // Build the carousel payload for this recipient
         const carouselPayload = {
           body: { text: campaignData.mainMessage },
           cards: campaignData.cards.map((card: any, index: number) => ({
@@ -202,16 +404,10 @@ export default function SendCampaignPage() {
           })),
         };
 
-        // Send via our API route (uses server-side WHAPI_API_KEY)
         const response = await fetch('/api/whatsapp/carousel', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            phoneNumber: phone,
-            carouselPayload,
-          }),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phoneNumber: phone, carouselPayload }),
         });
 
         const data = await response.json();
@@ -227,7 +423,6 @@ export default function SendCampaignPage() {
       setSendProgress(Math.round(((i + 1) / total) * 100));
       setSendResults([...results]);
 
-      // Small delay between sends to avoid rate limiting
       if (i < selectedArray.length - 1) {
         await new Promise(resolve => setTimeout(resolve, 500));
       }
@@ -237,8 +432,13 @@ export default function SendCampaignPage() {
     setShowResults(true);
   };
 
+  const sendCampaign = isTemplateMode ? sendTemplateCampaign : sendCarouselCampaign;
+
   const successCount = sendResults.filter(r => r.success).length;
   const failureCount = sendResults.filter(r => !r.success).length;
+
+  // Cost estimate
+  const estimatedCost = selectedCustomers.size * COST_PER_MESSAGE;
 
   // Test send functions
   const addTestNumber = () => {
@@ -259,57 +459,86 @@ export default function SendCampaignPage() {
 
   const sendTestCampaign = async () => {
     const validNumbers = testNumbers.filter(n => n.trim().length > 0);
-    if (!campaignData || validNumbers.length === 0) {
-      return;
-    }
+    if (validNumbers.length === 0) return;
 
     setIsTestSending(true);
     setTestResults([]);
 
-    const results: SendResult[] = [];
-
-    for (const phone of validNumbers) {
+    if (isTemplateMode) {
+      // Test template send
       try {
-        const carouselPayload = {
-          body: { text: campaignData.mainMessage },
-          cards: campaignData.cards.map((card: any, index: number) => ({
-            media: { media: card.mediaUrl },
-            text: card.text,
-            id: `Card-ID${index + 1}`,
-            buttons: [
-              card.buttonType === 'url'
-                ? { type: 'url', title: card.buttonTitle, id: `Button-ID${index + 1}`, url: card.buttonUrl }
-                : { type: 'quick_reply', title: card.buttonTitle, id: `Button-ID${index + 1}` },
-            ],
-          })),
-        };
+        const components: any[] = [];
+        const bodyParams = Object.entries(templateVariables)
+          .filter(([key]) => key.startsWith('BODY_'))
+          .sort(([a], [b]) => a.localeCompare(b))
+          .map(([, val]) => ({ type: 'text', text: val || '' }));
+        if (bodyParams.length > 0) components.push({ type: 'body', parameters: bodyParams });
 
-        // Send via our API route (uses server-side WHAPI_API_KEY)
-        const response = await fetch('/api/whatsapp/carousel', {
+        const headerParams = Object.entries(templateVariables)
+          .filter(([key]) => key.startsWith('HEADER_'))
+          .sort(([a], [b]) => a.localeCompare(b))
+          .map(([, val]) => ({ type: 'text', text: val || '' }));
+        if (headerParams.length > 0) components.push({ type: 'header', parameters: headerParams });
+
+        const response = await fetch('/api/whatsapp/campaign/send', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            phoneNumber: phone,
-            carouselPayload,
+            merchantId: merchant?.id,
+            templateId,
+            recipients: validNumbers.map(p => ({ phone: p, name: 'Test' })),
+            variables: { components },
           }),
         });
 
         const data = await response.json();
         if (response.ok && data.success) {
-          results.push({ phone, success: true });
+          setTestResults(validNumbers.map(p => ({ phone: p, success: true })));
         } else {
-          results.push({ phone, success: false, error: data.error || 'Failed to send' });
+          setTestResults(validNumbers.map(p => ({ phone: p, success: false, error: data.error })));
         }
       } catch (error: any) {
-        results.push({ phone, success: false, error: error.message || 'Network error' });
+        setTestResults(validNumbers.map(p => ({ phone: p, success: false, error: error.message })));
       }
+    } else {
+      // Test carousel send (existing logic)
+      const results: SendResult[] = [];
+      for (const phone of validNumbers) {
+        try {
+          const carouselPayload = {
+            body: { text: campaignData?.mainMessage },
+            cards: campaignData?.cards.map((card: any, index: number) => ({
+              media: { media: card.mediaUrl },
+              text: card.text,
+              id: `Card-ID${index + 1}`,
+              buttons: [
+                card.buttonType === 'url'
+                  ? { type: 'url', title: card.buttonTitle, id: `Button-ID${index + 1}`, url: card.buttonUrl }
+                  : { type: 'quick_reply', title: card.buttonTitle, id: `Button-ID${index + 1}` },
+              ],
+            })),
+          };
 
-      await new Promise(resolve => setTimeout(resolve, 300));
+          const response = await fetch('/api/whatsapp/carousel', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phoneNumber: phone, carouselPayload }),
+          });
+
+          const data = await response.json();
+          if (response.ok && data.success) {
+            results.push({ phone, success: true });
+          } else {
+            results.push({ phone, success: false, error: data.error || 'Failed to send' });
+          }
+        } catch (error: any) {
+          results.push({ phone, success: false, error: error.message || 'Network error' });
+        }
+        await new Promise(resolve => setTimeout(resolve, 300));
+      }
+      setTestResults(results);
     }
 
-    setTestResults(results);
     setIsTestSending(false);
   };
 
@@ -339,13 +568,46 @@ export default function SendCampaignPage() {
             {t('dashboard.common.back')}
           </Button>
           <div className="flex-1">
-            <h1 className="text-2xl font-bold text-gray-900">{t('marketing.whatsappCampaign.selectRecipients')}</h1>
-            <p className="text-sm text-gray-500">{t('marketing.whatsappCampaign.selectRecipientsDesc')}</p>
+            <h1 className="text-2xl font-bold text-gray-900">
+              {isTemplateMode ? 'Envoyer la campagne template' : t('marketing.whatsappCampaign.selectRecipients')}
+            </h1>
+            <p className="text-sm text-gray-500">
+              {isTemplateMode
+                ? 'Selectionnez les destinataires et envoyez votre campagne Meta Cloud API'
+                : t('marketing.whatsappCampaign.selectRecipientsDesc')}
+            </p>
           </div>
         </div>
 
         {/* Campaign Summary Banner */}
-        {campaignData && (
+        {isTemplateMode ? (
+          <div className="group relative p-4 border border-gray-200 rounded-xl overflow-hidden transition-all duration-300 hover:border-gray-300 hover:shadow-md bg-gradient-to-r from-teal-50 to-emerald-50">
+            <span className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-teal-500 to-emerald-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-teal-100 text-teal-600 flex items-center justify-center">
+                  <LayoutTemplate className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-teal-900">{templateName}</p>
+                  <p className="text-xs text-teal-700">Template {templateLanguage} - Meta Cloud API</p>
+                </div>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setShowTestModal(true);
+                  setTestResults([]);
+                }}
+                className="gap-1.5 border-amber-300 text-amber-700 hover:bg-amber-50 h-8"
+              >
+                <FlaskConical className="w-3.5 h-3.5" />
+                Test
+              </Button>
+            </div>
+          </div>
+        ) : campaignData ? (
           <div className="group relative p-4 border border-gray-200 rounded-xl overflow-hidden transition-all duration-300 hover:border-gray-300 hover:shadow-md bg-gradient-to-r from-green-50 to-emerald-50">
             <span className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-teal-500 to-emerald-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
             <div className="flex items-center justify-between">
@@ -372,7 +634,7 @@ export default function SendCampaignPage() {
               </Button>
             </div>
           </div>
-        )}
+        ) : null}
 
         {/* Test Send Modal */}
         {showTestModal && (
@@ -384,14 +646,20 @@ export default function SendCampaignPage() {
                     <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
                       <FlaskConical className="w-4 h-4" />
                     </div>
-                    <h3 className="text-sm font-semibold text-gray-900">{t('marketing.whatsappCampaign.testSend')}</h3>
+                    <h3 className="text-sm font-semibold text-gray-900">
+                      {isTemplateMode ? 'Test template' : t('marketing.whatsappCampaign.testSend')}
+                    </h3>
                   </div>
                   <Button variant="ghost" size="sm" onClick={() => setShowTestModal(false)} className="h-7 w-7 p-0">
                     <X className="w-4 h-4" />
                   </Button>
                 </div>
 
-                <p className="text-xs text-gray-500 mb-4">{t('marketing.whatsappCampaign.testSendDesc')}</p>
+                <p className="text-xs text-gray-500 mb-4">
+                  {isTemplateMode
+                    ? 'Envoyez un test du template a 1-2 numeros avant la campagne.'
+                    : t('marketing.whatsappCampaign.testSendDesc')}
+                </p>
 
                 {/* Test Numbers */}
                 <div className="space-y-2 mb-4">
@@ -470,12 +738,12 @@ export default function SendCampaignPage() {
                     {isTestSending ? (
                       <>
                         <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                        {t('marketing.whatsappCampaign.sendingInProgress')}
+                        Envoi...
                       </>
                     ) : (
                       <>
                         <Send className="w-3.5 h-3.5" />
-                        {t('marketing.whatsappCampaign.sendTest')}
+                        {isTemplateMode ? 'Envoyer test' : t('marketing.whatsappCampaign.sendTest')}
                       </>
                     )}
                   </Button>
@@ -486,7 +754,7 @@ export default function SendCampaignPage() {
         )}
 
         {/* Stats Row */}
-        <div className="grid grid-cols-3 gap-3">
+        <div className={`grid gap-3 ${isTemplateMode ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-3'}`}>
           <div className="group relative p-4 border border-gray-200 rounded-xl overflow-hidden transition-all duration-300 hover:border-gray-300 hover:shadow-md bg-white">
             <span className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-teal-500 to-emerald-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
             <div className="flex items-center gap-3">
@@ -513,6 +781,21 @@ export default function SendCampaignPage() {
             </div>
           </div>
 
+          {isTemplateMode && (
+            <div className="group relative p-4 border border-gray-200 rounded-xl overflow-hidden transition-all duration-300 hover:border-gray-300 hover:shadow-md bg-white">
+              <span className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-teal-500 to-emerald-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                  <Wallet className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-xl font-bold text-gray-900">{estimatedCost.toLocaleString()}</p>
+                  <p className="text-xs text-gray-500">Cout estime (FCFA)</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="group relative p-4 border border-gray-200 rounded-xl overflow-hidden transition-all duration-300 hover:border-gray-300 hover:shadow-md bg-white">
             <span className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-teal-500 to-emerald-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
             <div className="flex items-center gap-3">
@@ -529,14 +812,34 @@ export default function SendCampaignPage() {
           </div>
         </div>
 
+        {/* Cost Estimate Card (template mode) */}
+        {isTemplateMode && selectedCustomers.size > 0 && (
+          <div className="group relative p-4 border border-emerald-200 rounded-xl overflow-hidden bg-gradient-to-r from-emerald-50 to-teal-50">
+            <span className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-emerald-500 to-teal-500" />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-emerald-900">Estimation du cout</p>
+                  <p className="text-xs text-emerald-700">
+                    {selectedCustomers.size} destinataire{selectedCustomers.size > 1 ? 's' : ''} x {COST_PER_MESSAGE} FCFA = <span className="font-bold">{estimatedCost.toLocaleString()} FCFA</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Send Progress */}
         {isSending && (
           <div className="group relative p-4 border border-gray-200 rounded-xl overflow-hidden bg-white">
             <span className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-teal-500 to-emerald-500" />
             <div className="flex items-center gap-3 mb-2">
               <Loader2 className="w-4 h-4 text-teal-600 animate-spin" />
-              <p className="text-sm font-medium text-gray-900">{t('marketing.whatsappCampaign.sendingInProgress')}</p>
-              <span className="text-xs text-gray-500 ml-auto">{sendResults.length} / {selectedCustomers.size}</span>
+              <p className="text-sm font-medium text-gray-900">Envoi en cours...</p>
+              <span className="text-xs text-gray-500 ml-auto">{sendProgress}%</span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-2">
               <div
@@ -552,30 +855,50 @@ export default function SendCampaignPage() {
           <div className="group relative p-5 border border-gray-200 rounded-xl overflow-hidden bg-white">
             <span className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-teal-500 to-emerald-500" />
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-semibold text-gray-900">{t('marketing.whatsappCampaign.sendResults')}</h3>
-              <Button variant="ghost" size="sm" onClick={() => setShowResults(false)} className="h-7 text-xs">
-                {t('dashboard.common.close')}
-              </Button>
+              <h3 className="text-sm font-semibold text-gray-900">Resultats de l&apos;envoi</h3>
+              <div className="flex gap-2">
+                {isTemplateMode && campaignResultId && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => router.push(`/dashboard/marketing/whatsapp-campaign/${campaignResultId}`)}
+                    className="h-7 text-xs gap-1.5"
+                  >
+                    <Eye className="w-3 h-3" />
+                    Voir le rapport
+                  </Button>
+                )}
+                <Button variant="ghost" size="sm" onClick={() => setShowResults(false)} className="h-7 text-xs">
+                  {t('dashboard.common.close')}
+                </Button>
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-3 mb-4">
               <div className="p-3 bg-green-50 rounded-lg flex items-center gap-3">
                 <CheckCircle className="w-6 h-6 text-green-600" />
                 <div>
                   <p className="text-xl font-bold text-green-900">{successCount}</p>
-                  <p className="text-xs text-green-700">{t('marketing.whatsappCampaign.successfullySent')}</p>
+                  <p className="text-xs text-green-700">Envoyes avec succes</p>
                 </div>
               </div>
               <div className="p-3 bg-red-50 rounded-lg flex items-center gap-3">
                 <XCircle className="w-6 h-6 text-red-600" />
                 <div>
                   <p className="text-xl font-bold text-red-900">{failureCount}</p>
-                  <p className="text-xs text-red-700">{t('marketing.whatsappCampaign.failed')}</p>
+                  <p className="text-xs text-red-700">Echoues</p>
                 </div>
               </div>
             </div>
+            {isTemplateMode && (
+              <div className="p-3 bg-gray-50 rounded-lg mb-4">
+                <p className="text-xs text-gray-600">
+                  Cout total : <span className="font-bold text-gray-900">{(successCount * COST_PER_MESSAGE).toLocaleString()} FCFA</span>
+                </p>
+              </div>
+            )}
             {failureCount > 0 && (
               <div className="border border-red-200 rounded-lg p-2.5 bg-red-50 max-h-32 overflow-y-auto">
-                <p className="text-xs font-medium text-red-800 mb-1.5">{t('marketing.whatsappCampaign.failedNumbers')}:</p>
+                <p className="text-xs font-medium text-red-800 mb-1.5">Numeros echoues :</p>
                 {sendResults.filter(r => !r.success).map((result, i) => (
                   <p key={i} className="text-[10px] text-red-700">
                     {result.phone}: {result.error}
@@ -597,7 +920,7 @@ export default function SendCampaignPage() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
                 <input
                   type="text"
-                  placeholder={t('marketing.whatsappCampaign.searchByPhone')}
+                  placeholder={isTemplateMode ? 'Rechercher par telephone ou nom...' : t('marketing.whatsappCampaign.searchByPhone')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
@@ -632,6 +955,12 @@ export default function SendCampaignPage() {
                     />
                   </th>
                   <th className="px-4 py-2.5 text-left text-[10px] font-semibold text-gray-500 uppercase tracking-wider">{t('marketing.whatsappCampaign.phoneNumber')}</th>
+                  {isTemplateMode && (
+                    <th className="px-4 py-2.5 text-left text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Nom</th>
+                  )}
+                  {isTemplateMode && (
+                    <th className="px-4 py-2.5 text-left text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Source</th>
+                  )}
                   <th className="px-4 py-2.5 text-left text-[10px] font-semibold text-gray-500 uppercase tracking-wider">{t('marketing.whatsappCampaign.rating')}</th>
                   <th className="px-4 py-2.5 text-left text-[10px] font-semibold text-gray-500 uppercase tracking-wider">{t('marketing.whatsappCampaign.reviews')}</th>
                   <th className="px-4 py-2.5 text-left text-[10px] font-semibold text-gray-500 uppercase tracking-wider">{t('marketing.whatsappCampaign.lastVisit')}</th>
@@ -662,10 +991,32 @@ export default function SendCampaignPage() {
                           <span className="text-sm font-medium text-gray-900">{customer.phone}</span>
                         </div>
                       </td>
+                      {isTemplateMode && (
+                        <td className="px-4 py-2.5">
+                          <span className="text-sm text-gray-700">{customer.name || '-'}</span>
+                        </td>
+                      )}
+                      {isTemplateMode && (
+                        <td className="px-4 py-2.5">
+                          <Badge
+                            variant="secondary"
+                            className={`text-[10px] ${
+                              customer.source === 'both' ? 'bg-purple-100 text-purple-700' :
+                              customer.source === 'loyalty' ? 'bg-blue-100 text-blue-700' :
+                              'bg-gray-100 text-gray-700'
+                            }`}
+                          >
+                            {customer.source === 'both' ? 'Avis + Fidelite' :
+                             customer.source === 'loyalty' ? 'Fidelite' : 'Avis'}
+                          </Badge>
+                        </td>
+                      )}
                       <td className="px-4 py-2.5">
                         <div className="flex items-center gap-1">
-                          <span className="text-sm font-medium">{customer.avg_rating.toFixed(1)}</span>
-                          <Star className={`w-3.5 h-3.5 ${customer.avg_rating >= 4 ? 'text-amber-400 fill-amber-400' : 'text-gray-300'}`} />
+                          <span className="text-sm font-medium">{customer.avg_rating > 0 ? customer.avg_rating.toFixed(1) : '-'}</span>
+                          {customer.avg_rating > 0 && (
+                            <Star className={`w-3.5 h-3.5 ${customer.avg_rating >= 4 ? 'text-amber-400 fill-amber-400' : 'text-gray-300'}`} />
+                          )}
                         </div>
                       </td>
                       <td className="px-4 py-2.5">
@@ -681,7 +1032,7 @@ export default function SendCampaignPage() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={5} className="px-4 py-10 text-center text-gray-500">
+                    <td colSpan={isTemplateMode ? 7 : 5} className="px-4 py-10 text-center text-gray-500">
                       <Users className="w-10 h-10 text-gray-300 mx-auto mb-2" />
                       <p className="text-sm font-medium text-gray-900">{t('marketing.whatsappCampaign.noContacts')}</p>
                       <p className="text-xs">{t('marketing.whatsappCampaign.noContactsDesc')}</p>
@@ -702,17 +1053,21 @@ export default function SendCampaignPage() {
                   <Send className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">{selectedCustomers.size} {t('marketing.whatsappCampaign.selected')}</p>
-                  <p className="text-[10px] text-gray-500">{t('marketing.whatsappCampaign.readyToSend') || 'Pret a envoyer'}</p>
+                  <p className="text-sm font-semibold text-gray-900">{selectedCustomers.size} selectionne{selectedCustomers.size > 1 ? 's' : ''}</p>
+                  <p className="text-[10px] text-gray-500">
+                    {isTemplateMode
+                      ? `Cout : ${estimatedCost.toLocaleString()} FCFA`
+                      : (t('marketing.whatsappCampaign.readyToSend') || 'Pret a envoyer')}
+                  </p>
                 </div>
               </div>
               <Button
                 onClick={sendCampaign}
-                disabled={!campaignData}
+                disabled={isTemplateMode ? !templateId : !campaignData}
                 className="bg-teal-600 hover:bg-teal-700 gap-1.5"
               >
                 <Send className="w-4 h-4" />
-                {t('marketing.whatsappCampaign.sendToSelected')} ({selectedCustomers.size})
+                Envoyer ({selectedCustomers.size})
               </Button>
             </div>
           </div>
