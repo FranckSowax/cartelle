@@ -4,7 +4,7 @@ const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
 const path = require('path');
 
-console.log('🚀 StarSpin - Supabase Database Setup\n');
+console.log('🚀 Cartelle - Supabase Database Setup\n');
 
 // Supabase credentials
 const supabaseUrl = 'https://egemjezgejptazoucwci.supabase.co';
@@ -57,7 +57,7 @@ async function main() {
   console.log('');
   console.log('5. Then run: npm run dev');
   console.log('');
-  console.log('✨ Your StarSpin database will be ready!');
+  console.log('✨ Your Cartelle database will be ready!');
 }
 
 main();

@@ -1,7 +1,7 @@
 {
-  "name": "StarSpin - Customer Feedback Gamification",
-  "short_name": "StarSpin",
-  "description": "Turn customer feedback into a fun, rewarding experience",
+  "name": "Cartelle - Gamification des avis clients",
+  "short_name": "Cartelle",
+  "description": "Transformez les avis clients en une expérience amusante et gratifiante",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#FFFFFF",

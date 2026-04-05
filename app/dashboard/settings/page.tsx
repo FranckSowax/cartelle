@@ -10,21 +10,19 @@ import {
   Check, X, Loader2, Globe, Bell, Shield, Link2,
   Settings, ExternalLink
 } from 'lucide-react';
-import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
 import '@/lib/i18n/config';
 
 type TabId = 'general' | 'links';
 
-const TABS: { id: TabId; icon: React.ReactNode; labelFr: string; labelEn: string }[] = [
-  { id: 'general', icon: <Settings className="w-4 h-4" />, labelFr: 'Général', labelEn: 'General' },
-  { id: 'links', icon: <Link2 className="w-4 h-4" />, labelFr: 'Liens', labelEn: 'Links' },
+const TABS: { id: TabId; icon: React.ReactNode; label: string }[] = [
+  { id: 'general', icon: <Settings className="w-4 h-4" />, label: 'Général' },
+  { id: 'links', icon: <Link2 className="w-4 h-4" />, label: 'Liens' },
 ];
 
 export default function SettingsPage() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const router = useRouter();
-  const isFr = i18n.language === 'fr';
 
   const [user, setUser] = useState<any>(null);
   const [merchant, setMerchant] = useState<any>(null);
@@ -105,12 +103,12 @@ export default function SettingsPage() {
 
       setMessage({
         type: 'success',
-        text: isFr ? 'Paramètres enregistrés avec succès !' : 'Settings saved successfully!',
+        text: 'Paramètres enregistrés avec succès !',
       });
     } catch (error: any) {
       setMessage({
         type: 'error',
-        text: error.message || (isFr ? 'Erreur lors de la sauvegarde' : 'Error saving settings'),
+        text: error.message || 'Erreur lors de la sauvegarde',
       });
     } finally {
       setSaving(false);
@@ -122,7 +120,7 @@ export default function SettingsPage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-teal-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-lg text-gray-600">{isFr ? 'Chargement...' : 'Loading...'}</p>
+          <p className="text-lg text-gray-600">Chargement...</p>
         </div>
       </div>
     );
@@ -135,7 +133,7 @@ export default function SettingsPage() {
         <div>
           <h1 className="text-3xl font-bold text-gray-900 mb-1">{t('dashboard.nav.settings')}</h1>
           <p className="text-gray-500 text-sm">
-            {isFr ? 'Gérez vos préférences et configurations' : 'Manage your preferences and configurations'}
+            Gérez vos préférences et configurations
           </p>
         </div>
 
@@ -177,7 +175,7 @@ export default function SettingsPage() {
               `}
             >
               {tab.icon}
-              <span>{isFr ? tab.labelFr : tab.labelEn}</span>
+              <span>{tab.label}</span>
               {/* Active underline */}
               <span
                 className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-teal-500 to-emerald-500 transition-transform duration-300 origin-left ${
@@ -193,7 +191,7 @@ export default function SettingsPage() {
           {/* ===== GENERAL TAB ===== */}
           {activeTab === 'general' && (
             <div className="space-y-5">
-              {/* Language & Region */}
+              {/* Region */}
               <Card className="group relative p-6 border border-gray-200 rounded-xl overflow-hidden transition-all duration-300 hover:border-gray-300 hover:shadow-md">
                 <span className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-teal-500 to-emerald-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                 <div className="flex items-center gap-3 mb-5">
@@ -202,23 +200,17 @@ export default function SettingsPage() {
                   </div>
                   <div>
                     <h3 className="text-base font-semibold text-gray-900">
-                      {isFr ? 'Langue & Région' : 'Language & Region'}
+                      Région
                     </h3>
                     <p className="text-xs text-gray-500">
-                      {isFr ? 'Langue et fuseau horaire' : 'Language and timezone settings'}
+                      Fuseau horaire
                     </p>
                   </div>
                 </div>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {isFr ? 'Langue' : 'Language'}
-                    </label>
-                    <LanguageSwitcher variant="dark" />
-                  </div>
-                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      {isFr ? 'Fuseau horaire' : 'Timezone'}
+                      Fuseau horaire
                     </label>
                     <select
                       value={timezone}
@@ -230,11 +222,9 @@ export default function SettingsPage() {
                       <option value="Africa/Douala">Africa/Douala (UTC+1)</option>
                       <option value="Africa/Kinshasa">Africa/Kinshasa (UTC+1)</option>
                       <option value="Africa/Brazzaville">Africa/Brazzaville (UTC+1)</option>
+                      <option value="Africa/Abidjan">Africa/Abidjan (UTC+0)</option>
+                      <option value="Africa/Dakar">Africa/Dakar (UTC+0)</option>
                       <option value="Europe/Paris">Europe/Paris (UTC+1/+2)</option>
-                      <option value="Europe/London">Europe/London (UTC+0/+1)</option>
-                      <option value="America/New_York">America/New_York (UTC-5/-4)</option>
-                      <option value="Asia/Bangkok">Asia/Bangkok (UTC+7)</option>
-                      <option value="Asia/Shanghai">Asia/Shanghai (UTC+8)</option>
                     </select>
                   </div>
                 </div>
@@ -250,21 +240,16 @@ export default function SettingsPage() {
                   <div>
                     <h3 className="text-base font-semibold text-gray-900">Notifications</h3>
                     <p className="text-xs text-gray-500">
-                      {isFr ? 'Gérez vos alertes' : 'Manage your alerts'}
+                      Gérez vos alertes
                     </p>
                   </div>
                 </div>
 
                 <div className="divide-y divide-gray-100">
-                  {/* Email Notifications */}
                   <label className="flex items-center justify-between py-4 cursor-pointer rounded-lg hover:bg-gray-50/50 transition-colors duration-200 px-1">
                     <div>
-                      <p className="text-sm font-medium text-gray-900">
-                        {isFr ? 'Notifications par email' : 'Email Notifications'}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {isFr ? 'Recevoir les notifications par email' : 'Receive notifications by email'}
-                      </p>
+                      <p className="text-sm font-medium text-gray-900">Notifications par email</p>
+                      <p className="text-xs text-gray-500">Recevoir les notifications par email</p>
                     </div>
                     <div className="relative">
                       <input
@@ -278,15 +263,10 @@ export default function SettingsPage() {
                     </div>
                   </label>
 
-                  {/* New Review Alert */}
                   <label className="flex items-center justify-between py-4 cursor-pointer rounded-lg hover:bg-gray-50/50 transition-colors duration-200 px-1">
                     <div>
-                      <p className="text-sm font-medium text-gray-900">
-                        {isFr ? 'Alertes nouveaux avis' : 'New Review Alerts'}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {isFr ? 'Être notifié quand un client laisse un avis' : 'Get notified when a customer leaves a review'}
-                      </p>
+                      <p className="text-sm font-medium text-gray-900">Alertes nouveaux avis</p>
+                      <p className="text-xs text-gray-500">Être notifié quand un client laisse un avis</p>
                     </div>
                     <div className="relative">
                       <input
@@ -300,15 +280,10 @@ export default function SettingsPage() {
                     </div>
                   </label>
 
-                  {/* Weekly Summary */}
                   <label className="flex items-center justify-between py-4 cursor-pointer rounded-lg hover:bg-gray-50/50 transition-colors duration-200 px-1">
                     <div>
-                      <p className="text-sm font-medium text-gray-900">
-                        {isFr ? 'Résumé hebdomadaire' : 'Weekly Summary'}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {isFr ? 'Recevoir un résumé de performance chaque semaine' : 'Receive a weekly performance summary'}
-                      </p>
+                      <p className="text-sm font-medium text-gray-900">Résumé hebdomadaire</p>
+                      <p className="text-xs text-gray-500">Recevoir un résumé de performance chaque semaine</p>
                     </div>
                     <div className="relative">
                       <input
@@ -332,12 +307,8 @@ export default function SettingsPage() {
                     <Shield className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-base font-semibold text-gray-900">
-                      {isFr ? 'Compte' : 'Account'}
-                    </h3>
-                    <p className="text-xs text-gray-500">
-                      {isFr ? 'Informations de votre compte' : 'Your account information'}
-                    </p>
+                    <h3 className="text-base font-semibold text-gray-900">Compte</h3>
+                    <p className="text-xs text-gray-500">Informations de votre compte</p>
                   </div>
                 </div>
                 <div className="space-y-3">
@@ -348,7 +319,7 @@ export default function SettingsPage() {
                     </p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Account ID</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">ID du compte</label>
                     <p className="text-xs text-gray-500 px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg font-mono">
                       {user.id}
                     </p>
@@ -368,19 +339,12 @@ export default function SettingsPage() {
                     <Link2 className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-base font-semibold text-gray-900">
-                      {isFr ? 'Liens de redirection' : 'Redirect Links'}
-                    </h3>
-                    <p className="text-xs text-gray-500">
-                      {isFr
-                        ? 'Configurez les liens vers vos réseaux sociaux'
-                        : 'Configure links to your social networks'}
-                    </p>
+                    <h3 className="text-base font-semibold text-gray-900">Liens de redirection</h3>
+                    <p className="text-xs text-gray-500">Configurez les liens vers vos réseaux sociaux</p>
                   </div>
                 </div>
 
                 <div className="space-y-5">
-                  {/* Google Reviews */}
                   <div>
                     <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1.5">
                       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
@@ -407,7 +371,6 @@ export default function SettingsPage() {
                     </div>
                   </div>
 
-                  {/* TikTok */}
                   <div>
                     <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1.5">
                       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -431,7 +394,6 @@ export default function SettingsPage() {
                     </div>
                   </div>
 
-                  {/* Instagram */}
                   <div>
                     <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1.5">
                       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
@@ -481,10 +443,10 @@ export default function SettingsPage() {
             {saving ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                {isFr ? 'Enregistrement...' : 'Saving...'}
+                Enregistrement...
               </>
             ) : (
-              isFr ? 'Enregistrer' : 'Save Settings'
+              'Enregistrer'
             )}
           </Button>
         </div>

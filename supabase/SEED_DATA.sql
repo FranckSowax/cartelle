@@ -1,5 +1,5 @@
 -- ============================================================================
--- STARSPIN - DONNÉES DE TEST (SEED)
+-- CARTELLE - DONNÉES DE TEST (SEED)
 -- ============================================================================
 -- Ce script ajoute des données de test pour vérifier le bon fonctionnement.
 -- Exécutez-le APRÈS le script FULL_DATABASE_SETUP.sql
@@ -12,7 +12,7 @@
 -- ============================================================================
 -- 1. Allez dans Authentication > Users
 -- 2. Cliquez sur "Add user"
--- 3. Email: demo@starspin.app
+-- 3. Email: demo@cartelle.app
 -- 4. Password: Demo2024!
 -- 5. Copiez l'UUID généré et utilisez-le ci-dessous
 
@@ -43,9 +43,9 @@ BEGIN
         whatsapp_message_template
     ) VALUES (
         demo_merchant_id,
-        'demo@starspin.app',
+        'demo@cartelle.app',
         'Demo User',
-        'Restaurant Demo',
+        'Commerce Demo Cartelle',
         'starter',
         'google_maps',
         'https://g.page/r/example-review-link',
@@ -166,5 +166,5 @@ SELECT 'subscription_tiers', COUNT(*) FROM subscription_tiers;
 -- ============================================================================
 
 -- Pour supprimer les données de test:
--- DELETE FROM merchants WHERE email = 'demo@starspin.app';
+-- DELETE FROM merchants WHERE email = 'demo@cartelle.app';
 -- (Les autres tables seront nettoyées automatiquement grâce à ON DELETE CASCADE)

@@ -50,7 +50,7 @@ export default function LoyaltyPage() {
   const [loyaltyEnabled, setLoyaltyEnabled] = useState(false);
   const [pointsPerPurchase, setPointsPerPurchase] = useState(10);
   const [purchaseThreshold, setPurchaseThreshold] = useState(1000);
-  const [loyaltyCurrency, setLoyaltyCurrency] = useState<'THB' | 'EUR' | 'USD' | 'XAF'>('THB');
+  const [loyaltyCurrency, setLoyaltyCurrency] = useState<'XAF'>('XAF');
   const [welcomePoints, setWelcomePoints] = useState(50);
   const [loyaltyCardFile, setLoyaltyCardFile] = useState<File | null>(null);
   const [loyaltyCardPreview, setLoyaltyCardPreview] = useState<string>('');
@@ -85,7 +85,7 @@ export default function LoyaltyPage() {
       setLoyaltyEnabled(merchantData?.loyalty_enabled || false);
       setPointsPerPurchase(merchantData?.points_per_purchase || 10);
       setPurchaseThreshold(merchantData?.purchase_amount_threshold || 1000);
-      setLoyaltyCurrency(merchantData?.loyalty_currency || 'THB');
+      setLoyaltyCurrency('XAF');
       setWelcomePoints(merchantData?.welcome_points || 50);
       if (merchantData?.loyalty_card_image_url) setLoyaltyCardPreview(merchantData.loyalty_card_image_url);
 
@@ -411,16 +411,9 @@ export default function LoyaltyPage() {
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('loyalty.settings.currency')}</label>
                         <p className="text-xs text-gray-500 mb-2">{t('loyalty.settings.currencyDesc')}</p>
-                        <select
-                          value={loyaltyCurrency}
-                          onChange={(e) => setLoyaltyCurrency(e.target.value as 'THB' | 'EUR' | 'USD' | 'XAF')}
-                          className={inputClass}
-                        >
-                          <option value="THB">THB - Thai Baht</option>
-                          <option value="EUR">EUR - Euro</option>
-                          <option value="USD">USD - US Dollar</option>
-                          <option value="XAF">XAF - CFA Franc</option>
-                        </select>
+                        <div className={`${inputClass} flex items-center bg-gray-100 text-gray-700`}>
+                          FCFA (XAF)
+                        </div>
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('loyalty.settings.welcomePoints')}</label>
@@ -481,7 +474,7 @@ export default function LoyaltyPage() {
                   <h3 className="font-semibold text-gray-900 mb-4">Points Calculation Example</h3>
                   <div className="flex items-center justify-center gap-4 text-center">
                     <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                      <p className="text-2xl font-bold text-teal-600">{purchaseThreshold.toLocaleString()} {loyaltyCurrency}</p>
+                      <p className="text-2xl font-bold text-teal-600">{purchaseThreshold.toLocaleString()} FCFA</p>
                       <p className="text-sm text-gray-500">Purchase Amount</p>
                     </div>
                     <div className="text-2xl text-teal-500 font-bold">=</div>
@@ -491,7 +484,7 @@ export default function LoyaltyPage() {
                     </div>
                   </div>
                   <p className="text-center text-sm text-gray-500 mt-4">
-                    Example: {(purchaseThreshold * 5).toLocaleString()} {loyaltyCurrency} purchase = {pointsPerPurchase * 5} points
+                    Example: {(purchaseThreshold * 5).toLocaleString()} FCFA purchase = {pointsPerPurchase * 5} points
                   </p>
                 </div>
               </>

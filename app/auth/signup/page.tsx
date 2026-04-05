@@ -158,7 +158,7 @@ export default function SignUpPage() {
                 <span className="text-green-600 text-xs font-bold">3</span>
               </div>
               <p className="text-sm text-gray-600">
-                Vous serez redirigé vers votre dashboard StarSpin
+                Vous serez redirigé vers votre dashboard Cartelle
               </p>
             </div>
           </div>
@@ -198,8 +198,8 @@ export default function SignUpPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#4CAF50] to-[#2196F3] flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full">
-        <h1 className="text-3xl font-bold text-center text-gray-900 mb-2">Join StarSpin</h1>
-        <p className="text-center text-gray-600 mb-8">Create your merchant account</p>
+        <h1 className="text-3xl font-bold text-center text-gray-900 mb-2">Rejoindre Cartelle</h1>
+        <p className="text-center text-gray-600 mb-8">Créez votre compte commerçant</p>
 
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
@@ -218,25 +218,25 @@ export default function SignUpPage() {
         <form onSubmit={handleSignUp} className="space-y-4">
           <Input
             type="text"
-            label="Business Name"
+            label="Nom du commerce"
             value={businessName}
             onChange={(e) => setBusinessName(e.target.value)}
-            placeholder="My Coffee Shop"
+            placeholder="Mon Commerce"
             required
           />
 
           <Input
             type="email"
-            label="Email"
+            label="Adresse email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="merchant@example.com"
+            placeholder="contact@moncommerce.com"
             required
           />
 
           <Input
             type="password"
-            label="Password"
+            label="Mot de passe"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
@@ -244,14 +244,14 @@ export default function SignUpPage() {
           />
 
           <Button type="submit" disabled={loading} className="w-full">
-            {loading ? 'Creating account...' : 'Create Account'}
+            {loading ? 'Création du compte...' : 'Créer le compte'}
           </Button>
         </form>
 
         <p className="text-center text-sm text-gray-600 mt-6">
-          Already have an account?{' '}
+          Vous avez déjà un compte ?{' '}
           <a href="/auth/login" className="text-[#4CAF50] font-semibold hover:underline">
-            Sign In
+            Se connecter
           </a>
         </p>
       </div>

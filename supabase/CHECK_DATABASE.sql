@@ -1,5 +1,5 @@
 -- ============================================================================
--- STARSPIN - SCRIPT DE VÉRIFICATION DE LA BASE DE DONNÉES
+-- CARTELLE - SCRIPT DE VÉRIFICATION DE LA BASE DE DONNÉES
 -- ============================================================================
 -- Ce script vérifie que la base de données est correctement configurée.
 -- Exécutez-le pour diagnostiquer d'éventuels problèmes.

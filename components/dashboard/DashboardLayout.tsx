@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
-import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { NotificationDropdown } from '@/components/dashboard/NotificationDropdown';
 import { useTranslation } from 'react-i18next';
 import '@/lib/i18n/config';
@@ -129,8 +128,8 @@ export function DashboardLayout({ children, merchant }: DashboardLayoutProps) {
           <div className="flex items-center justify-between h-20 px-6 border-b border-slate-800/50 bg-[#0F172A]">
             <Link href="/dashboard" className="flex items-center gap-3">
               <img 
-                src="/LOGO-STARSPIN-WHITE_web.png" 
-                alt="StarSpin Logo" 
+                src="/LOGO-STARSPIN-WHITE_web.png"
+                alt="Cartelle Logo" 
                 className="h-8 w-auto transition-transform hover:scale-105"
               />
             </Link>
@@ -232,7 +231,6 @@ export function DashboardLayout({ children, merchant }: DashboardLayoutProps) {
             </div>
 
             <div className="flex items-center gap-3">
-              <LanguageSwitcher variant="dark" />
               {merchant && <NotificationDropdown merchantId={merchant.id} />}
               <button
                 onClick={handleSignOut}

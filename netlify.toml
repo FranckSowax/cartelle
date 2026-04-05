@@ -13,9 +13,7 @@
 # - SUPABASE_SERVICE_ROLE_KEY
 # - NEXT_PUBLIC_APP_URL
 # - ADMIN_EMAILS
-# - STRIPE_SECRET_KEY
-# - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-# - STRIPE_WEBHOOK_SECRET
+# - WHAPI_API_KEY
 
 # ⚠️ DO NOT add [[redirects]] rules here.
 # The @netlify/plugin-nextjs plugin automatically handles all routing

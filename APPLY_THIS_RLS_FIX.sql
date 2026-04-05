@@ -1,5 +1,5 @@
 -- ============================================
--- CORRECTION DES POLITIQUES RLS POUR STARSPIN
+-- CORRECTION DES POLITIQUES RLS POUR CARTELLE
 -- Exécutez ce script dans Supabase SQL Editor
 -- ============================================
 

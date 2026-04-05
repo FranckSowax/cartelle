@@ -13,7 +13,6 @@ import { FloatingParticles } from '@/components/animations/FloatingParticles';
 import { GradientText } from '@/components/animations/GradientText';
 import { ShineBorder } from '@/components/animations/ShineBorder';
 import { ScrollReveal, StaggeredReveal } from '@/components/animations/ScrollReveal';
-import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
 import '@/lib/i18n/config';
 
@@ -61,7 +60,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-2">
             <img
               src="/LOGO-STARSPIN-WHITE_web.png"
-              alt="StarSpin Logo"
+              alt="Cartelle Logo"
               className="h-12 sm:h-16 md:h-20 w-auto"
             />
           </div>
@@ -73,7 +72,6 @@ export default function LandingPage() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <LanguageSwitcher variant="light" />
             <Link href="/auth/signup">
               <Button className="bg-[#FFD700] text-black font-bold rounded-full hover:bg-[#FFC700] hover:shadow-lg transition-all">
                 {t('landing.nav.getStarted')}
@@ -151,7 +149,7 @@ export default function LandingPage() {
                 {/* Main wheel image with float + glow animation */}
                 <img
                   src="/DESIGNSPIN.png"
-                  alt="StarSpin Wheel"
+                  alt="Cartelle Wheel"
                   className="relative z-10 w-full h-auto animate-hero-float animate-hero-glow"
                 />
 
@@ -1101,7 +1099,7 @@ export default function LandingPage() {
         <div className="absolute inset-0">
           <Image
             src="/BANNER-SPIN-HERO-.png"
-            alt="StarSpin Banner"
+            alt="Cartelle Banner"
             fill
             className="object-cover"
             priority
@@ -1170,7 +1168,7 @@ export default function LandingPage() {
             <div className="md:col-span-2">
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-2 h-2 bg-[#52B788] rounded-full"></div>
-                <span className="text-2xl font-bold text-white">starspin</span>
+                <span className="text-2xl font-bold text-white">cartelle</span>
               </div>
               <p className="text-white/70 mb-6 leading-relaxed">
                 La solution gamifiée qui transforme vos clients satisfaits en ambassadeurs et booste votre réputation en ligne.
@@ -1231,7 +1229,7 @@ export default function LandingPage() {
           {/* Bottom bar */}
           <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-white/60 text-sm">
-              © 2025 StarSpin. Tous droits réservés.
+              © 2025 Cartelle. Tous droits réservés.
             </p>
             <div className="flex items-center gap-6 text-white/60 text-sm">
               <span>Made with ❤️ for Thai businesses</span>

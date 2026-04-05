@@ -273,7 +273,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({
         client: clientData,
         isNew: false,
-        cardUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'https://starspin.netlify.app'}/card/${clientData.qr_code_data}`
+        cardUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'https://cartelle.app'}/card/${clientData.qr_code_data}`
       });
     }
 
@@ -283,7 +283,7 @@ export async function POST(request: NextRequest) {
     const timestamp = Date.now();
     const randomSuffix = Math.random().toString(36).substring(2, 6).toUpperCase();
     // Extraire les 4 premières lettres du nom du merchant (en majuscules, sans espaces/caractères spéciaux)
-    const merchantPrefix = (merchant.business_name || 'STAR')
+    const merchantPrefix = (merchant.business_name || 'CART')
       .replace(/[^a-zA-Z]/g, '') // Garder seulement les lettres
       .substring(0, 4)
       .toUpperCase()
@@ -355,7 +355,7 @@ export async function POST(request: NextRequest) {
       client: newClient,
       isNew: true,
       welcomePoints,
-      cardUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'https://starspin.netlify.app'}/card/${qrCodeData}`
+      cardUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'https://cartelle.app'}/card/${qrCodeData}`
     });
   } catch (error) {
     console.error('[LOYALTY CLIENT POST] Error:', error);

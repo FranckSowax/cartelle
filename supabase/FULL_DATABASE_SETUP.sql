@@ -1,7 +1,7 @@
 -- ============================================================================
--- STARSPIN - SCRIPT COMPLET DE CRÉATION DE BASE DE DONNÉES
+-- CARTELLE - SCRIPT COMPLET DE CRÉATION DE BASE DE DONNÉES
 -- ============================================================================
--- Ce script crée une nouvelle base de données StarSpin complète depuis zéro.
+-- Ce script crée une nouvelle base de données Cartelle complète depuis zéro.
 -- Exécutez-le dans l'éditeur SQL de votre projet Supabase.
 --
 -- IMPORTANT: Ce script suppose une base de données Supabase vierge.
@@ -70,9 +70,6 @@ CREATE TABLE merchants (
     -- Planning
     weekly_schedule TEXT,
 
-    -- Stripe (paiements)
-    stripe_customer_id TEXT,
-    stripe_subscription_id TEXT,
     subscription_tier TEXT DEFAULT 'starter',
 
     -- Configuration de la roue
@@ -97,7 +94,7 @@ CREATE TABLE merchants (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-COMMENT ON TABLE merchants IS 'Comptes marchands utilisant StarSpin';
+COMMENT ON TABLE merchants IS 'Comptes marchands utilisant Cartelle';
 COMMENT ON COLUMN merchants.workflow_mode IS 'Mode de workflow: web ou whatsapp';
 COMMENT ON COLUMN merchants.redirect_strategy IS 'Stratégie de redirection après avis positif';
 COMMENT ON COLUMN merchants.unlucky_probability IS 'Probabilité du résultat "pas de chance" (0-100)';

@@ -31,10 +31,6 @@ import type { LoyaltyClient, LoyaltyReward, PointsTransaction, Merchant } from '
 // Available languages
 const LANGUAGES = [
   { code: 'fr', flag: '🇫🇷', name: 'Français' },
-  { code: 'en', flag: '🇬🇧', name: 'English' },
-  { code: 'th', flag: '🇹🇭', name: 'ไทย' },
-  { code: 'es', flag: '🇪🇸', name: 'Español' },
-  { code: 'pt', flag: '🇵🇹', name: 'Português' }
 ];
 
 interface PageProps {
@@ -224,7 +220,7 @@ export default function LoyaltyCardPage({ params }: PageProps) {
   const handleDownloadCard = async () => {
     if (!client) return;
 
-    const shopName = merchant?.business_name || 'StarSpin';
+    const shopName = merchant?.business_name || 'Cartelle';
     const cardImageUrl = merchant?.loyalty_card_image_url || merchant?.background_url;
     setDownloading(true);
 
@@ -351,9 +347,9 @@ export default function LoyaltyCardPage({ params }: PageProps) {
       pdf.setTextColor(148, 163, 184);
       pdf.setFontSize(6);
       pdf.setFont('helvetica', 'normal');
-      pdf.text('Powered by StarSpin', pageWidth / 2, footerY, { align: 'center' });
+      pdf.text('Powered by Cartelle', pageWidth / 2, footerY, { align: 'center' });
       pdf.setFontSize(5);
-      pdf.text(`starspin.netlify.app/card/${client.qr_code_data}`, pageWidth / 2, footerY + 3, { align: 'center' });
+      pdf.text(`cartelle.app/card/${client.qr_code_data}`, pageWidth / 2, footerY + 3, { align: 'center' });
 
       // Download PDF
       pdf.save(`${shopName.replace(/\s+/g, '_')}_card_${client.card_id}.pdf`);
@@ -386,7 +382,7 @@ export default function LoyaltyCardPage({ params }: PageProps) {
   }
 
   const cardImageUrl = merchant?.loyalty_card_image_url || merchant?.background_url;
-  const shopName = merchant?.business_name || 'StarSpin';
+  const shopName = merchant?.business_name || 'Cartelle';
   const logoBackgroundColor = merchant?.logo_background_color || '#FFFFFF';
 
   return (
@@ -897,7 +893,7 @@ export default function LoyaltyCardPage({ params }: PageProps) {
 
         {/* Footer */}
         <div className="mt-8 text-center">
-          <p className="text-sm text-slate-500">Powered by StarSpin</p>
+          <p className="text-sm text-slate-500">Powered by Cartelle</p>
         </div>
       </div>
 

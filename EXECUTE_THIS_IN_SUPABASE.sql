@@ -1,5 +1,5 @@
 -- ============================================
--- STARSPIN DATABASE SCHEMA
+-- CARTELLE DATABASE SCHEMA
 -- Copiez et collez ce fichier complet dans le SQL Editor de Supabase
 -- Dashboard: https://supabase.com/dashboard/project/egemjezgejptazoucwci/editor
 -- ============================================
@@ -19,8 +19,6 @@ CREATE TABLE merchants (
   google_review_link TEXT,
   instagram_handle TEXT,
   tiktok_handle TEXT,
-  stripe_customer_id TEXT,
-  stripe_subscription_id TEXT,
   subscription_tier TEXT DEFAULT 'starter',
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()

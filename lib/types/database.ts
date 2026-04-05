@@ -16,8 +16,6 @@ export interface Merchant {
   tiktok_handle: string | null;
   tiktok_url: string | null;
   weekly_schedule: string | null;
-  stripe_customer_id: string | null;
-  stripe_subscription_id: string | null;
   subscription_tier: string;
   unlucky_probability?: number;
   retry_probability?: number;
@@ -32,7 +30,7 @@ export interface Merchant {
   loyalty_card_image_url?: string | null;
   points_per_purchase?: number;
   purchase_amount_threshold?: number;
-  loyalty_currency?: 'THB' | 'EUR' | 'USD' | 'XAF';
+  loyalty_currency?: 'XAF';
   welcome_points?: number;
   loyalty_message_template?: string | null;
   created_at: string;
@@ -122,7 +120,7 @@ export type LoyaltyClientStatus = 'active' | 'suspended' | 'expired';
 export interface LoyaltyClient {
   id: string;
   merchant_id: string;
-  card_id: string; // Format: STAR-YYYY-XXXX
+  card_id: string; // Format: CART-YYYY-XXXX
   name: string | null;
   phone: string | null;
   email: string | null;
@@ -134,7 +132,7 @@ export interface LoyaltyClient {
   user_token: string | null;
   apple_pass_serial: string | null;
   google_pass_id: string | null;
-  preferred_language: string | null; // Language preference (fr, en, th, es, pt)
+  preferred_language: string | null; // Language preference (fr)
   status: LoyaltyClientStatus;
   last_visit: string | null;
   created_at: string;

@@ -182,12 +182,12 @@ export async function POST(request: NextRequest) {
 
         if (pointsToAdd <= 0) {
           return NextResponse.json(
-            { error: `Minimum purchase of ${threshold} ${merchant.loyalty_currency} required to earn points` },
+            { error: `Minimum purchase of ${threshold} FCFA required to earn points` },
             { status: 400 }
           );
         }
 
-        transactionDescription = transactionDescription || `Achat de ${purchaseAmount} ${merchant.loyalty_currency}`;
+        transactionDescription = transactionDescription || `Achat de ${purchaseAmount} FCFA`;
         break;
 
       case 'bonus':

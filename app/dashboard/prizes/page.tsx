@@ -56,7 +56,7 @@ export default function PrizesPage() {
       ]
     },
     {
-      name: isFr ? 'StarSpin Teal' : 'StarSpin Teal',
+      name: isFr ? 'Cartelle Teal' : 'Cartelle Teal',
       colors: [
         { bg: '#0D9488', text: '#FFFFFF' },
         { bg: '#14B8A6', text: '#FFFFFF' },

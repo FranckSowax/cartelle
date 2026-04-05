@@ -16,28 +16,28 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://starspin.app'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://cartelle.app'),
   title: {
-    default: 'StarSpin - Boostez vos avis Google avec la gamification',
-    template: '%s | StarSpin',
+    default: 'Cartelle - Boostez vos avis Google avec la gamification',
+    template: '%s | Cartelle',
   },
   description:
     'Transformez vos clients satisfaits en ambassadeurs avec notre roue de la fortune gamifiée. Augmentez vos avis Google et TripAdvisor facilement.',
   keywords: [
     'avis google',
-    'google reviews',
     'gamification',
     'roue de la fortune',
     'fidélisation client',
     'restaurant marketing',
-    'hôtel marketing',
     'QR code',
     'avis clients',
     'réputation en ligne',
+    'FCFA',
+    'Afrique',
   ],
-  authors: [{ name: 'StarSpin' }],
-  creator: 'StarSpin',
-  publisher: 'StarSpin',
+  authors: [{ name: 'Cartelle' }],
+  creator: 'Cartelle',
+  publisher: 'Cartelle',
   robots: {
     index: true,
     follow: true,
@@ -45,10 +45,9 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'fr_FR',
-    alternateLocale: ['en_US', 'th_TH'],
     url: process.env.NEXT_PUBLIC_APP_URL,
-    siteName: 'StarSpin',
-    title: 'StarSpin - Boostez vos avis Google avec la gamification',
+    siteName: 'Cartelle',
+    title: 'Cartelle - Boostez vos avis Google avec la gamification',
     description:
       'Transformez vos clients satisfaits en ambassadeurs avec notre roue de la fortune gamifiée.',
     images: [
@@ -56,13 +55,13 @@ export const metadata: Metadata = {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'StarSpin - Gamified Review Booster',
+        alt: 'Cartelle - Boostez vos avis clients',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'StarSpin - Boostez vos avis Google',
+    title: 'Cartelle - Boostez vos avis Google',
     description: 'La roue gamifiée qui booste vos avis Google et TripAdvisor.',
     images: ['/og-image.png'],
   },
@@ -79,7 +78,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="fr">
       <head>
         <link href="https://fonts.cdnfonts.com/css/arco" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>

@@ -576,7 +576,7 @@ export default function AdminDashboard() {
           <div className="flex flex-col gap-2">
             <img 
               src="/LOGO-STARSPIN-WHITE_web.png" 
-              alt="StarSpin Logo" 
+              alt="Cartelle Logo"
               className="h-8 w-auto"
             />
             <p className="text-xs text-white">Admin Dashboard</p>
@@ -855,7 +855,7 @@ export default function AdminDashboard() {
                       <p className="text-2xl font-bold text-white">{loyaltyStats.totalPurchases}</p>
                     </div>
                   </div>
-                  <p className="text-xs text-blue-400">{loyaltyStats.totalSpent.toLocaleString()} THB dépensés</p>
+                  <p className="text-xs text-blue-400">{loyaltyStats.totalSpent.toLocaleString()} FCFA dépensés</p>
                 </div>
 
                 <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-xl p-4 border border-purple-500/20">
@@ -1557,7 +1557,7 @@ export default function AdminDashboard() {
                   </div>
                   <div>
                     <p className="text-xs text-white/60">Montant Total</p>
-                    <p className="text-2xl font-bold text-white">{loyaltyStats.totalSpent.toLocaleString()} THB</p>
+                    <p className="text-2xl font-bold text-white">{loyaltyStats.totalSpent.toLocaleString()} FCFA</p>
                   </div>
                 </div>
               </div>
@@ -1664,7 +1664,7 @@ export default function AdminDashboard() {
                           <td className="px-6 py-4">
                             <div>
                               <p className="text-white">{client.total_purchases} achats</p>
-                              <p className="text-xs text-white/50">{Number(client.total_spent).toLocaleString()} THB</p>
+                              <p className="text-xs text-white/50">{Number(client.total_spent).toLocaleString()} FCFA</p>
                             </div>
                           </td>
                           <td className="px-6 py-4">

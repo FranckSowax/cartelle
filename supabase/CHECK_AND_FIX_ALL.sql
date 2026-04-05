@@ -1,5 +1,5 @@
 -- ============================================
--- MASTER FIX SCRIPT - STARSPIN DATABASE HEALTH
+-- MASTER FIX SCRIPT - CARTELLE DATABASE HEALTH
 -- ============================================
 -- Ce script vérifie et répare TOUT : colonnes manquantes, RLS, Permissions, Cache.
 -- À exécuter en cas de doute ou après une restauration de schéma.

@@ -8,7 +8,6 @@ import { supabase } from '@/lib/supabase/client';
 import { useTranslation } from 'react-i18next';
 import i18n from '@/lib/i18n/config';
 import { Star, Mail, Globe, Phone } from 'lucide-react';
-import { ALL_LANGUAGES } from '@/components/ui/LanguageSwitcher';
 import { PhoneInputWithCountry } from '@/components/ui/PhoneInputWithCountry';
 import { feedbackSchema, feedbackSchemaWhatsApp, sanitizeString, sanitizePhone, isValidUUID } from '@/lib/utils/validation';
 
@@ -21,7 +20,7 @@ export default function RatingPage() {
 
   // Get language from URL or localStorage
   const langFromUrl = searchParams.get('lang');
-  const currentLang = langFromUrl || i18n.language || 'en';
+  const currentLang = 'fr';
 
   const [rating, setRating] = useState<number | null>(null);
   const [feedback, setFeedback] = useState('');
@@ -323,16 +322,7 @@ export default function RatingPage() {
         )}
 
         {/* Language Switcher */}
-        <div className="flex justify-end mb-4">
-          <button
-            onClick={() => router.push(`/rate/${shopId}/select-language`)}
-            className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-full text-white transition-all backdrop-blur-sm"
-          >
-            <Globe className="w-4 h-4" />
-            <span className="text-xl">{ALL_LANGUAGES.find(l => l.code === i18n.language)?.flag || '🇬🇧'}</span>
-            <span className="text-sm font-medium">{i18n.language.toUpperCase()}</span>
-          </button>
-        </div>
+        <div className="mb-4" />
 
         {/* Rating Card */}
         <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/20">

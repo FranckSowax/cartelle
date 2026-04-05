@@ -1,5 +1,5 @@
 -- ============================================
--- SCRIPT DE RESTAURATION SUPABASE - STARSPIN
+-- SCRIPT DE RESTAURATION SUPABASE - CARTELLE
 -- ============================================
 -- Ce script restaure la base de données après l'exécution accidentelle de schema.sql
 -- Exécutez ce script dans le SQL Editor de Supabase Dashboard
@@ -24,7 +24,7 @@ INSERT INTO merchants (
   '158aed3e-d053-4d37-9824-3ea87af2ce9d'::uuid,
   'VOTRE_EMAIL@example.com',  -- ⚠️ CHANGEZ CECI
   'Merchant Test',
-  'StarSpin Business',
+  'Cartelle Business',
   'starter',
   20,
   10,

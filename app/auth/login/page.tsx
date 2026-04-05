@@ -124,12 +124,12 @@ function LoginForm() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#FF6F61] to-[#FFC107] flex items-center justify-center p-4">
         <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Check Your Email</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">Vérifiez votre email</h1>
           <p className="text-gray-600 mb-6">
-            We've sent a magic link to <strong>{email}</strong>. Click the link to sign in.
+            Un lien magique a été envoyé à <strong>{email}</strong>. Cliquez dessus pour vous connecter.
           </p>
           <Button onClick={() => setMagicLinkSent(false)} variant="outline">
-            Back to Login
+            Retour à la connexion
           </Button>
         </div>
       </div>
@@ -139,8 +139,8 @@ function LoginForm() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FF6F61] to-[#FFC107] flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full">
-        <h1 className="text-3xl font-bold text-center text-gray-900 mb-2">StarSpin</h1>
-        <p className="text-center text-gray-600 mb-8">Merchant Login</p>
+        <h1 className="text-3xl font-bold text-center text-gray-900 mb-2">Cartelle</h1>
+        <p className="text-center text-gray-600 mb-8">Connexion commerçant</p>
 
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
@@ -151,16 +151,16 @@ function LoginForm() {
         <form onSubmit={handleEmailLogin} className="space-y-4 mb-6">
           <Input
             type="email"
-            label="Email"
+            label="Adresse email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="merchant@example.com"
+            placeholder="contact@moncommerce.com"
             required
           />
 
           <Input
             type="password"
-            label="Password"
+            label="Mot de passe"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
@@ -168,7 +168,7 @@ function LoginForm() {
           />
 
           <Button type="submit" disabled={loading} className="w-full">
-            {loading ? 'Signing in...' : 'Sign In'}
+            {loading ? 'Connexion...' : 'Se connecter'}
           </Button>
         </form>
 
@@ -177,7 +177,7 @@ function LoginForm() {
             <div className="w-full border-t border-gray-300"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-gray-500">Or</span>
+            <span className="px-2 bg-white text-gray-500">Ou</span>
           </div>
         </div>
 
@@ -187,13 +187,13 @@ function LoginForm() {
           variant="outline"
           className="w-full"
         >
-          Send Magic Link
+          Envoyer un lien magique
         </Button>
 
         <p className="text-center text-sm text-gray-600 mt-6">
-          Don't have an account?{' '}
+          Pas encore de compte ?{' '}
           <a href="/auth/signup" className="text-[#FF6F61] font-semibold hover:underline">
-            Sign Up
+            S'inscrire
           </a>
         </p>
       </div>
@@ -206,7 +206,7 @@ function LoginLoading() {
     <div className="min-h-screen bg-gradient-to-br from-[#FF6F61] to-[#FFC107] flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center">
         <div className="w-12 h-12 border-4 border-gray-300 border-t-[#FF6F61] rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-gray-600">Loading...</p>
+        <p className="text-gray-600">Chargement...</p>
       </div>
     </div>
   );

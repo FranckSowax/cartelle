@@ -254,7 +254,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 8. Generate spin URL with phone number and language
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://starspin.netlify.app';
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://cartelle.app';
     const spinUrl = `${baseUrl}/spin/${merchantId}?phone=${encodeURIComponent(phoneNumber)}&lang=${language}`;
 
     // 9. Format phone number for Whapi (remove + prefix)
@@ -263,7 +263,7 @@ export async function POST(request: NextRequest) {
     // 10. Get translated texts
     const spinButtonText = SPIN_BUTTON_TEXTS[language] || SPIN_BUTTON_TEXTS['fr'];
     const cardButtonText = CARD_BUTTON_TEXTS[language] || CARD_BUTTON_TEXTS['fr'];
-    const businessName = merchant.business_name || 'StarSpin';
+    const businessName = merchant.business_name || 'Cartelle';
 
     // Select body text based on context:
     // - If cardUrl provided + isNewClient: use NEW_CLIENT message (welcome + loyalty card)
@@ -333,7 +333,7 @@ export async function POST(request: NextRequest) {
         text: bodyText
       },
       footer: {
-        text: '⭐ StarSpin'
+        text: 'Cartelle'
       },
       action: {
         buttons
@@ -374,7 +374,7 @@ ${cardUrl}`;
 
       textMessage += `
 
-⭐ StarSpin`;
+Cartelle`;
 
       whapiResponse = await fetch(WHAPI_TEXT_URL, {
         method: 'POST',

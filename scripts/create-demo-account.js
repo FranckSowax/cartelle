@@ -2,7 +2,7 @@
 
 const { createClient } = require('@supabase/supabase-js');
 
-console.log('🎭 Création d\'un compte démo StarSpin\n');
+console.log('🎭 Création d\'un compte démo Cartelle\n');
 
 const supabaseUrl = 'https://egemjezgejptazoucwci.supabase.co';
 const supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVnZW1qZXpnZWpwdGF6b3Vjd2NpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2Njc4NjA1OSwiZXhwIjoyMDgyMzYyMDU5fQ.HJJStxiUl5BoGF6VFqWsDC6uFHKemB27A4fTVKCfgcI';
@@ -20,7 +20,7 @@ async function createDemoAccount() {
     
     // Créer un utilisateur avec Supabase Auth
     const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-      email: 'demo@starspin.app',
+      email: 'demo@cartelle.app',
       password: 'Demo123!',
       email_confirm: true,
       user_metadata: {
@@ -30,12 +30,12 @@ async function createDemoAccount() {
 
     if (authError) {
       if (authError.message.includes('already registered')) {
-        console.log('ℹ️  Le compte demo@starspin.app existe déjà');
+        console.log('ℹ️  Le compte demo@cartelle.app existe déjà');
         console.log('   Utilisation du compte existant...\n');
         
         // Récupérer l'utilisateur existant
         const { data: users } = await supabase.auth.admin.listUsers();
-        const demoUser = users.users.find(u => u.email === 'demo@starspin.app');
+        const demoUser = users.users.find(u => u.email === 'demo@cartelle.app');
         
         if (!demoUser) {
           throw new Error('Impossible de trouver le compte démo');
@@ -80,13 +80,13 @@ async function createMerchant(userId) {
     .from('merchants')
     .insert({
       id: userId,
-      email: 'demo@starspin.app',
+      email: 'demo@cartelle.app',
       name: 'Compte Démo',
-      business_name: 'Café Demo StarSpin',
+      business_name: 'Commerce Demo Cartelle',
       subscription_tier: 'pro',
       google_review_link: 'https://g.page/r/demo',
-      instagram_handle: 'starspin_demo',
-      tiktok_handle: 'starspin_demo'
+      instagram_handle: 'cartelle_demo',
+      tiktok_handle: 'cartelle_demo'
     })
     .select()
     .single();
@@ -147,7 +147,7 @@ function displayCredentials(merchant) {
   console.log('🎉 COMPTE DÉMO CRÉÉ AVEC SUCCÈS!');
   console.log('='.repeat(60));
   console.log('\n📧 Identifiants de connexion:');
-  console.log('   Email    : demo@starspin.app');
+  console.log('   Email    : demo@cartelle.app');
   console.log('   Password : Demo123!');
   console.log('\n🏪 Informations du compte:');
   console.log(`   Business : ${merchant.business_name}`);
@@ -169,7 +169,7 @@ function displayCredentials(merchant) {
   console.log('   - Générez votre QR code dans "Generate QR Code"');
   console.log('   - Consultez les feedbacks dans "View Feedback"');
   console.log('\n' + '='.repeat(60));
-  console.log('🚀 Bon test de StarSpin!\n');
+  console.log('🚀 Bon test de Cartelle!\n');
 }
 
 createDemoAccount();

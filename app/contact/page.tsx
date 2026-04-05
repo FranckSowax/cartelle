@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useTranslation } from 'react-i18next';
-import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import '@/lib/i18n/config';
 
 export default function ContactPage() {
@@ -63,13 +62,12 @@ export default function ContactPage() {
           <Link href="/" className="flex items-center gap-2">
             <img
               src="/LOGO-STARSPIN-WHITE_web.png"
-              alt="StarSpin Logo"
+              alt="Cartelle Logo"
               className="h-12 sm:h-16 md:h-20 w-auto"
             />
           </Link>
 
           <div className="flex items-center gap-4">
-            <LanguageSwitcher variant="light" />
             <Link href="/">
               <Button variant="outline" className="border-white/30 text-white hover:bg-white/10">
                 {t('contact.backToHome')}
@@ -240,11 +238,11 @@ export default function ContactPage() {
               <Card className="bg-white rounded-2xl p-6 shadow-lg">
                 <h4 className="font-bold text-gray-900 mb-3">{t('contact.directContact')}</h4>
                 <div className="space-y-3 text-gray-600">
-                  <a href="mailto:contact@starspin.app" className="flex items-center gap-3 hover:text-[#2D6A4F] transition">
+                  <a href="mailto:contact@cartelle.app" className="flex items-center gap-3 hover:text-[#2D6A4F] transition">
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
-                    contact@starspin.app
+                    contact@cartelle.app
                   </a>
                 </div>
               </Card>

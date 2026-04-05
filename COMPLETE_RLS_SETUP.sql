@@ -1,5 +1,5 @@
 -- ============================================
--- CONFIGURATION COMPLÈTE DES POLITIQUES RLS POUR STARSPIN
+-- CONFIGURATION COMPLÈTE DES POLITIQUES RLS POUR CARTELLE
 -- Exécutez ce script dans Supabase SQL Editor
 -- ============================================
 -- Ce script configure toutes les politiques RLS nécessaires pour :

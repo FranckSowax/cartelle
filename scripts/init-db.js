@@ -16,7 +16,7 @@ if (!supabaseUrl || !supabaseServiceKey) {
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 async function initDatabase() {
-  console.log('🚀 Initializing StarSpin database...\n');
+  console.log('🚀 Initializing Cartelle database...\n');
 
   try {
     // Read the schema file
@@ -64,7 +64,7 @@ async function initDatabase() {
     console.log('  - subscription_tiers');
     console.log('\n🔒 Row Level Security policies applied');
     console.log('📈 Indexes created for performance');
-    console.log('\n🎉 StarSpin database is ready to use!');
+    console.log('\n🎉 Cartelle database is ready to use!');
 
   } catch (error) {
     console.error('❌ Error initializing database:', error.message);

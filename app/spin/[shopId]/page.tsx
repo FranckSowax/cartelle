@@ -398,18 +398,31 @@ export default function SpinPage() {
             }),
           }).catch(() => {});
 
-          if (phoneFromUrl && merchant?.workflow_mode === 'whatsapp') {
-            fetch('/api/whatsapp/congratulate', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                merchantId: shopId,
-                phoneNumber: phoneFromUrl,
-                prizeName: prize.name,
-                couponCode: generatedCode,
-                language: currentLang,
-              }),
-            }).catch(() => {});
+          // Send WhatsApp congratulation message if phone number is available
+          if (phoneFromUrl) {
+            try {
+              const congratsResponse = await fetch('/api/whatsapp/congratulate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  merchantId: shopId,
+                  phoneNumber: phoneFromUrl,
+                  prizeName: prize.name,
+                  couponCode: generatedCode,
+                  language: currentLang,
+                }),
+              });
+              const congratsData = await congratsResponse.json();
+              if (!congratsResponse.ok) {
+                console.error('[SPIN] WhatsApp congratulate failed:', congratsResponse.status, congratsData);
+              } else {
+                console.log('[SPIN] WhatsApp congratulate sent:', congratsData);
+              }
+            } catch (err) {
+              console.error('[SPIN] WhatsApp congratulate error:', err);
+            }
+          } else {
+            console.warn('[SPIN] No phone in URL, skipping WhatsApp congratulate');
           }
         }
       } catch {

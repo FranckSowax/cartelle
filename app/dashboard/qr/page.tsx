@@ -66,7 +66,7 @@ export default function QRCodePage() {
     if (!canvasRef.current || !qrCodeUrl) return;
 
     const link = document.createElement('a');
-    link.download = `starspin-qr-${merchant?.business_name || 'code'}.${format}`;
+    link.download = `cartelle-qr-${merchant?.business_name || 'code'}.${format}`;
     link.href = qrCodeUrl;
     link.click();
   };

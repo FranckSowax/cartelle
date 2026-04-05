@@ -1,5 +1,5 @@
--- StarSpin Database Schema
--- This schema defines all tables for the StarSpin SaaS application
+-- Cartelle Database Schema
+-- This schema defines all tables for the Cartelle SaaS application
 
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -23,8 +23,6 @@ CREATE TABLE merchants (
   tiktok_handle TEXT,
   tiktok_url TEXT,
   weekly_schedule TEXT,
-  stripe_customer_id TEXT,
-  stripe_subscription_id TEXT,
   subscription_tier TEXT DEFAULT 'starter',
   unlucky_probability INTEGER DEFAULT 20,
   retry_probability INTEGER DEFAULT 10,

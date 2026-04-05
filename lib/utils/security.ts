@@ -1,5 +1,5 @@
 /**
- * Security utilities for StarSpin
+ * Security utilities for Cartelle
  * Includes rate limiting and request validation
  */
 

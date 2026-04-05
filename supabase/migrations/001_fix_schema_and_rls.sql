@@ -1,5 +1,5 @@
 -- ============================================================
--- STARSPIN - Script de Correction Base de Données
+-- CARTELLE - Script de Correction Base de Données
 -- Date: 2025-12-29
 -- ============================================================
 

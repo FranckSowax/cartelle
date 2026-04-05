@@ -1,5 +1,5 @@
 -- ============================================
--- FIX MERCHANT SIGNUP - STARSPIN
+-- FIX MERCHANT SIGNUP - CARTELLE
 -- ============================================
 -- Exécutez ce script dans Supabase SQL Editor pour permettre
 -- l'inscription de nouveaux merchants.

@@ -7,7 +7,7 @@ const path = require('path');
 const SUPABASE_URL = 'https://egemjezgejptazoucwci.supabase.co';
 const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVnZW1qZXpnZWpwdGF6b3Vjd2NpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2Njc4NjA1OSwiZXhwIjoyMDgyMzYyMDU5fQ.HJJStxiUl5BoGF6VFqWsDC6uFHKemB27A4fTVKCfgcI';
 
-console.log('🚀 StarSpin - Exécution automatique du schéma SQL\n');
+console.log('🚀 Cartelle - Exécution automatique du schéma SQL\n');
 
 // Lire le schéma SQL
 const schemaPath = path.join(__dirname, '../supabase/schema.sql');

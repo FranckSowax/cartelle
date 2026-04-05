@@ -112,7 +112,7 @@ export default function AdminLoginPage() {
             label="Email administrateur"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="admin@starspin.app"
+            placeholder="admin@cartelle.app"
             required
           />
 

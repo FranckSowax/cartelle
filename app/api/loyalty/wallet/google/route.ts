@@ -89,17 +89,17 @@ export async function GET(request: NextRequest) {
     }
 
     // Créer les IDs uniques
-    const classId = `${googleIssuerId}.starspin_loyalty_${merchant.id.replace(/-/g, '_')}`;
-    const objectId = `${googleIssuerId}.starspin_card_${client.id.replace(/-/g, '_')}`;
+    const classId = `${googleIssuerId}.cartelle_loyalty_${merchant.id.replace(/-/g, '_')}`;
+    const objectId = `${googleIssuerId}.cartelle_card_${client.id.replace(/-/g, '_')}`;
 
     // LoyaltyClass (template pour tous les passes du merchant)
     const loyaltyClass = {
       id: classId,
-      issuerName: 'StarSpin',
+      issuerName: 'Cartelle',
       programName: `${merchant.business_name} - Fidélité`,
       programLogo: {
         sourceUri: {
-          uri: merchant.logo_url || 'https://starspin.netlify.app/logo.png'
+          uri: merchant.logo_url || 'https://cartelle.app/logo.png'
         },
         contentDescription: {
           defaultValue: {
@@ -197,7 +197,7 @@ export async function GET(request: NextRequest) {
       linksModuleData: {
         uris: [
           {
-            uri: `https://starspin.netlify.app/card/${client.qr_code_data}`,
+            uri: `https://cartelle.app/card/${client.qr_code_data}`,
             description: 'Voir ma carte en ligne',
             id: 'card_link'
           }
@@ -209,7 +209,7 @@ export async function GET(request: NextRequest) {
     const claims = {
       iss: googleServiceAccountEmail,
       aud: 'google',
-      origins: ['https://starspin.netlify.app'],
+      origins: ['https://cartelle.app'],
       typ: 'savetowallet',
       payload: {
         loyaltyClasses: [loyaltyClass],

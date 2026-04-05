@@ -192,7 +192,7 @@ export default function ScanPage() {
           action: 'earn',
           points: pointsToAdd,
           purchaseAmount: parseFloat(purchaseAmount) || 0,
-          description: isFr ? `Achat de ${purchaseAmount} ${merchant?.loyalty_currency || 'THB'}` : `Purchase of ${purchaseAmount} ${merchant?.loyalty_currency || 'THB'}`
+          description: isFr ? `Achat de ${purchaseAmount} FCFA` : `Purchase of ${purchaseAmount} FCFA`
         })
       });
 
@@ -549,7 +549,7 @@ export default function ScanPage() {
                     <div className="space-y-3">
                       <div>
                         <label className="block text-xs font-medium text-gray-700 mb-1.5">
-                          {t('loyalty.scan.enterAmount')} ({merchant?.loyalty_currency || 'THB'})
+                          {t('loyalty.scan.enterAmount')} (FCFA)
                         </label>
                         <Input
                           type="number"
@@ -569,7 +569,7 @@ export default function ScanPage() {
                             <span className="text-2xl font-bold text-amber-600">+{pointsToAdd}</span>
                           </div>
                           <p className="text-[10px] text-amber-600 mt-1">
-                            {merchant?.purchase_amount_threshold || 1000} {merchant?.loyalty_currency || 'THB'} = {merchant?.points_per_purchase || 10} points
+                            {merchant?.purchase_amount_threshold || 1000} FCFA = {merchant?.points_per_purchase || 10} points
                           </p>
                         </div>
                       )}

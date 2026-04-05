@@ -1,5 +1,5 @@
 -- ============================================================================
--- STARSPIN - CONFIGURATION DU STORAGE SUPABASE
+-- CARTELLE - CONFIGURATION DU STORAGE SUPABASE
 -- ============================================================================
 -- Ce script configure le bucket de stockage pour les assets des marchands.
 -- Exécutez-le dans l'éditeur SQL de Supabase.

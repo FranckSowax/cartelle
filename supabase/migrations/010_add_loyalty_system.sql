@@ -1,5 +1,5 @@
 -- ============================================================================
--- STARSPIN - Migration 010: Système de Carte Fidélité Digitale
+-- CARTELLE - Migration 010: Système de Carte Fidélité Digitale
 -- ============================================================================
 -- Ajoute le système complet de fidélité avec:
 -- - Table clients fidélité (loyalty_clients)
@@ -17,7 +17,7 @@ ALTER TABLE merchants ADD COLUMN IF NOT EXISTS loyalty_enabled BOOLEAN DEFAULT f
 ALTER TABLE merchants ADD COLUMN IF NOT EXISTS loyalty_card_image_url TEXT;
 ALTER TABLE merchants ADD COLUMN IF NOT EXISTS points_per_purchase INTEGER DEFAULT 10;
 ALTER TABLE merchants ADD COLUMN IF NOT EXISTS purchase_amount_threshold INTEGER DEFAULT 1000;
-ALTER TABLE merchants ADD COLUMN IF NOT EXISTS loyalty_currency TEXT DEFAULT 'THB';
+ALTER TABLE merchants ADD COLUMN IF NOT EXISTS loyalty_currency TEXT DEFAULT 'XAF';
 ALTER TABLE merchants ADD COLUMN IF NOT EXISTS welcome_points INTEGER DEFAULT 50;
 ALTER TABLE merchants ADD COLUMN IF NOT EXISTS loyalty_message_template TEXT DEFAULT 'Bienvenue ! Votre carte fidélité est prête avec {{points}} points. Consultez-la ici: {{card_link}}';
 
@@ -25,7 +25,7 @@ COMMENT ON COLUMN merchants.loyalty_enabled IS 'Active/désactive le système de
 COMMENT ON COLUMN merchants.loyalty_card_image_url IS 'Image personnalisée pour la carte fidélité';
 COMMENT ON COLUMN merchants.points_per_purchase IS 'Nombre de points gagnés par seuil atteint';
 COMMENT ON COLUMN merchants.purchase_amount_threshold IS 'Montant en devise pour gagner des points';
-COMMENT ON COLUMN merchants.loyalty_currency IS 'Devise pour calcul (THB, EUR, USD, XAF)';
+COMMENT ON COLUMN merchants.loyalty_currency IS 'Devise pour calcul (XAF, EUR, USD)';
 COMMENT ON COLUMN merchants.welcome_points IS 'Points offerts à la création de la carte';
 COMMENT ON COLUMN merchants.loyalty_message_template IS 'Template message WhatsApp/email fidélité';
 
@@ -36,7 +36,7 @@ COMMENT ON COLUMN merchants.loyalty_message_template IS 'Template message WhatsA
 CREATE TABLE IF NOT EXISTS loyalty_clients (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     merchant_id UUID NOT NULL REFERENCES merchants(id) ON DELETE CASCADE,
-    card_id TEXT UNIQUE NOT NULL, -- Format: STAR-2026-XXXX
+    card_id TEXT UNIQUE NOT NULL, -- Format: CART-2026-XXXX
     name TEXT,
     phone TEXT,
     email TEXT,
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS loyalty_clients (
 );
 
 COMMENT ON TABLE loyalty_clients IS 'Clients inscrits au programme de fidélité';
-COMMENT ON COLUMN loyalty_clients.card_id IS 'Identifiant lisible de la carte (STAR-YYYY-XXXX)';
+COMMENT ON COLUMN loyalty_clients.card_id IS 'Identifiant lisible de la carte (CART-YYYY-XXXX)';
 COMMENT ON COLUMN loyalty_clients.qr_code_data IS 'UUID unique encodé dans le QR code';
 COMMENT ON COLUMN loyalty_clients.user_token IS 'Lien avec le token feedback pour historique';
 
@@ -186,16 +186,16 @@ BEGIN
     SELECT COUNT(*) + 1 INTO v_count
     FROM loyalty_clients
     WHERE merchant_id = p_merchant_id
-    AND card_id LIKE 'STAR-' || v_year || '-%';
+    AND card_id LIKE 'CART-' || v_year || '-%';
 
-    -- Générer le card_id au format STAR-YYYY-XXXX
-    v_card_id := 'STAR-' || v_year || '-' || LPAD(v_count::TEXT, 4, '0');
+    -- Générer le card_id au format CART-YYYY-XXXX
+    v_card_id := 'CART-' || v_year || '-' || LPAD(v_count::TEXT, 4, '0');
 
     RETURN v_card_id;
 END;
 $$ LANGUAGE plpgsql;
 
-COMMENT ON FUNCTION generate_loyalty_card_id IS 'Génère un ID de carte unique au format STAR-YYYY-XXXX';
+COMMENT ON FUNCTION generate_loyalty_card_id IS 'Génère un ID de carte unique au format CART-YYYY-XXXX';
 
 -- ============================================================================
 -- PARTIE 7: FONCTION GÉNÉRATION redemption_code

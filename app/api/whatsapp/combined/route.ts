@@ -12,42 +12,7 @@ const NEW_CLIENT_MESSAGES: Record<string, { header: string; body: string; footer
   fr: {
     header: '🎉 Bienvenue !',
     body: 'Merci pour votre avis ! Votre carte fidélité a été créée avec des points de bienvenue offerts !\n\n🎰 Tournez la roue pour gagner un cadeau\n🎁 Consultez votre carte fidélité',
-    footer: '⭐ StarSpin'
-  },
-  en: {
-    header: '🎉 Welcome!',
-    body: 'Thank you for your review! Your loyalty card has been created with welcome points!\n\n🎰 Spin the wheel to win a gift\n🎁 Check your loyalty card',
-    footer: '⭐ StarSpin'
-  },
-  th: {
-    header: '🎉 ยินดีต้อนรับ!',
-    body: 'ขอบคุณสำหรับรีวิว! บัตรสมาชิกของคุณถูกสร้างแล้วพร้อมแต้มต้อนรับ!\n\n🎰 หมุนวงล้อเพื่อรับของรางวัล\n🎁 ตรวจสอบบัตรสมาชิกของคุณ',
-    footer: '⭐ StarSpin'
-  },
-  es: {
-    header: '🎉 ¡Bienvenido!',
-    body: '¡Gracias por tu opinión! Tu tarjeta de fidelidad ha sido creada con puntos de bienvenida!\n\n🎰 Gira la rueda para ganar un regalo\n🎁 Consulta tu tarjeta de fidelidad',
-    footer: '⭐ StarSpin'
-  },
-  pt: {
-    header: '🎉 Bem-vindo!',
-    body: 'Obrigado pela sua avaliação! Seu cartão fidelidade foi criado com pontos de boas-vindas!\n\n🎰 Gire a roda para ganhar um presente\n🎁 Consulte seu cartão fidelidade',
-    footer: '⭐ StarSpin'
-  },
-  zh: {
-    header: '🎉 欢迎！',
-    body: '感谢您的评价！您的会员卡已创建并赠送欢迎积分！\n\n🎰 转动轮盘赢取礼物\n🎁 查看您的会员卡',
-    footer: '⭐ StarSpin'
-  },
-  ru: {
-    header: '🎉 Добро пожаловать!',
-    body: 'Спасибо за отзыв! Ваша карта лояльности создана с приветственными баллами!\n\n🎰 Крутите колесо, чтобы выиграть подарок\n🎁 Проверьте вашу карту лояльности',
-    footer: '⭐ StarSpin'
-  },
-  ar: {
-    header: '🎉 أهلاً وسهلاً!',
-    body: 'شكراً لتقييمك! تم إنشاء بطاقة الولاء الخاصة بك مع نقاط ترحيبية!\n\n🎰 أدر العجلة للفوز بهدية\n🎁 تحقق من بطاقة الولاء الخاصة بك',
-    footer: '⭐ StarSpin'
+    footer: 'Cartelle'
   },
 };
 
@@ -56,55 +21,13 @@ const RETURNING_CLIENT_MESSAGES: Record<string, { header: string; body: (points:
   fr: {
     header: '👋 Bon retour !',
     body: (points) => `Merci pour votre visite ! Vous avez ${points} points sur votre carte fidélité.\n\n🎰 Tournez la roue pour gagner un cadeau\n🎁 Consultez votre solde et récompenses`,
-    footer: '⭐ StarSpin'
-  },
-  en: {
-    header: '👋 Welcome back!',
-    body: (points) => `Thank you for your visit! You have ${points} points on your loyalty card.\n\n🎰 Spin the wheel to win a gift\n🎁 Check your balance and rewards`,
-    footer: '⭐ StarSpin'
-  },
-  th: {
-    header: '👋 ยินดีต้อนรับกลับ!',
-    body: (points) => `ขอบคุณสำหรับการมาเยี่ยมชม! คุณมี ${points} แต้มในบัตรสมาชิก\n\n🎰 หมุนวงล้อเพื่อรับของรางวัล\n🎁 ตรวจสอบยอดแต้มและรางวัล`,
-    footer: '⭐ StarSpin'
-  },
-  es: {
-    header: '👋 ¡Bienvenido de nuevo!',
-    body: (points) => `¡Gracias por tu visita! Tienes ${points} puntos en tu tarjeta.\n\n🎰 Gira la rueda para ganar un regalo\n🎁 Consulta tu saldo y recompensas`,
-    footer: '⭐ StarSpin'
-  },
-  pt: {
-    header: '👋 Bem-vindo de volta!',
-    body: (points) => `Obrigado pela sua visita! Você tem ${points} pontos no seu cartão.\n\n🎰 Gire a roda para ganhar um presente\n🎁 Consulte seu saldo e recompensas`,
-    footer: '⭐ StarSpin'
-  },
-  zh: {
-    header: '👋 欢迎回来！',
-    body: (points) => `感谢您的光临！您的会员卡有 ${points} 积分。\n\n🎰 转动轮盘赢取礼物\n🎁 查看您的余额和奖励`,
-    footer: '⭐ StarSpin'
-  },
-  ru: {
-    header: '👋 С возвращением!',
-    body: (points) => `Спасибо за визит! У вас ${points} баллов на карте лояльности.\n\n🎰 Крутите колесо, чтобы выиграть подарок\n🎁 Проверьте ваш баланс и награды`,
-    footer: '⭐ StarSpin'
-  },
-  ar: {
-    header: '👋 أهلاً بعودتك!',
-    body: (points) => `شكراً لزيارتك! لديك ${points} نقطة على بطاقة الولاء.\n\n🎰 أدر العجلة للفوز بهدية\n🎁 تحقق من رصيدك ومكافآتك`,
-    footer: '⭐ StarSpin'
+    footer: 'Cartelle'
   },
 };
 
 // Button texts (max 20 characters for WhatsApp)
 const BUTTON_TEXTS: Record<string, { spin: string; card: string }> = {
   fr: { spin: 'Tourner la Roue 🎰', card: 'Ma Carte 🎁' },
-  en: { spin: 'Spin the Wheel 🎰', card: 'My Card 🎁' },
-  th: { spin: 'หมุนวงล้อ 🎰', card: 'บัตรของฉัน 🎁' },
-  es: { spin: 'Girar Rueda 🎰', card: 'Mi Tarjeta 🎁' },
-  pt: { spin: 'Girar Roda 🎰', card: 'Meu Cartão 🎁' },
-  zh: { spin: '转动轮盘 🎰', card: '我的卡 🎁' },
-  ru: { spin: 'Крутить колесо 🎰', card: 'Моя карта 🎁' },
-  ar: { spin: 'أدر العجلة 🎰', card: 'بطاقتي 🎁' },
 };
 
 /**
@@ -224,7 +147,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 8. Generate URLs
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://starspin.netlify.app';
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://cartelle.app';
     const spinUrl = `${baseUrl}/spin/${merchantId}?phone=${encodeURIComponent(phoneNumber)}&lang=${language}`;
     const cardUrl = `${baseUrl}/card/${cardQrCode}`;
 
@@ -233,7 +156,7 @@ export async function POST(request: NextRequest) {
 
     // 10. Get translated texts
     const buttonTexts = BUTTON_TEXTS[language] || BUTTON_TEXTS['fr'];
-    const businessName = merchant.business_name || 'StarSpin';
+    const businessName = merchant.business_name || 'Cartelle';
 
     let headerText: string;
     let bodyText: string;
