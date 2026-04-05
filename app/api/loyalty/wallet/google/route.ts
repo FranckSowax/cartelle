@@ -99,7 +99,7 @@ export async function GET(request: NextRequest) {
       programName: `${merchant.business_name} - Fidélité`,
       programLogo: {
         sourceUri: {
-          uri: merchant.logo_url || 'https://cartelle.app/logo.png'
+          uri: merchant.logo_url || 'https://cartelle-production.up.railway.app/logo.png'
         },
         contentDescription: {
           defaultValue: {
@@ -197,7 +197,7 @@ export async function GET(request: NextRequest) {
       linksModuleData: {
         uris: [
           {
-            uri: `https://cartelle.app/card/${client.qr_code_data}`,
+            uri: `https://cartelle-production.up.railway.app/card/${client.qr_code_data}`,
             description: 'Voir ma carte en ligne',
             id: 'card_link'
           }
@@ -209,7 +209,7 @@ export async function GET(request: NextRequest) {
     const claims = {
       iss: googleServiceAccountEmail,
       aud: 'google',
-      origins: ['https://cartelle.app'],
+      origins: ['https://cartelle-production.up.railway.app'],
       typ: 'savetowallet',
       payload: {
         loyaltyClasses: [loyaltyClass],

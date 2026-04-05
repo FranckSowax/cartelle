@@ -90,7 +90,7 @@ Votre abonnement Cartelle (plan ${tier}) arrive à renouvellement dans *2 jours*
 Pour continuer à fidéliser vos clients sans interruption, pensez à renouveler votre abonnement.
 
 💳 Renouvelez maintenant depuis votre dashboard :
-${process.env.NEXT_PUBLIC_APP_URL || 'https://cartelle.app'}/dashboard/billing
+${process.env.NEXT_PUBLIC_APP_URL || 'https://cartelle-production.up.railway.app'}/dashboard/billing
 
 Besoin d'aide ? Contactez-nous sur contact@cartelle.app
 

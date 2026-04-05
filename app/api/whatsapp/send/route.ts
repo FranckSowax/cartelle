@@ -254,8 +254,9 @@ export async function POST(request: NextRequest) {
     }
 
     // 8. Generate spin URL with phone number and language
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://cartelle.app';
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://cartelle-production.up.railway.app';
     const spinUrl = `${baseUrl}/spin/${merchantId}?phone=${encodeURIComponent(phoneNumber)}&lang=${language}`;
+    console.log('[WHATSAPP SEND] Base URL:', baseUrl, '| Spin URL:', spinUrl);
 
     // 9. Format phone number for Whapi (remove + prefix)
     const formattedPhone = phoneNumber.replace(/^\+/, '');

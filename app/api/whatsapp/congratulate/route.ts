@@ -166,7 +166,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 8. Generate coupon URL with language
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://cartelle.app';
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://cartelle-production.up.railway.app';
     const couponUrl = `${baseUrl}/coupon/${merchantId}?code=${couponCode}&lang=${language}`;
 
     // 9. Get congratulation message based on language

@@ -273,7 +273,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({
         client: clientData,
         isNew: false,
-        cardUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'https://cartelle.app'}/card/${clientData.qr_code_data}`
+        cardUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'https://cartelle-production.up.railway.app'}/card/${clientData.qr_code_data}`
       });
     }
 
@@ -355,7 +355,7 @@ export async function POST(request: NextRequest) {
       client: newClient,
       isNew: true,
       welcomePoints,
-      cardUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'https://cartelle.app'}/card/${qrCodeData}`
+      cardUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'https://cartelle-production.up.railway.app'}/card/${qrCodeData}`
     });
   } catch (error) {
     console.error('[LOYALTY CLIENT POST] Error:', error);
