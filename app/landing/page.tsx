@@ -461,6 +461,120 @@ export default function LandingPage() {
         </div>
       </Reveal>
 
+      {/* ═══════════ WHATSAPP CAMPAIGNS SECTION ═══════════ */}
+      <Reveal className="py-24 px-5 sm:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {/* Left — Content */}
+            <div>
+              <motion.div variants={fadeUp} custom={0}>
+                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-50 text-green-700 text-sm font-semibold">
+                  <MessageCircle className="w-4 h-4" />
+                  Campagnes WhatsApp
+                </span>
+              </motion.div>
+
+              <motion.h2 variants={fadeUp} custom={1} className="mt-5 text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
+                Parlez à des clients qui vous
+                <br />
+                <span className="bg-gradient-to-r from-green-600 to-teal-500 bg-clip-text text-transparent">connaissent déjà</span>
+              </motion.h2>
+
+              <motion.p variants={fadeUp} custom={2} className="mt-5 text-lg text-gray-500 leading-relaxed">
+                Vos clients ont scanné votre QR code, joué à la roue, cumulé des points. Ils connaissent votre marque. WhatsApp devient alors le canal le plus puissant pour les faire revenir.
+              </motion.p>
+
+              {/* Stats grid */}
+              <motion.div variants={fadeUp} custom={3} className="mt-8 grid grid-cols-2 gap-4">
+                <div className="p-4 rounded-xl bg-green-50 border border-green-100">
+                  <p className="text-3xl font-extrabold text-green-600" style={{ fontFamily: 'Sora, sans-serif' }}>98%</p>
+                  <p className="text-sm text-gray-500 mt-1">Taux d'ouverture WhatsApp</p>
+                  <p className="text-xs text-gray-400 mt-0.5">vs 20% pour l'email</p>
+                </div>
+                <div className="p-4 rounded-xl bg-green-50 border border-green-100">
+                  <p className="text-3xl font-extrabold text-green-600" style={{ fontFamily: 'Sora, sans-serif' }}>45%</p>
+                  <p className="text-sm text-gray-500 mt-1">Taux de clic moyen</p>
+                  <p className="text-xs text-gray-400 mt-0.5">vs 2-5% pour l'email</p>
+                </div>
+                <div className="p-4 rounded-xl bg-green-50 border border-green-100">
+                  <p className="text-3xl font-extrabold text-green-600" style={{ fontFamily: 'Sora, sans-serif' }}>×3</p>
+                  <p className="text-sm text-gray-500 mt-1">Plus de conversions</p>
+                  <p className="text-xs text-gray-400 mt-0.5">que les canaux traditionnels</p>
+                </div>
+                <div className="p-4 rounded-xl bg-green-50 border border-green-100">
+                  <p className="text-3xl font-extrabold text-green-600" style={{ fontFamily: 'Sora, sans-serif' }}>90s</p>
+                  <p className="text-sm text-gray-500 mt-1">Temps de lecture moyen</p>
+                  <p className="text-xs text-gray-400 mt-0.5">Message lu en moins de 2 min</p>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Right — Arguments */}
+            <div className="space-y-5">
+              <motion.div variants={fadeUp} custom={1} className="p-6 rounded-2xl bg-white border border-gray-100 hover:shadow-lg hover:border-green-200 transition-all duration-300">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
+                    <Users className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900">Audience 100% opt-in</h3>
+                    <p className="mt-1 text-sm text-gray-500 leading-relaxed">Vos destinataires ont volontairement scanné votre QR code. Pas de spam : chaque message touche un client qui vous connaît.</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div variants={fadeUp} custom={2} className="p-6 rounded-2xl bg-white border border-gray-100 hover:shadow-lg hover:border-green-200 transition-all duration-300">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
+                    <Sparkles className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900">Templates personnalisés</h3>
+                    <p className="mt-1 text-sm text-gray-500 leading-relaxed">Créez des messages avec images, vidéos et boutons d'action. Soumettez-les à Meta et envoyez en un clic à toute votre base.</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div variants={fadeUp} custom={3} className="p-6 rounded-2xl bg-white border border-gray-100 hover:shadow-lg hover:border-green-200 transition-all duration-300">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
+                    <TrendingUp className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900">Fidélisation intelligente</h3>
+                    <p className="mt-1 text-sm text-gray-500 leading-relaxed">Promotions ciblées, rappels de points, offres anniversaire — relancez vos clients au bon moment avec le bon message.</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div variants={fadeUp} custom={4} className="p-6 rounded-2xl bg-white border border-gray-100 hover:shadow-lg hover:border-green-200 transition-all duration-300">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
+                    <BarChart3 className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900">Rapports en temps réel</h3>
+                    <p className="mt-1 text-sm text-gray-500 leading-relaxed">Suivez la délivrance, l'ouverture et les clics de chaque campagne. Optimisez vos messages pour un ROI maximal.</p>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Bottom CTA */}
+          <motion.div variants={fadeUp} custom={5} className="mt-14 text-center">
+            <div className="inline-flex flex-col sm:flex-row items-center gap-4 p-6 rounded-2xl bg-gradient-to-r from-green-50 to-teal-50 border border-green-100">
+              <p className="text-gray-600 text-sm">
+                <span className="text-gray-900 font-semibold">Forfaits à partir de 8 000 FCFA</span> pour 100 messages. Sans abonnement.
+              </p>
+              <Link href="/auth/signup" className="px-5 py-2.5 rounded-xl bg-green-600 text-white text-sm font-semibold hover:bg-green-700 transition-colors whitespace-nowrap">
+                Essayer gratuitement
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+      </Reveal>
+
       {/* ═══════════ COMMENT ÇA MARCHE (4 étapes timeline) ═══════════ */}
       <Reveal id="comment" className="py-24 px-5 sm:px-8">
         <div className="max-w-7xl mx-auto">
