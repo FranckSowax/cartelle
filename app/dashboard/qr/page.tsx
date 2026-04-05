@@ -11,6 +11,18 @@ import { Card } from '@/components/ui/card';
 import { Download, Copy, Share2, QrCode, Printer, ArrowRight, CheckCircle2 } from 'lucide-react';
 import QRCode from 'qrcode';
 
+function getBaseUrl() {
+  // NEXT_PUBLIC_APP_URL is baked at build time
+  if (process.env.NEXT_PUBLIC_APP_URL && !process.env.NEXT_PUBLIC_APP_URL.includes('localhost')) {
+    return process.env.NEXT_PUBLIC_APP_URL;
+  }
+  // Fallback: use current origin (works in production)
+  if (typeof window !== 'undefined') {
+    return window.location.origin;
+  }
+  return 'https://cartelle-production.up.railway.app';
+}
+
 export default function QRCodePage() {
   const router = useRouter();
   const { i18n } = useTranslation(undefined, { useSuspense: false });
@@ -45,7 +57,7 @@ export default function QRCodePage() {
         setQrCodeUrl(merchantData.qr_code_url);
       } else {
         // Generate new QR code
-        const url = `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/rate/${user.id}`;
+        const url = `${getBaseUrl()}/rate/${user.id}`;
         const qr = await QRCode.toDataURL(url, {
           width: 400,
           margin: 2,
@@ -73,13 +85,13 @@ export default function QRCodePage() {
 
   const copyLink = () => {
     if (!user) return;
-    const url = `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/rate/${user.id}`;
+    const url = `${getBaseUrl()}/rate/${user.id}`;
     navigator.clipboard.writeText(url);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const reviewUrl = user ? `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/rate/${user.id}` : '';
+  const reviewUrl = user ? `${getBaseUrl()}/rate/${user.id}` : '';
 
   if (!user || !merchant) {
     return (
