@@ -207,7 +207,7 @@ export default function LandingPage() {
             <img
               src="/logo-cartelle.png"
               alt="Cartelle"
-              className={`h-9 w-auto transition-all ${scrolled ? 'brightness-100' : 'brightness-0 invert'}`}
+              className="h-9 w-auto"
             />
           </Link>
 
@@ -217,9 +217,7 @@ export default function LandingPage() {
               <a
                 key={link.href}
                 href={link.href}
-                className={`text-sm font-medium transition-colors hover:text-teal-600 ${
-                  scrolled ? 'text-gray-600' : 'text-white/80 hover:text-white'
-                }`}
+                className="text-sm font-medium text-gray-600 transition-colors hover:text-teal-600"
               >
                 {link.label}
               </a>
@@ -229,9 +227,7 @@ export default function LandingPage() {
           <div className="hidden md:flex items-center gap-3">
             <Link
               href="/auth/login"
-              className={`text-sm font-medium px-4 py-2 rounded-xl transition-colors ${
-                scrolled ? 'text-gray-700 hover:text-teal-700' : 'text-white/90 hover:text-white'
-              }`}
+              className="text-sm font-medium px-4 py-2 rounded-xl text-gray-700 hover:text-teal-700 transition-colors"
             >
               Connexion
             </Link>
@@ -246,8 +242,8 @@ export default function LandingPage() {
           {/* Mobile menu button */}
           <button onClick={() => setMobileMenu(!mobileMenu)} className="md:hidden p-2">
             {mobileMenu
-              ? <X className={scrolled ? 'text-gray-900' : 'text-white'} />
-              : <Menu className={scrolled ? 'text-gray-900' : 'text-white'} />}
+              ? <X className="text-gray-900" />
+              : <Menu className="text-gray-900" />}
           </button>
         </nav>
 
@@ -272,106 +268,112 @@ export default function LandingPage() {
       </header>
 
       {/* ═══════════ HERO SECTION ═══════════ */}
-      <section ref={heroRef} className="relative min-h-[100vh] flex items-center overflow-hidden">
-        {/* Dark gradient background */}
-        <div className="absolute inset-0 bg-[#0A1A14]" />
-        <div className="absolute inset-0 bg-gradient-to-br from-teal-950/80 via-[#0A1A14] to-emerald-950/60" />
-        {/* Mesh gradient orbs */}
-        <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] rounded-full bg-teal-600/15 blur-[120px]" />
-        <div className="absolute bottom-1/4 right-0 w-[400px] h-[400px] rounded-full bg-emerald-500/10 blur-[100px]" />
-        {/* Grid pattern */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-          backgroundSize: '64px 64px',
-        }} />
+      <section ref={heroRef} className="relative min-h-[100vh] flex items-center overflow-hidden bg-white">
+        {/* Subtle background accents */}
+        <div className="absolute top-20 -left-40 w-[500px] h-[500px] rounded-full bg-teal-100/40 blur-[120px]" />
+        <div className="absolute bottom-10 right-10 w-[400px] h-[400px] rounded-full bg-emerald-100/30 blur-[100px]" />
 
-        <motion.div style={{ opacity: heroOpacity, scale: heroScale }} className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 pt-32 pb-24 w-full">
-          <div className="max-w-4xl">
-            {/* Badge */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.07] border border-white/[0.1] text-emerald-300 text-sm font-medium backdrop-blur-sm">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                La plateforme #1 de fidélisation en Afrique
-              </span>
-            </motion.div>
-
-            {/* Headline */}
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              className="mt-8 text-5xl sm:text-6xl lg:text-[5.2rem] font-extrabold leading-[1.05] tracking-tight text-white"
-              style={{ fontFamily: 'Sora, sans-serif' }}
-            >
-              Transformez chaque
-              <br />
-              visite en{' '}
-              <span className="relative inline-block">
-                <span className="bg-gradient-to-r from-emerald-300 via-teal-200 to-emerald-400 bg-clip-text text-transparent">
-                  fidélité
+        <motion.div style={{ opacity: heroOpacity, scale: heroScale }} className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 pt-32 pb-16 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+            {/* Left column — Text */}
+            <div>
+              {/* Badge */}
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-50 border border-teal-100 text-teal-700 text-sm font-medium">
+                  <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
+                  La plateforme #1 de fidélisation en Afrique
                 </span>
-                <span className="absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 to-teal-300 rounded-full opacity-60" />
-              </span>
-            </motion.h1>
+              </motion.div>
 
-            {/* Subtitle */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.3 }}
-              className="mt-7 text-lg sm:text-xl text-white/60 max-w-2xl leading-relaxed"
-            >
-              Vos clients jouent à la roue, cumulent des points, laissent des avis Google — et reviennent.{' '}
-              <span className="text-white/90 font-semibold">Zéro app à télécharger, zéro friction, zéro complexité.</span>
-            </motion.p>
-
-            {/* Metrics */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.45 }}
-              className="mt-10 flex flex-wrap gap-8"
-            >
-              {METRICS.map((m, i) => (
-                <div key={i} className="flex flex-col">
-                  <span className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
-                    +<AnimatedCounter value={m.value} suffix={m.suffix} />
+              {/* Headline */}
+              <motion.h1
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.15 }}
+                className="mt-8 text-4xl sm:text-5xl lg:text-[4.2rem] font-extrabold leading-[1.08] tracking-tight text-gray-900"
+                style={{ fontFamily: 'Sora, sans-serif' }}
+              >
+                Transformez chaque
+                <br />
+                visite en{' '}
+                <span className="relative inline-block">
+                  <span className="bg-gradient-to-r from-teal-600 via-emerald-500 to-teal-500 bg-clip-text text-transparent">
+                    fidélité
                   </span>
-                  <span className="text-sm text-white/50 mt-1 font-medium">{m.label}</span>
-                </div>
-              ))}
-            </motion.div>
+                  <span className="absolute -bottom-1 left-0 w-full h-1.5 bg-gradient-to-r from-teal-500 to-emerald-400 rounded-full opacity-50" />
+                </span>
+              </motion.h1>
 
-            {/* CTAs */}
+              {/* Subtitle */}
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.3 }}
+                className="mt-7 text-lg sm:text-xl text-gray-500 max-w-xl leading-relaxed"
+              >
+                Vos clients jouent à la roue, cumulent des points, laissent des avis Google — et reviennent.{' '}
+                <span className="text-gray-800 font-semibold">Zéro app à télécharger, zéro friction, zéro complexité.</span>
+              </motion.p>
+
+              {/* Metrics */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.45 }}
+                className="mt-10 flex flex-wrap gap-8"
+              >
+                {METRICS.map((m, i) => (
+                  <div key={i} className="flex flex-col">
+                    <span className="text-4xl sm:text-5xl font-extrabold text-gray-900 tracking-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
+                      +<AnimatedCounter value={m.value} suffix={m.suffix} />
+                    </span>
+                    <span className="text-sm text-gray-400 mt-1 font-medium">{m.label}</span>
+                  </div>
+                ))}
+              </motion.div>
+
+              {/* CTAs */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.6 }}
+                className="mt-10 flex flex-wrap gap-4"
+              >
+                <Link
+                  href="/auth/signup"
+                  className="group inline-flex items-center gap-2 px-7 py-4 rounded-2xl bg-gradient-to-r from-teal-600 to-emerald-500 text-white font-semibold text-base hover:shadow-2xl hover:shadow-teal-500/25 hover:-translate-y-0.5 transition-all"
+                >
+                  Lancez-vous maintenant
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center gap-2 px-7 py-4 rounded-2xl border border-gray-200 text-gray-600 font-medium text-base hover:border-teal-300 hover:text-teal-700 hover:bg-teal-50/50 transition-all"
+                >
+                  Nous contacter
+                </Link>
+              </motion.div>
+            </div>
+
+            {/* Right column — Hero Image */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.6 }}
-              className="mt-10 flex flex-wrap gap-4"
+              initial={{ opacity: 0, scale: 0.9, x: 40 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="relative flex items-center justify-center"
             >
-              <Link
-                href="/auth/signup"
-                className="group inline-flex items-center gap-2 px-7 py-4 rounded-2xl bg-gradient-to-r from-teal-500 to-emerald-500 text-white font-semibold text-base hover:shadow-2xl hover:shadow-teal-500/30 hover:-translate-y-0.5 transition-all"
-              >
-                Lancez-vous maintenant
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 px-7 py-4 rounded-2xl border border-white/15 text-white/80 font-medium text-base hover:bg-white/[0.06] hover:text-white transition-all backdrop-blur-sm"
-              >
-                Nous contacter
-              </Link>
+              <img
+                src="/hero-cartelle.png"
+                alt="Cartelle — Roue de la fortune, carte fidélité, QR code, WhatsApp"
+                className="w-full max-w-lg lg:max-w-xl xl:max-w-2xl drop-shadow-2xl"
+              />
             </motion.div>
           </div>
         </motion.div>
-
-        {/* Bottom fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
       </section>
 
       {/* ═══════════ 3 QUICK FEATURES ═══════════ */}
-      <RevealSection className="relative -mt-20 z-20 max-w-6xl mx-auto px-5 sm:px-8">
+      <RevealSection className="relative z-20 max-w-6xl mx-auto px-5 sm:px-8 -mt-8 mb-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {FEATURES_QUICK.map((f, i) => (
             <motion.div
