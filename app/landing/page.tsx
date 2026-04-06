@@ -462,6 +462,93 @@ export default function LandingPage() {
         </div>
       </Reveal>
 
+      {/* ═══════════ AUTOMATISATIONS INTELLIGENTES ═══════════ */}
+      <Reveal className="py-24 px-5 sm:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <motion.div variants={fadeUp} custom={0}>
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-50 text-purple-700 text-sm font-semibold">
+                <Zap className="w-4 h-4" />
+                Automatisations
+              </span>
+            </motion.div>
+            <motion.h2 variants={fadeUp} custom={1} className="mt-5 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
+              Cartelle travaille pour vous,
+              {' '}<span className="bg-gradient-to-r from-purple-600 to-teal-500 bg-clip-text text-transparent">même quand vous dormez</span>
+            </motion.h2>
+            <motion.p variants={fadeUp} custom={2} className="mt-5 text-lg text-gray-500 leading-relaxed">
+              Des messages automatiques envoyés au bon moment, au bon client. Vous configurez une fois, Cartelle s'occupe du reste.
+            </motion.p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Birthday */}
+            <motion.div variants={fadeUp} custom={0} className="group p-7 rounded-2xl bg-white border border-gray-100 hover:shadow-xl hover:border-purple-200 hover:-translate-y-1 transition-all duration-300">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-pink-50 flex items-center justify-center shrink-0 text-2xl">🎂</div>
+                <div>
+                  <h3 className="font-bold text-gray-900" style={{ fontFamily: 'Sora, sans-serif' }}>Message d'anniversaire</h3>
+                  <p className="mt-1.5 text-sm text-gray-500 leading-relaxed">Chaque client reçoit automatiquement un message WhatsApp le jour de son anniversaire avec un cadeau ou une offre spéciale.</p>
+                  <div className="mt-3 px-3 py-2 rounded-lg bg-gray-50 text-xs text-gray-400 italic">
+                    "Joyeux anniversaire Amadou ! 🎉 Le Baobab vous offre un dessert gratuit pour fêter ça !"
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Inactivity */}
+            <motion.div variants={fadeUp} custom={1} className="group p-7 rounded-2xl bg-white border border-gray-100 hover:shadow-xl hover:border-purple-200 hover:-translate-y-1 transition-all duration-300">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center shrink-0 text-2xl">👋</div>
+                <div>
+                  <h3 className="font-bold text-gray-900" style={{ fontFamily: 'Sora, sans-serif' }}>Rappel de visite</h3>
+                  <p className="mt-1.5 text-sm text-gray-500 leading-relaxed">Un client n'est pas revenu depuis 30 jours ? Cartelle lui envoie un message personnalisé pour le faire revenir avec ses points de fidélité.</p>
+                  <div className="mt-3 px-3 py-2 rounded-lg bg-gray-50 text-xs text-gray-400 italic">
+                    "Vous nous manquez chez Afro Chic ! 💚 Vos 120 points vous attendent. Revenez en profiter !"
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Points milestone */}
+            <motion.div variants={fadeUp} custom={2} className="group p-7 rounded-2xl bg-white border border-gray-100 hover:shadow-xl hover:border-purple-200 hover:-translate-y-1 transition-all duration-300">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-teal-50 flex items-center justify-center shrink-0 text-2xl">🏆</div>
+                <div>
+                  <h3 className="font-bold text-gray-900" style={{ fontFamily: 'Sora, sans-serif' }}>Palier de points atteint</h3>
+                  <p className="mt-1.5 text-sm text-gray-500 leading-relaxed">Quand un client franchit un palier (50, 100, 200, 500 points), il reçoit une félicitation + invitation à découvrir ses récompenses.</p>
+                  <div className="mt-3 px-3 py-2 rounded-lg bg-gray-50 text-xs text-gray-400 italic">
+                    "Félicitations Marie ! 🎉 Vous avez atteint 200 points chez Beauté Divine. Découvrez vos récompenses !"
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Coupon expiry */}
+            <motion.div variants={fadeUp} custom={3} className="group p-7 rounded-2xl bg-white border border-gray-100 hover:shadow-xl hover:border-purple-200 hover:-translate-y-1 transition-all duration-300">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-red-50 flex items-center justify-center shrink-0 text-2xl">⏰</div>
+                <div>
+                  <h3 className="font-bold text-gray-900" style={{ fontFamily: 'Sora, sans-serif' }}>Coupon qui expire</h3>
+                  <p className="mt-1.5 text-sm text-gray-500 leading-relaxed">Un client a gagné un coupon mais ne l'a pas utilisé ? 6 heures avant l'expiration, Cartelle lui envoie un rappel pour ne pas le perdre.</p>
+                  <div className="mt-3 px-3 py-2 rounded-lg bg-gray-50 text-xs text-gray-400 italic">
+                    "⏰ Votre coupon -20% chez Le Baobab expire bientôt ! Utilisez-le avant qu'il ne soit trop tard."
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Bottom note */}
+          <motion.div variants={fadeUp} custom={4} className="mt-10 text-center">
+            <p className="text-sm text-gray-400">
+              Toutes les automatisations sont <span className="text-gray-600 font-medium">configurables et désactivables</span> depuis votre dashboard.
+              Vos clients reçoivent uniquement les messages pertinents.
+            </p>
+          </motion.div>
+        </div>
+      </Reveal>
+
       {/* ═══════════ WHATSAPP CAMPAIGNS SECTION ═══════════ */}
       <Reveal className="py-24 px-5 sm:px-8 bg-gradient-to-b from-white via-green-50/30 to-white">
         <div className="max-w-7xl mx-auto">
