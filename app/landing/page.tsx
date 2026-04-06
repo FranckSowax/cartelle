@@ -10,7 +10,6 @@ import {
   BarChart3,
   Star,
   Users,
-  Smartphone,
   MessageCircle,
   Shield,
   Zap,
@@ -462,138 +461,116 @@ export default function LandingPage() {
       </Reveal>
 
       {/* ═══════════ WHATSAPP CAMPAIGNS SECTION ═══════════ */}
-      <Reveal className="py-24 px-5 sm:px-8">
+      <Reveal className="py-24 px-5 sm:px-8 bg-gradient-to-b from-white via-green-50/30 to-white">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            {/* Left — Content */}
+          {/* Section header */}
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <motion.div variants={fadeUp} custom={0}>
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-50 text-green-700 text-sm font-semibold">
+                <MessageCircle className="w-4 h-4" />
+                Campagnes WhatsApp
+              </span>
+            </motion.div>
+            <motion.h2 variants={fadeUp} custom={1} className="mt-5 text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
+              Parlez à des clients qui vous
+              {' '}<span className="bg-gradient-to-r from-green-600 to-teal-500 bg-clip-text text-transparent">connaissent déjà</span>
+            </motion.h2>
+            <motion.p variants={fadeUp} custom={2} className="mt-5 text-lg text-gray-500 leading-relaxed">
+              Vos clients ont scanné votre QR code, joué à la roue, cumulé des points. WhatsApp devient le canal le plus puissant pour les faire revenir.
+            </motion.p>
+          </div>
+
+          {/* Image + Stats row */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+            {/* Left — Mockup image */}
+            <motion.div variants={fadeUp} custom={1} className="relative flex justify-center">
+              <img
+                src="/whatsapp-mockup.png"
+                alt="Exemples de campagnes WhatsApp — Restaurant, Hôtel, Salon de beauté"
+                className="w-full max-w-lg drop-shadow-2xl"
+              />
+            </motion.div>
+
+            {/* Right — Stats + key arguments */}
             <div>
-              <motion.div variants={fadeUp} custom={0}>
-                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-50 text-green-700 text-sm font-semibold">
-                  <MessageCircle className="w-4 h-4" />
-                  Campagnes WhatsApp
-                </span>
-              </motion.div>
-
-              <motion.h2 variants={fadeUp} custom={1} className="mt-5 text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
-                Parlez à des clients qui vous
-                <br />
-                <span className="bg-gradient-to-r from-green-600 to-teal-500 bg-clip-text text-transparent">connaissent déjà</span>
-              </motion.h2>
-
-              <motion.p variants={fadeUp} custom={2} className="mt-5 text-lg text-gray-500 leading-relaxed">
-                Vos clients ont scanné votre QR code, joué à la roue, cumulé des points. Ils connaissent votre marque. WhatsApp devient alors le canal le plus puissant pour les faire revenir.
+              <motion.p variants={fadeUp} custom={2} className="text-gray-600 leading-relaxed mb-8">
+                Contrairement aux pubs Facebook ou aux emails que personne ne lit, vos campagnes WhatsApp touchent des clients qui ont <span className="text-gray-900 font-semibold">déjà franchi votre porte</span>. Audience 100% opt-in, taux d'ouverture record, boutons cliquables vers vos liens.
               </motion.p>
 
-              {/* Stats grid */}
-              <motion.div variants={fadeUp} custom={3} className="mt-8 grid grid-cols-2 gap-4">
-                <div className="p-4 rounded-xl bg-green-50 border border-green-100">
+              {/* Stats */}
+              <motion.div variants={fadeUp} custom={3} className="grid grid-cols-2 gap-4 mb-8">
+                <div className="p-4 rounded-xl bg-white border border-green-100 shadow-sm">
                   <p className="text-3xl font-extrabold text-green-600" style={{ fontFamily: 'Sora, sans-serif' }}>98%</p>
-                  <p className="text-sm text-gray-500 mt-1">Taux d'ouverture WhatsApp</p>
-                  <p className="text-xs text-gray-400 mt-0.5">vs 20% pour l'email</p>
+                  <p className="text-sm text-gray-500 mt-1">Taux d'ouverture</p>
+                  <p className="text-xs text-gray-400">vs 20% pour l'email</p>
                 </div>
-                <div className="p-4 rounded-xl bg-green-50 border border-green-100">
+                <div className="p-4 rounded-xl bg-white border border-green-100 shadow-sm">
                   <p className="text-3xl font-extrabold text-green-600" style={{ fontFamily: 'Sora, sans-serif' }}>45%</p>
-                  <p className="text-sm text-gray-500 mt-1">Taux de clic moyen</p>
-                  <p className="text-xs text-gray-400 mt-0.5">vs 2-5% pour l'email</p>
+                  <p className="text-sm text-gray-500 mt-1">Taux de clic</p>
+                  <p className="text-xs text-gray-400">vs 2-5% pour l'email</p>
                 </div>
-                <div className="p-4 rounded-xl bg-green-50 border border-green-100">
+                <div className="p-4 rounded-xl bg-white border border-green-100 shadow-sm">
                   <p className="text-3xl font-extrabold text-green-600" style={{ fontFamily: 'Sora, sans-serif' }}>×3</p>
                   <p className="text-sm text-gray-500 mt-1">Plus de conversions</p>
-                  <p className="text-xs text-gray-400 mt-0.5">que les canaux traditionnels</p>
+                  <p className="text-xs text-gray-400">que les canaux traditionnels</p>
                 </div>
-                <div className="p-4 rounded-xl bg-green-50 border border-green-100">
-                  <p className="text-3xl font-extrabold text-green-600" style={{ fontFamily: 'Sora, sans-serif' }}>90s</p>
-                  <p className="text-sm text-gray-500 mt-1">Temps de lecture moyen</p>
-                  <p className="text-xs text-gray-400 mt-0.5">Message lu en moins de 2 min</p>
-                </div>
-              </motion.div>
-            </div>
-
-            {/* Right — Arguments */}
-            <div className="space-y-5">
-              <motion.div variants={fadeUp} custom={1} className="p-6 rounded-2xl bg-white border border-gray-100 hover:shadow-lg hover:border-green-200 transition-all duration-300">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
-                    <Users className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-gray-900">Audience 100% opt-in</h3>
-                    <p className="mt-1 text-sm text-gray-500 leading-relaxed">Vos destinataires ont volontairement scanné votre QR code. Pas de spam : chaque message touche un client qui vous connaît.</p>
-                  </div>
+                <div className="p-4 rounded-xl bg-white border border-green-100 shadow-sm">
+                  <p className="text-3xl font-extrabold text-green-600" style={{ fontFamily: 'Sora, sans-serif' }}>5×</p>
+                  <p className="text-sm text-gray-500 mt-1">Moins cher</p>
+                  <p className="text-xs text-gray-400">qu'une pub Facebook/Google</p>
                 </div>
               </motion.div>
 
-              <motion.div variants={fadeUp} custom={2} className="p-6 rounded-2xl bg-white border border-gray-100 hover:shadow-lg hover:border-green-200 transition-all duration-300">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
-                    <ArrowRight className="w-5 h-5 text-green-600" />
+              {/* Button examples */}
+              <motion.div variants={fadeUp} custom={4}>
+                <p className="text-sm font-semibold text-gray-700 mb-3">Chaque message peut contenir des boutons vers vos liens :</p>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="flex items-center gap-2 px-3 py-2.5 rounded-lg bg-white border border-green-100 text-xs shadow-sm">
+                    <span className="text-green-600 font-bold">🍽️</span>
+                    <span className="text-gray-600">"Voir le menu"</span>
                   </div>
-                  <div>
-                    <h3 className="font-bold text-gray-900">Boutons cliquables vers n'importe quel lien</h3>
-                    <p className="mt-1 text-sm text-gray-500 leading-relaxed">Chaque message peut contenir des boutons qui redirigent vos clients exactement où vous voulez.</p>
-                    {/* Examples */}
-                    <div className="mt-3 space-y-2">
-                      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-50/80 text-xs">
-                        <span className="text-green-600 font-bold">Restaurant</span>
-                        <span className="text-gray-400">—</span>
-                        <span className="text-gray-600">"Voir le menu du jour" → lien vers votre carte en ligne</span>
-                      </div>
-                      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-50/80 text-xs">
-                        <span className="text-green-600 font-bold">Hôtel</span>
-                        <span className="text-gray-400">—</span>
-                        <span className="text-gray-600">"Réserver maintenant" → lien vers votre page de réservation</span>
-                      </div>
-                      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-50/80 text-xs">
-                        <span className="text-green-600 font-bold">Boutique</span>
-                        <span className="text-gray-400">—</span>
-                        <span className="text-gray-600">"Voir la promo" → lien vers votre page Instagram ou site web</span>
-                      </div>
-                      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-50/80 text-xs">
-                        <span className="text-green-600 font-bold">Salon</span>
-                        <span className="text-gray-400">—</span>
-                        <span className="text-gray-600">"Prendre RDV" → lien vers votre agenda en ligne</span>
-                      </div>
-                    </div>
+                  <div className="flex items-center gap-2 px-3 py-2.5 rounded-lg bg-white border border-green-100 text-xs shadow-sm">
+                    <span className="text-green-600 font-bold">🏨</span>
+                    <span className="text-gray-600">"Réserver maintenant"</span>
                   </div>
-                </div>
-              </motion.div>
-
-              <motion.div variants={fadeUp} custom={3} className="p-6 rounded-2xl bg-white border border-gray-100 hover:shadow-lg hover:border-green-200 transition-all duration-300">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
-                    <TrendingUp className="w-5 h-5 text-green-600" />
+                  <div className="flex items-center gap-2 px-3 py-2.5 rounded-lg bg-white border border-green-100 text-xs shadow-sm">
+                    <span className="text-green-600 font-bold">👗</span>
+                    <span className="text-gray-600">"Voir la promo"</span>
                   </div>
-                  <div>
-                    <h3 className="font-bold text-gray-900">Fidélisation plus pertinente</h3>
-                    <p className="mt-1 text-sm text-gray-500 leading-relaxed">Contrairement aux pubs Facebook ou Google qui ciblent des inconnus, vos campagnes WhatsApp touchent des clients qui ont déjà franchi votre porte. Résultat : un coût par conversion 5× plus bas.</p>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div variants={fadeUp} custom={4} className="p-6 rounded-2xl bg-white border border-gray-100 hover:shadow-lg hover:border-green-200 transition-all duration-300">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
-                    <Sparkles className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-gray-900">Messages riches : texte, image, vidéo</h3>
-                    <p className="mt-1 text-sm text-gray-500 leading-relaxed">Créez des templates avec photo de votre plat du jour, vidéo de votre nouvelle collection, ou simple texte promotionnel. Ajoutez jusqu'à 3 boutons d'action par message.</p>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div variants={fadeUp} custom={5} className="p-6 rounded-2xl bg-white border border-gray-100 hover:shadow-lg hover:border-green-200 transition-all duration-300">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
-                    <BarChart3 className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-gray-900">Rapports de délivrance et clics</h3>
-                    <p className="mt-1 text-sm text-gray-500 leading-relaxed">Suivez en temps réel combien de messages sont délivrés, lus, et combien de clients ont cliqué sur vos boutons. Optimisez chaque campagne.</p>
+                  <div className="flex items-center gap-2 px-3 py-2.5 rounded-lg bg-white border border-green-100 text-xs shadow-sm">
+                    <span className="text-green-600 font-bold">💇</span>
+                    <span className="text-gray-600">"Prendre RDV"</span>
                   </div>
                 </div>
               </motion.div>
             </div>
+          </div>
+
+          {/* Features row */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <motion.div variants={fadeUp} custom={1} className="p-6 rounded-2xl bg-white border border-gray-100 hover:shadow-lg hover:border-green-200 transition-all duration-300">
+              <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center mb-4">
+                <Users className="w-5 h-5 text-green-600" />
+              </div>
+              <h3 className="font-bold text-gray-900">Audience 100% opt-in</h3>
+              <p className="mt-2 text-sm text-gray-500 leading-relaxed">Vos destinataires ont volontairement scanné votre QR code. Pas de spam — chaque message touche un client qui vous connaît.</p>
+            </motion.div>
+
+            <motion.div variants={fadeUp} custom={2} className="p-6 rounded-2xl bg-white border border-gray-100 hover:shadow-lg hover:border-green-200 transition-all duration-300">
+              <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center mb-4">
+                <Sparkles className="w-5 h-5 text-green-600" />
+              </div>
+              <h3 className="font-bold text-gray-900">Texte, image, vidéo & boutons</h3>
+              <p className="mt-2 text-sm text-gray-500 leading-relaxed">Photo de votre plat du jour, vidéo de votre collection, promo flash — avec jusqu'à 3 boutons d'action cliquables par message.</p>
+            </motion.div>
+
+            <motion.div variants={fadeUp} custom={3} className="p-6 rounded-2xl bg-white border border-gray-100 hover:shadow-lg hover:border-green-200 transition-all duration-300">
+              <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center mb-4">
+                <BarChart3 className="w-5 h-5 text-green-600" />
+              </div>
+              <h3 className="font-bold text-gray-900">Rapports en temps réel</h3>
+              <p className="mt-2 text-sm text-gray-500 leading-relaxed">Suivez la délivrance, l'ouverture et les clics de chaque campagne. Optimisez vos messages pour un ROI maximal.</p>
+            </motion.div>
           </div>
 
           {/* Bottom CTA */}
