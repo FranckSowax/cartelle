@@ -4,6 +4,7 @@ import "./globals.css";
 import { I18nProvider } from "@/components/providers/I18nProvider";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import { ErrorBoundary } from "@/components/providers/ErrorBoundary";
+import InstallPrompt from "@/components/pwa/InstallPrompt";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -90,6 +91,7 @@ export default function RootLayout({
           <QueryProvider>
             <I18nProvider>
               {children}
+              <InstallPrompt />
             </I18nProvider>
           </QueryProvider>
         </ErrorBoundary>
