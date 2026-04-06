@@ -334,6 +334,9 @@ export default function SpinPage() {
 
     setRotation(totalRotation);
 
+    // Vibration on spin start
+    try { navigator.vibrate(30); } catch {}
+
     setTimeout(async () => {
       await handleSpinComplete(selectedPrize, type);
       setIsSpinning(false);
@@ -343,7 +346,13 @@ export default function SpinPage() {
   const handleSpinComplete = async (prize: Prize | undefined, type: 'win' | 'retry' | 'lost') => {
     setResultType(type);
 
+    // Vibration on landing
+    try { navigator.vibrate(20); } catch {}
+
     if (type === 'win' && prize) {
+      // Vibration pattern for win
+      try { navigator.vibrate([50, 30, 50, 30, 100]); } catch {}
+
       setIsSaving(true);
       setSaveError(false);
       setResult(prize.name);
@@ -353,6 +362,15 @@ export default function SpinPage() {
         const rect = wheelRef.current.getBoundingClientRect();
         trigger(rect.left + rect.width / 2, rect.top + rect.height / 2);
       }
+
+      // Second confetti burst from left and right
+      setTimeout(() => {
+        if (wheelRef.current) {
+          const rect = wheelRef.current.getBoundingClientRect();
+          trigger(rect.left + rect.width * 0.2, rect.top + rect.height * 0.3);
+          trigger(rect.left + rect.width * 0.8, rect.top + rect.height * 0.3);
+        }
+      }, 300);
 
       try {
         const userToken = localStorage.getItem('user_token') || crypto.randomUUID();
@@ -723,7 +741,7 @@ export default function SpinPage() {
 
         {/* Result display */}
         {result && (
-          <div className="mt-6 p-5 rounded-2xl text-center max-w-sm w-full" style={{
+          <div className={`mt-6 p-5 rounded-2xl text-center max-w-sm w-full ${resultType === 'win' ? 'animate-bounce-in animate-golden-glow' : ''}`} style={{
             background: resultType === 'win'
               ? 'linear-gradient(135deg, rgba(34, 197, 94, 0.95), rgba(22, 163, 74, 0.95))'
               : resultType === 'retry'

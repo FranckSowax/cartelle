@@ -1,19 +1,50 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 
-export default function SignUpPage() {
+export default function SignUpPageWrapper() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-10 h-10 border-3 border-teal-600 border-t-transparent rounded-full animate-spin" /></div>}>
+      <SignUpPage />
+    </Suspense>
+  );
+}
+
+function SignUpPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [businessName, setBusinessName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [confirmationSent, setConfirmationSent] = useState(false);
+  const [refCode, setRefCode] = useState('');
+  const [refBusiness, setRefBusiness] = useState('');
+
+  useEffect(() => {
+    const ref = searchParams.get('ref');
+    if (ref) {
+      setRefCode(ref.toUpperCase());
+      // Validate the referral code
+      fetch('/api/referral', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: ref }),
+      })
+        .then(r => r.json())
+        .then(data => {
+          if (data.valid) {
+            setRefBusiness(data.businessName);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [searchParams]);
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,6 +60,7 @@ export default function SignUpPage() {
           emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/auth/callback`,
           data: {
             business_name: businessName,
+            ...(refCode ? { referral_code: refCode } : {}),
           },
         },
       });
@@ -203,7 +235,16 @@ export default function SignUpPage() {
       <div className="absolute inset-0 bg-gradient-to-br from-[#0F766E]/85 to-[#059669]/80 backdrop-blur-[2px]" />
       <div className="relative z-10 bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full">
         <h1 className="text-3xl font-bold text-center text-gray-900 mb-2">Rejoindre Cartelle</h1>
-        <p className="text-center text-gray-600 mb-8">Créez votre compte commerçant</p>
+        <p className="text-center text-gray-600 mb-4">Créez votre compte commerçant</p>
+
+        {refCode && (
+          <div className="bg-teal-50 border border-teal-200 rounded-xl px-4 py-3 mb-4 text-center">
+            <p className="text-sm text-teal-800 font-medium">
+              Parrainé par : <strong>{refBusiness || refCode}</strong>
+            </p>
+            <p className="text-xs text-teal-600 mt-0.5">50 crédits offerts à l&apos;inscription !</p>
+          </div>
+        )}
 
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">

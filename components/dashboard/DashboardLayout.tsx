@@ -27,7 +27,9 @@ import {
   Award,
   UserCircle,
   Shield,
-  Send
+  Send,
+  MapPin,
+  Zap
 } from 'lucide-react';
 
 interface DashboardLayoutProps {
@@ -63,6 +65,7 @@ export function DashboardLayout({ children, merchant }: DashboardLayoutProps) {
       items: [
         { name: t('dashboard.nav.scanner'), href: '/dashboard/scan', icon: ScanLine },
         { name: t('dashboard.nav.qrCode'), href: '/dashboard/qr', icon: QrCode },
+        { name: 'Établissements', href: '/dashboard/locations', icon: MapPin },
       ],
     },
     {
@@ -72,6 +75,7 @@ export function DashboardLayout({ children, merchant }: DashboardLayoutProps) {
         { name: t('dashboard.nav.loyalty'), href: '/dashboard/loyalty', icon: Award },
         { name: t('dashboard.nav.feedback'), href: '/dashboard/feedback', icon: MessageSquare },
         { name: t('dashboard.nav.strategy'), href: '/dashboard/strategy', icon: Target },
+        { name: 'Parrainage', href: '/dashboard/referral', icon: Gift },
       ],
     },
     {
@@ -95,6 +99,7 @@ export function DashboardLayout({ children, merchant }: DashboardLayoutProps) {
         { name: t('dashboard.nav.profile'), href: '/dashboard/profile', icon: UserCircle },
         { name: t('dashboard.nav.billing'), href: '/dashboard/billing', icon: CreditCard },
         { name: t('dashboard.nav.settings'), href: '/dashboard/settings', icon: Settings },
+        { name: 'Automatisations', href: '/dashboard/settings/automations', icon: Zap },
       ],
     },
   ];
