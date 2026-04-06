@@ -61,19 +61,19 @@ const useConfetti = () => {
   const animationRef = useRef<number | null>(null);
   const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#FFD93D', '#6C5CE7'];
 
-  const createParticles = useCallback((x: number, y: number, count: number = 150) => {
+  const createParticles = useCallback((x: number, y: number, count: number = 60) => {
     const particles = [];
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const velocity = 2 + Math.random() * 6;
+      const velocity = 3 + Math.random() * 5;
       particles.push({
         x, y,
         vx: Math.cos(angle) * velocity,
-        vy: Math.sin(angle) * velocity - 3,
+        vy: Math.sin(angle) * velocity - 4,
         color: colors[Math.floor(Math.random() * colors.length)],
-        size: 4 + Math.random() * 8,
+        size: 3 + Math.random() * 5,
         rotation: Math.random() * Math.PI * 2,
-        rotationSpeed: (Math.random() - 0.5) * 0.3,
+        rotationSpeed: (Math.random() - 0.5) * 0.2,
       });
     }
     particlesRef.current = particles;
@@ -86,7 +86,7 @@ const useConfetti = () => {
     if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     particlesRef.current = particlesRef.current.filter(p => {
-      p.x += p.vx; p.y += p.vy; p.vy += 0.15; p.rotation += p.rotationSpeed;
+      p.x += p.vx; p.y += p.vy; p.vy += 0.25; p.vx *= 0.99; p.rotation += p.rotationSpeed;
       if (p.y > canvas.height + 50) return false;
       ctx.save();
       ctx.translate(p.x, p.y);
@@ -102,7 +102,7 @@ const useConfetti = () => {
   }, []);
 
   const trigger = useCallback((x: number, y: number) => {
-    createParticles(x, y, 150);
+    createParticles(x, y, 50);
     if (animationRef.current !== null) cancelAnimationFrame(animationRef.current);
     animate();
   }, [createParticles, animate]);
