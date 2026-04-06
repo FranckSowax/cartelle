@@ -143,7 +143,17 @@ function LivePreview({
 
         {/* Body */}
         <div className="px-3 py-2 text-sm text-gray-800 whitespace-pre-wrap">
-          {bodyText || <span className="text-gray-400 italic">Corps du message...</span>}
+          {bodyText ? (
+            bodyText.split(/(\{\{\d+\}\})/).map((part, i) => {
+              const varLabels: Record<string, string> = { '{{1}}': 'Prénom', '{{2}}': 'Commerce', '{{3}}': 'Offre', '{{4}}': 'Date', '{{5}}': 'Points' };
+              if (/^\{\{\d+\}\}$/.test(part)) {
+                return <span key={i} className="inline-block px-1.5 py-0.5 mx-0.5 rounded bg-teal-100 text-teal-700 text-xs font-semibold">{varLabels[part] || part}</span>;
+              }
+              return <span key={i}>{part}</span>;
+            })
+          ) : (
+            <span className="text-gray-400 italic">Corps du message...</span>
+          )}
         </div>
 
         {/* Footer */}
@@ -601,15 +611,95 @@ export default function WhatsAppTemplatesPage() {
                     Corps du message <span className="text-red-500">*</span>
                   </label>
                   <textarea
+                    id="template-body-textarea"
                     value={formBody}
                     onChange={(e) => setFormBody(e.target.value)}
                     rows={5}
                     placeholder={"Bonjour {{1}},\n\nDecouvrez notre offre speciale : {{2}} !\n\nA bientot."}
                     className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none"
                   />
-                  <p className="text-xs text-gray-400 mt-1">
-                    Utilisez {"{{1}}"}, {"{{2}}"}, etc. pour les variables dynamiques
-                  </p>
+
+                  {/* ─── Variables Module ─── */}
+                  <div className="mt-3 p-4 rounded-xl bg-teal-50/50 border border-teal-100">
+                    <div className="flex items-start gap-2 mb-3">
+                      <AlertCircle className="w-4 h-4 text-teal-600 mt-0.5 shrink-0" />
+                      <div>
+                        <p className="text-xs font-semibold text-teal-800">Variables dynamiques</p>
+                        <p className="text-xs text-teal-600 mt-0.5">
+                          Les variables sont des champs remplacés automatiquement par les vraies infos lors de l'envoi.
+                          Cliquez sur une variable pour l'insérer dans votre message.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Predefined variables — click to insert */}
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {[
+                        { tag: '{{1}}', label: 'Prénom client', example: 'Amadou' },
+                        { tag: '{{2}}', label: 'Nom du commerce', example: 'Le Baobab' },
+                        { tag: '{{3}}', label: 'Offre / Promo', example: '-20% ce weekend' },
+                        { tag: '{{4}}', label: 'Date', example: '15 avril' },
+                        { tag: '{{5}}', label: 'Points fidélité', example: '150 pts' },
+                      ].map((v) => (
+                        <button
+                          key={v.tag}
+                          type="button"
+                          onClick={() => {
+                            const textarea = document.getElementById('template-body-textarea') as HTMLTextAreaElement;
+                            if (textarea) {
+                              const start = textarea.selectionStart;
+                              const end = textarea.selectionEnd;
+                              const newText = formBody.slice(0, start) + v.tag + formBody.slice(end);
+                              setFormBody(newText);
+                              setTimeout(() => {
+                                textarea.focus();
+                                textarea.setSelectionRange(start + v.tag.length, start + v.tag.length);
+                              }, 0);
+                            } else {
+                              setFormBody(formBody + v.tag);
+                            }
+                          }}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-teal-200 text-xs font-medium text-teal-700 hover:bg-teal-100 hover:border-teal-300 transition-all cursor-pointer"
+                        >
+                          <span className="font-mono font-bold text-teal-500">{v.tag}</span>
+                          {v.label}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Correspondence table */}
+                    <details className="group">
+                      <summary className="text-xs font-medium text-teal-700 cursor-pointer flex items-center gap-1 hover:text-teal-900">
+                        <ChevronDown className="w-3 h-3 group-open:rotate-180 transition-transform" />
+                        Comment ça marche ?
+                      </summary>
+                      <div className="mt-2 rounded-lg bg-white border border-teal-100 overflow-hidden">
+                        <table className="w-full text-xs">
+                          <thead>
+                            <tr className="bg-teal-50">
+                              <th className="text-left px-3 py-2 text-teal-700 font-semibold">Variable</th>
+                              <th className="text-left px-3 py-2 text-teal-700 font-semibold">Correspond à</th>
+                              <th className="text-left px-3 py-2 text-teal-700 font-semibold">Exemple</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-teal-50">
+                            <tr><td className="px-3 py-1.5 font-mono text-teal-600">{'{{1}}'}</td><td className="px-3 py-1.5 text-gray-600">Prénom du client</td><td className="px-3 py-1.5 text-gray-400">Amadou</td></tr>
+                            <tr><td className="px-3 py-1.5 font-mono text-teal-600">{'{{2}}'}</td><td className="px-3 py-1.5 text-gray-600">Nom de votre commerce</td><td className="px-3 py-1.5 text-gray-400">Le Baobab</td></tr>
+                            <tr><td className="px-3 py-1.5 font-mono text-teal-600">{'{{3}}'}</td><td className="px-3 py-1.5 text-gray-600">Offre ou promotion</td><td className="px-3 py-1.5 text-gray-400">-20% ce weekend</td></tr>
+                            <tr><td className="px-3 py-1.5 font-mono text-teal-600">{'{{4}}'}</td><td className="px-3 py-1.5 text-gray-600">Date ou horaire</td><td className="px-3 py-1.5 text-gray-400">15 avril 2026</td></tr>
+                            <tr><td className="px-3 py-1.5 font-mono text-teal-600">{'{{5}}'}</td><td className="px-3 py-1.5 text-gray-600">Points de fidélité</td><td className="px-3 py-1.5 text-gray-400">150 points</td></tr>
+                          </tbody>
+                        </table>
+                        <div className="px-3 py-2 bg-amber-50 border-t border-amber-100">
+                          <p className="text-xs text-amber-700">
+                            <strong>Important :</strong> Lors de l'envoi de la campagne, vous devrez remplir la valeur réelle de chaque variable.
+                            Les variables sont numérotées dans l'ordre : {'{{1}}'}, {'{{2}}'}, etc.
+                            Vous pouvez les utiliser librement (pas obligé d'utiliser toutes les variables proposées).
+                          </p>
+                        </div>
+                      </div>
+                    </details>
+                  </div>
                 </div>
 
                 {/* Footer */}
