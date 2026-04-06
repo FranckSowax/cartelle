@@ -6,6 +6,15 @@ import { supabase } from '@/lib/supabase/client';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 
+function AuthBackground() {
+  return (
+    <>
+      <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(/bg-pattern-1.jpg)' }} />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0F766E]/85 to-[#059669]/80 backdrop-blur-[2px]" />
+    </>
+  );
+}
+
 function LoginForm() {
   const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
@@ -122,8 +131,9 @@ function LoginForm() {
 
   if (magicLinkSent) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#FF6F61] to-[#FFC107] flex items-center justify-center p-4">
-        <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center">
+      <div className="min-h-screen relative flex items-center justify-center p-4">
+        <AuthBackground />
+        <div className="relative z-10 bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">Vérifiez votre email</h1>
           <p className="text-gray-600 mb-6">
             Un lien magique a été envoyé à <strong>{email}</strong>. Cliquez dessus pour vous connecter.
@@ -137,7 +147,7 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FF6F61] to-[#FFC107] flex items-center justify-center p-4">
+    <div className="min-h-screen relative flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full">
         <h1 className="text-3xl font-bold text-center text-gray-900 mb-2">Cartelle</h1>
         <p className="text-center text-gray-600 mb-8">Connexion commerçant</p>
@@ -203,9 +213,9 @@ function LoginForm() {
 
 function LoginLoading() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FF6F61] to-[#FFC107] flex items-center justify-center p-4">
+    <div className="min-h-screen relative flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center">
-        <div className="w-12 h-12 border-4 border-gray-300 border-t-[#FF6F61] rounded-full animate-spin mx-auto mb-4"></div>
+        <div className="w-12 h-12 border-4 border-gray-300 border-t-teal-600 rounded-full animate-spin mx-auto mb-4"></div>
         <p className="text-gray-600">Chargement...</p>
       </div>
     </div>

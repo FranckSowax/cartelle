@@ -100,8 +100,10 @@ export default function SignUpPage() {
   // Afficher l'écran de confirmation d'email
   if (confirmationSent) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#4CAF50] to-[#2196F3] flex items-center justify-center p-4">
-        <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center">
+      <div className="min-h-screen relative flex items-center justify-center p-4">
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(/bg-pattern-2.jpg)' }} />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0F766E]/85 to-[#059669]/80 backdrop-blur-[2px]" />
+        <div className="relative z-10 bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center">
           {/* Animation de succès */}
           <div className="relative mb-6">
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto animate-bounce">
@@ -196,8 +198,10 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#4CAF50] to-[#2196F3] flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full">
+    <div className="min-h-screen relative flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(/bg-pattern-2.jpg)' }} />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0F766E]/85 to-[#059669]/80 backdrop-blur-[2px]" />
+      <div className="relative z-10 bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full">
         <h1 className="text-3xl font-bold text-center text-gray-900 mb-2">Rejoindre Cartelle</h1>
         <p className="text-center text-gray-600 mb-8">Créez votre compte commerçant</p>
 
