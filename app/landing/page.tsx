@@ -258,8 +258,8 @@ export default function LandingPage() {
 
       {/* ═══════════ HERO ═══════════ */}
       <section ref={heroRef} className="relative min-h-[100vh] flex items-center bg-white overflow-hidden">
-        <div className="absolute top-20 -left-40 w-[500px] h-[500px] rounded-full bg-teal-100/40 blur-[120px]" />
-        <div className="absolute bottom-10 right-10 w-[400px] h-[400px] rounded-full bg-emerald-100/30 blur-[100px]" />
+        <div className="absolute top-20 -left-40 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] rounded-full bg-teal-100/40 blur-[120px]" />
+        <div className="absolute bottom-10 right-10 w-[250px] h-[250px] sm:w-[400px] sm:h-[400px] rounded-full bg-emerald-100/30 blur-[100px]" />
 
         <motion.div style={{ opacity: heroOpacity }} className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 pt-28 pb-12 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
@@ -276,7 +276,7 @@ export default function LandingPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.12 }}
-                className="mt-7 text-4xl sm:text-5xl lg:text-[4rem] font-extrabold leading-[1.08] tracking-tight text-gray-900"
+                className="mt-7 text-3xl sm:text-4xl md:text-5xl lg:text-[4rem] font-extrabold leading-[1.08] tracking-tight text-gray-900"
                 style={{ fontFamily: 'Sora, sans-serif' }}
               >
                 Vos clients reviennent.
@@ -301,7 +301,7 @@ export default function LandingPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.38 }}
-                className="mt-8 flex flex-wrap gap-6"
+                className="mt-8 flex flex-wrap gap-4 sm:gap-6"
               >
                 {STATS.map((s, i) => (
                   <div key={i} className="flex items-center gap-3">
@@ -389,7 +389,7 @@ export default function LandingPage() {
                 <Zap className="w-4 h-4" /> Bénéfices
               </span>
             </motion.div>
-            <motion.h2 variants={fadeUp} custom={1} className="mt-5 text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
+            <motion.h2 variants={fadeUp} custom={1} className="mt-5 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
               La fidélité, <span className="bg-gradient-to-r from-teal-600 to-emerald-500 bg-clip-text text-transparent">sans friction</span>
             </motion.h2>
             <motion.p variants={fadeUp} custom={2} className="mt-4 text-lg text-gray-500">
@@ -471,7 +471,7 @@ export default function LandingPage() {
                 Campagnes WhatsApp
               </span>
             </motion.div>
-            <motion.h2 variants={fadeUp} custom={1} className="mt-5 text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
+            <motion.h2 variants={fadeUp} custom={1} className="mt-5 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
               Parlez à des clients qui vous
               {' '}<span className="bg-gradient-to-r from-green-600 to-teal-500 bg-clip-text text-transparent">connaissent déjà</span>
             </motion.h2>
@@ -596,7 +596,7 @@ export default function LandingPage() {
                 <Sparkles className="w-4 h-4" /> Comment ça marche
               </span>
             </motion.div>
-            <motion.h2 variants={fadeUp} custom={1} className="mt-5 text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900" style={{ fontFamily: 'Sora, sans-serif' }}>
+            <motion.h2 variants={fadeUp} custom={1} className="mt-5 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900" style={{ fontFamily: 'Sora, sans-serif' }}>
               Opérationnel en <span className="bg-gradient-to-r from-teal-600 to-emerald-500 bg-clip-text text-transparent">4 étapes</span>
             </motion.h2>
           </div>
@@ -697,7 +697,7 @@ export default function LandingPage() {
             <motion.div variants={fadeUp} custom={0}>
               <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-50 text-teal-700 text-sm font-semibold">Tarifs</span>
             </motion.div>
-            <motion.h2 variants={fadeUp} custom={1} className="mt-5 text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900" style={{ fontFamily: 'Sora, sans-serif' }}>
+            <motion.h2 variants={fadeUp} custom={1} className="mt-5 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900" style={{ fontFamily: 'Sora, sans-serif' }}>
               Des tarifs simples et transparents
             </motion.h2>
             <motion.p variants={fadeUp} custom={2} className="mt-4 text-lg text-gray-500">
@@ -855,11 +855,11 @@ export default function LandingPage() {
       <Reveal className="py-24 px-5 sm:px-8">
         <div className="max-w-5xl mx-auto">
           <motion.div variants={scaleIn} className="relative p-12 sm:p-16 rounded-3xl bg-[#0A1A14] overflow-hidden">
-            <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full bg-teal-600/20 blur-[120px]" />
+            <div className="absolute top-0 right-0 w-[250px] h-[250px] sm:w-[400px] sm:h-[400px] rounded-full bg-teal-600/20 blur-[120px]" />
             <div className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full bg-emerald-500/15 blur-[100px]" />
 
             <div className="relative text-center">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-white leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
                 Prêt à fidéliser<br />
                 <span className="bg-gradient-to-r from-emerald-300 to-teal-200 bg-clip-text text-transparent">vos clients ?</span>
               </h2>

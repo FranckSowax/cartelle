@@ -101,8 +101,8 @@ export default function ContactPage() {
 
       {/* ═══════════ HERO ═══════════ */}
       <section className="relative pt-32 pb-16 px-5 sm:px-8 overflow-hidden">
-        <div className="absolute top-20 -left-40 w-[500px] h-[500px] rounded-full bg-teal-100/40 blur-[120px]" />
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-emerald-100/30 blur-[100px]" />
+        <div className="absolute top-20 -left-40 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] rounded-full bg-teal-100/40 blur-[120px]" />
+        <div className="absolute bottom-0 right-0 w-[250px] h-[250px] sm:w-[400px] sm:h-[400px] rounded-full bg-emerald-100/30 blur-[100px]" />
 
         <div className="relative max-w-3xl mx-auto text-center">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-50 border border-teal-100 text-teal-700 text-sm font-medium">
@@ -138,7 +138,7 @@ export default function ContactPage() {
                   </Link>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="p-8 sm:p-10 rounded-2xl bg-white border border-gray-200 shadow-lg space-y-6">
+                <form onSubmit={handleSubmit} className="p-5 sm:p-8 md:p-10 rounded-2xl bg-white border border-gray-200 shadow-lg space-y-5 sm:space-y-6">
                   <div>
                     <h2 className="text-xl font-bold text-gray-900" style={{ fontFamily: 'Sora, sans-serif' }}>Envoyez-nous un message</h2>
                     <p className="text-sm text-gray-400 mt-1">Tous les champs marqués * sont obligatoires.</p>

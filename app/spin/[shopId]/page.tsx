@@ -598,7 +598,7 @@ export default function SpinPage() {
 
             {/* Rotating wheel SVG */}
             <svg
-              className="w-[85vw] h-[85vw] max-w-[400px] max-h-[400px]"
+              className="w-[80vw] h-[80vw] max-w-[340px] max-h-[340px] sm:max-w-[400px] sm:max-h-[400px]"
               viewBox="0 0 400 400"
               style={{
                 transform: `rotate(${rotation}deg)`,

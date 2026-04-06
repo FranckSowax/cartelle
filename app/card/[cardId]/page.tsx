@@ -512,7 +512,7 @@ export default function LoyaltyCardPage({ params }: PageProps) {
                     <p className="text-slate-600 text-sm mb-1">{t('loyalty.card.balance')}</p>
                     <div className="flex items-center justify-center md:justify-start gap-2">
                       <Star className="w-10 h-10 text-amber-500" />
-                      <span className="text-5xl font-bold text-slate-900">{client.points}</span>
+                      <span className="text-4xl sm:text-5xl font-bold text-slate-900">{client.points}</span>
                       <span className="text-slate-600 text-lg">{t('loyalty.clients.points')}</span>
                     </div>
                   </div>
