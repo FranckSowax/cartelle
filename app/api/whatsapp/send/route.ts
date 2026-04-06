@@ -326,23 +326,25 @@ export async function POST(request: NextRequest) {
     // 13. Send interactive message with URL buttons (Whapi format)
     // Whapi supports up to 3 buttons of type "url" via POST /messages/interactive
     const btnTs = Date.now();
-    const actionButtons: Array<{ type: string; title: string; id: string; url: string }> = [
-      {
-        type: 'url',
-        title: spinButtonText.substring(0, 25),
-        id: `spin_${btnTs}`,
-        url: spinUrl,
-      },
-    ];
+    const actionButtons: Array<{ type: string; title: string; id: string; url: string }> = [];
 
+    // Card button first (if available)
     if (cardUrl) {
       actionButtons.push({
         type: 'url',
         title: cardButtonText.substring(0, 25),
-        id: `card_${btnTs + 1}`,
+        id: `card_${btnTs}`,
         url: cardUrl,
       });
     }
+
+    // Spin button second
+    actionButtons.push({
+      type: 'url',
+      title: spinButtonText.substring(0, 25),
+      id: `spin_${btnTs + 1}`,
+      url: spinUrl,
+    });
 
     const interactivePayload = {
       to: formattedPhone,
