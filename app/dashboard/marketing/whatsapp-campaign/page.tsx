@@ -875,14 +875,14 @@ export default function WhatsAppCampaignPage() {
             </div>
 
             {/* Save Message */}
-            {saveMessage && (
+            {saveMessage ? (
               <div className={`p-2.5 rounded-lg flex items-center gap-2 text-sm ${
-                saveMessage.type === 'success' ? 'bg-green-50 border border-green-200 text-green-700' : 'bg-red-50 border border-red-200 text-red-700'
+                (saveMessage as { type: string; text: string }).type === 'success' ? 'bg-green-50 border border-green-200 text-green-700' : 'bg-red-50 border border-red-200 text-red-700'
               }`}>
-                {saveMessage.type === 'success' ? <Check className="w-3.5 h-3.5" /> : <AlertCircle className="w-3.5 h-3.5" />}
-                <span>{saveMessage.text}</span>
+                {(saveMessage as { type: string; text: string }).type === 'success' ? <Check className="w-3.5 h-3.5" /> : <AlertCircle className="w-3.5 h-3.5" />}
+                <span>{(saveMessage as { type: string; text: string }).text}</span>
               </div>
-            )}
+            ) : null}
 
             {/* Wizard Steps Indicator */}
             <div className="flex items-center gap-2">

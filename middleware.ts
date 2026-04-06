@@ -130,6 +130,7 @@ export async function middleware(request: NextRequest) {
   response.headers.set('X-Frame-Options', 'DENY');
   response.headers.set('X-XSS-Protection', '1; mode=block');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  response.headers.set('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' fonts.cdnfonts.com fonts.googleapis.com; font-src 'self' fonts.gstatic.com fonts.cdnfonts.com; img-src 'self' data: blob: *.supabase.co; connect-src 'self' *.supabase.co wss://*.supabase.co gate.whapi.cloud graph.facebook.com; frame-src 'none'; object-src 'none'");
 
   return response;
 }

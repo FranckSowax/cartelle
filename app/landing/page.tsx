@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { SoftwareApplicationJsonLd } from '@/components/seo/JsonLd';
 import Link from 'next/link';
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import {
@@ -215,6 +216,7 @@ export default function LandingPage() {
 
   return (
     <div className="relative overflow-hidden bg-white">
+      <SoftwareApplicationJsonLd />
 
       {/* ═══════════ NAVIGATION ═══════════ */}
       <header className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? 'bg-white/90 backdrop-blur-xl border-b border-gray-200/60 shadow-[0_1px_30px_rgba(0,0,0,0.04)]' : 'bg-white/60 backdrop-blur-md'}`}>
