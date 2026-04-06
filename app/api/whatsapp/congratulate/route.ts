@@ -176,45 +176,69 @@ export async function POST(request: NextRequest) {
     // 10. Format phone number for Whapi (remove + prefix)
     const formattedPhone = phoneNumber.replace(/^\+/, '');
 
-    // 11. Call Whapi API with interactive button message
-    const whapiResponse = await fetch(WHAPI_API_URL, {
+    // 11. Build business name for header
+    const businessName = merchant.business_name || 'Cartelle';
+
+    // 12. Call Whapi API with interactive URL button (correct format per Whapi docs)
+    const btnId = `prize_${Date.now()}`;
+    const interactivePayload = {
+      to: formattedPhone,
+      type: 'button',
+      header: {
+        text: `🎉 ${businessName}`,
+      },
+      body: {
+        text: messageContent.body,
+      },
+      footer: {
+        text: messageContent.footer,
+      },
+      action: {
+        buttons: [
+          {
+            type: 'url',
+            title: messageContent.buttonText.substring(0, 25),
+            id: btnId,
+            url: couponUrl,
+          },
+        ],
+      },
+    };
+
+    console.log('[CONGRATULATE] Sending to', formattedPhone, '| URL:', couponUrl);
+
+    let whapiResponse = await fetch(WHAPI_API_URL, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${globalWhapiKey}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        to: formattedPhone,
-        type: 'button',
-        body: {
-          text: messageContent.body,
-        },
-        footer: {
-          text: messageContent.footer,
-        },
-        action: {
-          buttons: [
-            {
-              type: 'url',
-              title: messageContent.buttonText,
-              url: couponUrl,
-            },
-          ],
-        },
-      }),
+      body: JSON.stringify(interactivePayload),
     });
+
+    // Fallback to text message if interactive fails
+    if (!whapiResponse.ok) {
+      const errorText = await whapiResponse.text();
+      console.error('[CONGRATULATE] Interactive failed:', whapiResponse.status, errorText, '— falling back to text');
+
+      const textMessage = `*🎉 ${businessName}*\n\n${messageContent.body}\n\n🎁 *${messageContent.buttonText}*\n${couponUrl}\n\n_${messageContent.footer}_`;
+
+      whapiResponse = await fetch('https://gate.whapi.cloud/messages/text', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${globalWhapiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          to: formattedPhone,
+          body: textMessage,
+        }),
+      });
+    }
 
     if (!whapiResponse.ok) {
       const errorText = await whapiResponse.text();
-      console.error('Whapi API error:', whapiResponse.status, errorText);
-
-      if (whapiResponse.status === 401) {
-        return NextResponse.json(
-          { error: 'Erreur de configuration WhatsApp' },
-          { status: 500 }
-        );
-      }
-
+      console.error('[CONGRATULATE] All methods failed:', whapiResponse.status, errorText);
       return NextResponse.json(
         { error: 'Échec de l\'envoi du message WhatsApp' },
         { status: 500 }
