@@ -69,20 +69,54 @@ export default function ScanPage() {
 
   useEffect(() => {
     if (merchant && scanStatus === 'scanning') {
-      // Initialize scanner
+      // Detect if mobile to optimize scanner size
+      const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+      const qrSize = isMobile ? Math.min(window.innerWidth - 60, 280) : 280;
+
+      // Initialize scanner with rear camera by default on mobile
       const scanner = new Html5QrcodeScanner(
         "reader",
         {
-          fps: 10,
-          qrbox: { width: 250, height: 250 },
+          fps: 15,
+          qrbox: { width: qrSize, height: qrSize },
           aspectRatio: 1.0,
-          showTorchButtonIfSupported: true
-        },
+          showTorchButtonIfSupported: true,
+          showZoomSliderIfSupported: true,
+          defaultZoomValueIfSupported: 2,
+          // Use rear camera by default on mobile
+          videoConstraints: {
+            facingMode: { ideal: 'environment' },
+          },
+          // Hide file scan option on mobile (only show camera)
+          supportedScanTypes: isMobile ? [0] : undefined, // 0 = SCAN_TYPE_CAMERA only
+          rememberLastUsedCamera: true,
+        } as any,
         /* verbose= */ false
       );
 
       scanner.render(onScanSuccess, onScanFailure);
       scannerRef.current = scanner;
+
+      // Apply mobile-friendly styling
+      if (isMobile) {
+        setTimeout(() => {
+          const reader = document.getElementById('reader');
+          if (reader) {
+            const select = reader.querySelector('#reader__camera_selection') as HTMLSelectElement;
+            if (select && select.options.length > 1) {
+              // Try to find and select the rear camera
+              for (let i = 0; i < select.options.length; i++) {
+                const text = select.options[i].text.toLowerCase();
+                if (text.includes('back') || text.includes('rear') || text.includes('arrière') || text.includes('environment')) {
+                  select.selectedIndex = i;
+                  select.dispatchEvent(new Event('change'));
+                  break;
+                }
+              }
+            }
+          }
+        }, 500);
+      }
     }
 
     return () => {
