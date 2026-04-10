@@ -87,6 +87,7 @@ export async function POST(_request: NextRequest) {
         email: user.email,
         business_name: businessName,
         subscription_tier: 'starter',
+        workflow_mode: 'whatsapp',
         is_headquarters: true,
         referral_code: generateRefCode(),
       })

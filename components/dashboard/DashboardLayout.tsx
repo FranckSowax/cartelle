@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { NotificationDropdown } from '@/components/dashboard/NotificationDropdown';
 import { SubscriptionOverlay } from '@/components/dashboard/SubscriptionOverlay';
 import { EXEMPT_EMAILS } from '@/lib/config/admin';
+import { OnboardingGuide } from '@/components/dashboard/OnboardingGuide';
 import { useTranslation } from 'react-i18next';
 import '@/lib/i18n/config';
 import {
@@ -130,6 +131,11 @@ export function DashboardLayout({ children, merchant }: DashboardLayoutProps) {
       {/* Subscription expiry overlay — blocks dashboard until renewed */}
       {isSubscriptionExpired && merchant && (
         <SubscriptionOverlay merchant={merchant} />
+      )}
+
+      {/* Onboarding guide for new merchants */}
+      {merchant && !isSubscriptionExpired && (
+        <OnboardingGuide merchant={merchant} />
       )}
       {/* Subtle background pattern */}
       <div className="fixed inset-0 opacity-[0.015] pointer-events-none" style={{
