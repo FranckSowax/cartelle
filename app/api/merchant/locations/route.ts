@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
+import { isExemptEmail } from '@/lib/config/admin';
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -45,12 +46,13 @@ export async function GET(request: NextRequest) {
     // Get parent merchant subscription tier for limit info
     const { data: parent } = await supabaseAdmin
       .from('merchants')
-      .select('subscription_tier')
+      .select('subscription_tier, email')
       .eq('id', merchantId)
       .single();
 
-    const tier = parent?.subscription_tier || 'starter';
-    const maxLocations = TIER_MAX_LOCATIONS[tier] ?? 0;
+    const exempt = isExemptEmail(parent?.email);
+    const tier = exempt ? 'illimité' : (parent?.subscription_tier || 'starter');
+    const maxLocations = exempt ? -1 : (TIER_MAX_LOCATIONS[parent?.subscription_tier || 'starter'] ?? 0);
 
     return NextResponse.json({ locations: locations || [], maxLocations, tier });
   } catch (error) {
@@ -79,7 +81,7 @@ export async function POST(request: NextRequest) {
     // Check parent merchant exists and get tier
     const { data: parent, error: parentError } = await supabaseAdmin
       .from('merchants')
-      .select('id, subscription_tier, business_name')
+      .select('id, subscription_tier, business_name, email')
       .eq('id', parentMerchantId)
       .single();
 
@@ -87,11 +89,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Parent merchant not found' }, { status: 404 });
     }
 
+    const exempt = isExemptEmail(parent.email);
     const tier = parent.subscription_tier || 'starter';
-    const maxLocations = TIER_MAX_LOCATIONS[tier] ?? 0;
+    const maxLocations = exempt ? -1 : (TIER_MAX_LOCATIONS[tier] ?? 0);
 
-    // Free plan cannot add any location
-    if (maxLocations === 0) {
+    // Free plan cannot add any location (exempt accounts bypass this)
+    if (!exempt && maxLocations === 0) {
       return NextResponse.json(
         { error: 'Votre plan gratuit ne permet pas d\'ajouter d\'établissements supplémentaires. Passez au plan Essentiel ou Premium.' },
         { status: 403 }

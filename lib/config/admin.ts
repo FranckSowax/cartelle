@@ -11,6 +11,25 @@ export const ADMIN_EMAILS: string[] = [
   'sowaxcom@gmail.com',
 ];
 
+/**
+ * Emails exempted from subscription requirements.
+ * These accounts get unlimited access without needing to pay.
+ */
+export const EXEMPT_EMAILS: string[] = [
+  'sowaxcom@gmail.com',
+  'contact@switchoncss.com',
+];
+
+const allExemptEmails = EXEMPT_EMAILS.map(e => e.toLowerCase());
+
+/**
+ * Check if an email is exempt from subscription (unlimited free access)
+ */
+export function isExemptEmail(email: string | null | undefined): boolean {
+  if (!email) return false;
+  return allExemptEmails.includes(email.toLowerCase());
+}
+
 // Check if environment variable is set for admin emails (comma-separated)
 const envAdminEmails = process.env.ADMIN_EMAILS?.split(',').map(e => e.trim().toLowerCase()) || [];
 const allAdminEmails = [...ADMIN_EMAILS, ...envAdminEmails].map(e => e.toLowerCase());

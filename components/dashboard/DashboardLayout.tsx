@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { NotificationDropdown } from '@/components/dashboard/NotificationDropdown';
 import { SubscriptionOverlay } from '@/components/dashboard/SubscriptionOverlay';
+import { EXEMPT_EMAILS } from '@/lib/config/admin';
 import { useTranslation } from 'react-i18next';
 import '@/lib/i18n/config';
 import {
@@ -108,10 +109,17 @@ export function DashboardLayout({ children, merchant }: DashboardLayoutProps) {
   const navigation = navigationGroups.flatMap(g => g.items);
 
 
-  // Check if subscription has expired
-  const isSubscriptionExpired = merchant?.subscription_expires_at
-    ? new Date(merchant.subscription_expires_at) < new Date()
+  // Check if this account is exempt from subscription
+  const isExempt = merchant?.email
+    ? EXEMPT_EMAILS.map(e => e.toLowerCase()).includes(merchant.email.toLowerCase())
     : false;
+
+  // Check if subscription has expired (exempt accounts are never expired)
+  const isSubscriptionExpired = isExempt
+    ? false
+    : merchant?.subscription_expires_at
+      ? new Date(merchant.subscription_expires_at) < new Date()
+      : false;
 
   if (!mounted) {
     return null; // Prevent hydration mismatch
@@ -177,7 +185,11 @@ export function DashboardLayout({ children, merchant }: DashboardLayoutProps) {
                   </p>
                   <p className="text-xs text-slate-400 capitalize flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    {merchant.subscription_tier || 'Free'} Plan
+                    {isExempt ? (
+                      <span className="text-amber-400 font-semibold">Illimité</span>
+                    ) : (
+                      <>{merchant.subscription_tier || 'Free'} Plan</>
+                    )}
                   </p>
                 </div>
               </div>
