@@ -7,7 +7,7 @@ import { Button } from '@/components/atoms/Button';
 import { supabase } from '@/lib/supabase/client';
 import { useTranslation } from 'react-i18next';
 import i18n from '@/lib/i18n/config';
-import { Star, Mail, Globe, Phone } from 'lucide-react';
+import { Star, Mail, Phone, Heart } from 'lucide-react';
 import { PhoneInputWithCountry } from '@/components/ui/PhoneInputWithCountry';
 import { feedbackSchema, feedbackSchemaWhatsApp, sanitizeString, sanitizePhone, isValidUUID } from '@/lib/utils/validation';
 
@@ -21,6 +21,7 @@ export default function RatingPage() {
   // Get language from URL or localStorage
   const langFromUrl = searchParams.get('lang');
   const currentLang = 'fr';
+  const isFr = currentLang === 'fr';
 
   const [rating, setRating] = useState<number | null>(null);
   const [feedback, setFeedback] = useState('');
@@ -338,15 +339,43 @@ export default function RatingPage() {
           {!rating ? (
             <div>
               <h2 className="text-xl font-semibold text-center mb-6 text-gray-900">{t('rating.title')}</h2>
-              <StarRating onRate={handleRating} />
+              <StarRating onRate={handleRating} submitLabel={isFr ? 'Valider ma note' : 'Submit my rating'} />
             </div>
           ) : rating < 4 ? (
             <div className="space-y-5">
-              <h2 className="text-xl font-semibold text-center text-gray-900">{t('feedback.title')}</h2>
+              {/* Message bienveillant */}
+              <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-center space-y-2">
+                <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center mx-auto">
+                  <Heart className="w-5 h-5 text-amber-600" />
+                </div>
+                <p className="text-sm font-medium text-amber-800">
+                  {isFr
+                    ? 'Merci pour votre honnêteté !'
+                    : 'Thank you for your honesty!'}
+                </p>
+                <p className="text-xs text-amber-700">
+                  {isFr
+                    ? 'Votre avis compte beaucoup pour nous. Dites-nous comment nous pouvons nous améliorer, nous lisons chaque commentaire avec attention.'
+                    : 'Your feedback means a lot to us. Tell us how we can improve — we read every comment carefully.'}
+                </p>
+              </div>
+
+              {/* Champ commentaire */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">
+                  {isFr ? 'Votre commentaire' : 'Your comment'}
+                </label>
+                <textarea
+                  value={feedback}
+                  onChange={(e) => setFeedback(e.target.value)}
+                  placeholder={isFr ? 'Qu\'est-ce qui pourrait être amélioré ?' : 'What could be improved?'}
+                  rows={3}
+                  className="w-full p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all resize-none text-sm"
+                />
+              </div>
 
               {/* Contact Field - Email or Phone based on workflow mode */}
               {isWhatsAppMode ? (
-                // WhatsApp Mode - Phone Input with Country Code
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                     <Phone className="w-4 h-4 text-green-600" />
@@ -366,10 +395,8 @@ export default function RatingPage() {
                       {phoneError}
                     </p>
                   )}
-                  <p className="text-xs text-gray-500">{t('form.phoneHint')}</p>
                 </div>
               ) : (
-                // Web Mode - Email Input
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                     <Mail className="w-4 h-4 text-teal-600" />
@@ -405,7 +432,7 @@ export default function RatingPage() {
                 disabled={loading}
                 className="w-full bg-teal-600 hover:bg-teal-700 text-white py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl"
               >
-                {loading ? t('common.loading') : t('common.submit')}
+                {loading ? t('common.loading') : (isFr ? 'Envoyer mon avis' : 'Send my feedback')}
               </Button>
             </div>
           ) : (

@@ -13,6 +13,7 @@ export interface Merchant {
   tripadvisor_url: string | null;
   instagram_handle: string | null;
   instagram_url: string | null;
+  whatsapp_channel_url: string | null;
   tiktok_handle: string | null;
   tiktok_url: string | null;
   weekly_schedule: string | null;

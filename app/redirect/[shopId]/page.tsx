@@ -53,6 +53,12 @@ const PlatformLogos = {
       <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="white" strokeWidth="2"/>
     </svg>
   ),
+  whatsapp_channel: (
+    <svg viewBox="0 0 24 24" className="w-16 h-16">
+      <rect width="24" height="24" rx="6" fill="#25D366"/>
+      <path d="M12 3.5C7.31 3.5 3.5 7.31 3.5 12c0 1.5.39 2.91 1.08 4.13L3.5 20.5l4.47-1.03A8.46 8.46 0 0012 20.5c4.69 0 8.5-3.81 8.5-8.5S16.69 3.5 12 3.5zm0 15.2a6.67 6.67 0 01-3.4-.93l-.24-.14-2.5.58.6-2.42-.16-.26A6.68 6.68 0 015.3 12 6.71 6.71 0 0112 5.3 6.71 6.71 0 0118.7 12 6.71 6.71 0 0112 18.7zm3.68-5.01c-.2-.1-1.18-.58-1.36-.65-.18-.07-.32-.1-.45.1-.13.2-.5.65-.62.78-.11.13-.23.15-.43.05-.2-.1-.84-.31-1.6-.99-.59-.53-.99-1.18-1.1-1.38-.12-.2-.01-.31.09-.41.09-.09.2-.23.3-.35.1-.12.13-.2.2-.33.07-.13.04-.25-.02-.35-.06-.1-.45-1.08-.62-1.48-.16-.39-.33-.34-.45-.34h-.39c-.13 0-.35.05-.53.25-.18.2-.7.68-.7 1.66s.72 1.93.82 2.06c.1.13 1.4 2.14 3.4 3 .47.2.84.33 1.13.42.48.15.91.13 1.25.08.38-.06 1.18-.48 1.35-.95.17-.47.17-.87.12-.95-.05-.08-.18-.13-.38-.23z" fill="white"/>
+    </svg>
+  ),
 };
 
 export default function RedirectPage() {
@@ -157,6 +163,9 @@ export default function RedirectPage() {
           case 'instagram':
             url = data.instagram_url;
             break;
+          case 'whatsapp_channel':
+            url = data.whatsapp_channel_url;
+            break;
         }
         setRedirectUrl(url);
       }
@@ -243,20 +252,60 @@ export default function RedirectPage() {
   };
 
   const getStrategyInfo = () => {
-    // Get the appropriate message based on workflow mode
-    const getWorkflowMessage = (isReview: boolean) => {
-      if (isReview) {
-        // Review platforms (Google, TripAdvisor)
-        if (isWhatsAppMode) {
-          return t('redirect.reviewMessageWhatsapp');
+    const isFrLang = currentLang === 'fr';
+
+    // Platform-specific messages that clearly explain the action + reward
+    const getMessageForPlatform = (platform: string) => {
+      if (isWhatsAppMode) {
+        switch (platform) {
+          case 'google_maps':
+            return isFrLang
+              ? 'Donnez-nous de la force avec un avis Google, puis vous recevrez un **WhatsApp avec la roue à tourner et votre carte de fidélité !**'
+              : 'Leave us a Google review, then you\'ll receive a **WhatsApp with the wheel to spin and your loyalty card!**';
+          case 'tripadvisor':
+            return isFrLang
+              ? 'Laissez-nous un avis sur TripAdvisor, puis vous recevrez un **WhatsApp avec la roue à tourner et votre carte de fidélité !**'
+              : 'Leave us a TripAdvisor review, then you\'ll receive a **WhatsApp with the wheel to spin and your loyalty card!**';
+          case 'tiktok':
+            return isFrLang
+              ? 'Abonnez-vous à notre TikTok, puis vous recevrez un **WhatsApp avec la roue à tourner et votre carte de fidélité !**'
+              : 'Follow us on TikTok, then you\'ll receive a **WhatsApp with the wheel to spin and your loyalty card!**';
+          case 'instagram':
+            return isFrLang
+              ? 'Abonnez-vous à notre Instagram, puis vous recevrez un **WhatsApp avec la roue à tourner et votre carte de fidélité !**'
+              : 'Follow us on Instagram, then you\'ll receive a **WhatsApp with the wheel to spin and your loyalty card!**';
+          case 'whatsapp_channel':
+            return isFrLang
+              ? 'Rejoignez notre chaîne WhatsApp, puis vous recevrez un **message avec la roue à tourner et votre carte de fidélité !**'
+              : 'Join our WhatsApp channel, then you\'ll receive a **message with the wheel to spin and your loyalty card!**';
+          default:
+            return t('redirect.reviewMessageWhatsapp');
         }
-        return t('redirect.reviewMessageWeb');
       } else {
-        // Social platforms (TikTok, Instagram)
-        if (isWhatsAppMode) {
-          return t('redirect.socialMessageWhatsapp');
+        switch (platform) {
+          case 'google_maps':
+            return isFrLang
+              ? 'Donnez-nous de la force avec un avis Google, puis **revenez ici pour tourner la roue et gagner un cadeau !**'
+              : 'Leave us a Google review, then **come back here to spin the wheel and win a gift!**';
+          case 'tripadvisor':
+            return isFrLang
+              ? 'Laissez-nous un avis sur TripAdvisor, puis **revenez ici pour tourner la roue et gagner un cadeau !**'
+              : 'Leave us a TripAdvisor review, then **come back here to spin the wheel and win a gift!**';
+          case 'tiktok':
+            return isFrLang
+              ? 'Abonnez-vous à notre TikTok, puis **revenez ici pour tourner la roue et gagner un cadeau !**'
+              : 'Follow us on TikTok, then **come back here to spin the wheel and win a gift!**';
+          case 'instagram':
+            return isFrLang
+              ? 'Abonnez-vous à notre Instagram, puis **revenez ici pour tourner la roue et gagner un cadeau !**'
+              : 'Follow us on Instagram, then **come back here to spin the wheel and win a gift!**';
+          case 'whatsapp_channel':
+            return isFrLang
+              ? 'Rejoignez notre chaîne WhatsApp, puis **revenez ici pour tourner la roue et gagner un cadeau !**'
+              : 'Join our WhatsApp channel, then **come back here to spin the wheel and win a gift!**';
+          default:
+            return t('redirect.reviewMessageWeb');
         }
-        return t('redirect.socialMessageWeb');
       }
     };
 
@@ -266,8 +315,8 @@ export default function RedirectPage() {
           logo: PlatformLogos.google,
           showStars: true,
           name: 'Google',
-          title: t('redirect.yourFeedbackPrecious'),
-          message: getWorkflowMessage(true),
+          title: isFrLang ? 'Donnez-nous de la force !' : t('redirect.yourFeedbackPrecious'),
+          message: getMessageForPlatform('google_maps'),
           buttonText: t('redirect.leaveReview'),
           bg: 'bg-white',
           border: 'border-gray-200',
@@ -280,8 +329,8 @@ export default function RedirectPage() {
           logo: PlatformLogos.tripadvisor,
           showStars: true,
           name: 'TripAdvisor',
-          title: t('redirect.yourFeedbackPrecious'),
-          message: getWorkflowMessage(true),
+          title: isFrLang ? 'Votre avis compte !' : t('redirect.yourFeedbackPrecious'),
+          message: getMessageForPlatform('tripadvisor'),
           buttonText: t('redirect.leaveReview'),
           bg: 'bg-white',
           border: 'border-[#34E0A1]',
@@ -294,8 +343,8 @@ export default function RedirectPage() {
           logo: PlatformLogos.tiktok,
           showStars: false,
           name: 'TikTok',
-          title: t('redirect.followUs'),
-          message: getWorkflowMessage(false),
+          title: isFrLang ? 'Abonnez-vous et gagnez !' : 'Follow us and win!',
+          message: getMessageForPlatform('tiktok'),
           buttonText: t('redirect.followOnTikTok'),
           bg: 'bg-white',
           border: 'border-gray-300',
@@ -308,8 +357,8 @@ export default function RedirectPage() {
           logo: PlatformLogos.instagram,
           showStars: false,
           name: 'Instagram',
-          title: t('redirect.followUs'),
-          message: getWorkflowMessage(false),
+          title: isFrLang ? 'Abonnez-vous et gagnez !' : 'Follow us and win!',
+          message: getMessageForPlatform('instagram'),
           buttonText: t('redirect.followOnInstagram'),
           bg: 'bg-white',
           border: 'border-pink-200',
@@ -317,13 +366,27 @@ export default function RedirectPage() {
           button_bg: 'bg-gradient-to-r from-[#F56040] via-[#C13584] to-[#833AB4]',
           button_hover: 'hover:opacity-90'
         };
+      case 'whatsapp_channel':
+        return {
+          logo: PlatformLogos.whatsapp_channel,
+          showStars: false,
+          name: 'WhatsApp',
+          title: isFrLang ? 'Rejoignez-nous et gagnez !' : 'Join us and win!',
+          message: getMessageForPlatform('whatsapp_channel'),
+          buttonText: isFrLang ? 'Rejoindre la chaîne' : 'Join the channel',
+          bg: 'bg-white',
+          border: 'border-green-300',
+          text_color: 'text-gray-800',
+          button_bg: 'bg-[#25D366]',
+          button_hover: 'hover:bg-[#1EB954]'
+        };
       default:
         return {
           logo: PlatformLogos.google,
           showStars: true,
           name: 'Google',
-          title: t('redirect.yourFeedbackPrecious'),
-          message: getWorkflowMessage(true),
+          title: isFrLang ? 'Donnez-nous de la force !' : t('redirect.yourFeedbackPrecious'),
+          message: getMessageForPlatform('google_maps'),
           buttonText: t('redirect.leaveReview'),
           bg: 'bg-white',
           border: 'border-gray-200',

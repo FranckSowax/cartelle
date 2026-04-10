@@ -8,13 +8,14 @@ import { supabase } from '@/lib/supabase/client';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check, X, Loader2, Calendar, MapPin, Star, Music, Instagram as InstagramIcon, Globe, MessageCircle, Palette, Link2, Route, Lightbulb, ChevronDown } from 'lucide-react';
+import { Check, X, Loader2, Calendar, MapPin, Star, Music, Instagram as InstagramIcon, Globe, MessageCircle, Palette, Link2, Route, Lightbulb, ChevronDown, MessageSquare } from 'lucide-react';
 
 const PLATFORMS = [
   { value: 'google_maps', label: 'Google Reviews', icon: MapPin, color: 'bg-red-500' },
   { value: 'tripadvisor', label: 'TripAdvisor', icon: Star, color: 'bg-green-500' },
   { value: 'tiktok', label: 'TikTok', icon: Music, color: 'bg-black' },
   { value: 'instagram', label: 'Instagram', icon: InstagramIcon, color: 'bg-pink-500' },
+  { value: 'whatsapp_channel', label: 'WhatsApp', icon: MessageSquare, color: 'bg-green-600' },
 ];
 
 type TabId = 'workflow' | 'routing';
@@ -54,6 +55,7 @@ export default function StrategyPage() {
   const [tripadvisorUrl, setTripadvisorUrl] = useState('');
   const [tiktokUrl, setTiktokUrl] = useState('');
   const [instagramUrl, setInstagramUrl] = useState('');
+  const [whatsappChannelUrl, setWhatsappChannelUrl] = useState('');
 
   // Weekly schedule: array of 7 days, each with a platform
   const [weeklySchedule, setWeeklySchedule] = useState<string[]>(
@@ -100,6 +102,7 @@ export default function StrategyPage() {
       setTripadvisorUrl(merchantData?.tripadvisor_url || '');
       setTiktokUrl(merchantData?.tiktok_url || '');
       setInstagramUrl(merchantData?.instagram_url || '');
+      setWhatsappChannelUrl(merchantData?.whatsapp_channel_url || '');
 
       // Load weekly schedule
       if (merchantData?.weekly_schedule) {
@@ -137,6 +140,7 @@ export default function StrategyPage() {
         tripadvisor_url: tripadvisorUrl || null,
         tiktok_url: tiktokUrl || null,
         instagram_url: instagramUrl || null,
+        whatsapp_channel_url: whatsappChannelUrl || null,
         weekly_schedule: JSON.stringify(weeklySchedule),
       };
 
@@ -174,6 +178,7 @@ export default function StrategyPage() {
     setTripadvisorUrl(merchant.tripadvisor_url || '');
     setTiktokUrl(merchant.tiktok_url || '');
     setInstagramUrl(merchant.instagram_url || '');
+    setWhatsappChannelUrl(merchant.whatsapp_channel_url || '');
     if (merchant.weekly_schedule) {
       try {
         const schedule = JSON.parse(merchant.weekly_schedule);
@@ -678,6 +683,26 @@ export default function StrategyPage() {
                       placeholder="https://www.instagram.com/your-account"
                       className="w-full px-3 py-2.5 border border-gray-300 rounded-lg bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-teal-50/30 transition-all duration-200"
                     />
+                  </div>
+
+                  {/* WhatsApp Channel URL */}
+                  <div>
+                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1.5">
+                      <MessageSquare className="w-4 h-4 text-green-600" />
+                      {isFr ? 'Chaîne / Groupe WhatsApp' : 'WhatsApp Channel / Group'}
+                    </label>
+                    <input
+                      type="url"
+                      value={whatsappChannelUrl}
+                      onChange={(e) => setWhatsappChannelUrl(e.target.value)}
+                      placeholder="https://whatsapp.com/channel/... ou https://chat.whatsapp.com/..."
+                      className="w-full px-3 py-2.5 border border-gray-300 rounded-lg bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-teal-50/30 transition-all duration-200"
+                    />
+                    <p className="text-xs text-gray-400 mt-1">
+                      {isFr
+                        ? 'Lien vers votre chaîne ou groupe WhatsApp pour rediriger vos clients'
+                        : 'Link to your WhatsApp channel or group to redirect your customers'}
+                    </p>
                   </div>
                 </div>
               </Card>

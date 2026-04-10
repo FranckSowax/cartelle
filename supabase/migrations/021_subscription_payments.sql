@@ -3,6 +3,9 @@
 -- Adds subscription tracking, payment history, and secure token access
 -- ============================================================================
 
+-- ─── Add WhatsApp channel URL to merchants ─────────────────────────────────
+ALTER TABLE merchants ADD COLUMN IF NOT EXISTS whatsapp_channel_url TEXT;
+
 -- ─── Add subscription columns to merchants ─────────────────────────────────
 ALTER TABLE merchants ADD COLUMN IF NOT EXISTS phone TEXT;
 ALTER TABLE merchants ADD COLUMN IF NOT EXISTS subscription_started_at TIMESTAMPTZ;
