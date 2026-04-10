@@ -8,9 +8,7 @@
 // List of email addresses authorized to access the admin dashboard
 // Add your admin emails here
 export const ADMIN_EMAILS: string[] = [
-  // Add admin emails here, e.g.:
-  // 'admin@cartelle.app',
-  // 'owner@cartelle.app',
+  'sowaxcom@gmail.com',
 ];
 
 // Check if environment variable is set for admin emails (comma-separated)
