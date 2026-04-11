@@ -176,7 +176,9 @@ export default function AdminDashboard() {
 
   const [selectedMerchant, setSelectedMerchant] = useState<string | null>(null);
   const [merchantStats, setMerchantStats] = useState<Record<string, MerchantStats>>({});
-  const [activeSection, setActiveSection] = useState<'dashboard' | 'merchants' | 'messages' | 'loyalty' | 'whatsapp'>('dashboard');
+  const [activeSection, setActiveSection] = useState<'dashboard' | 'merchants' | 'messages' | 'loyalty' | 'whatsapp' | 'orders'>('dashboard');
+  const [qrOrders, setQrOrders] = useState<any[]>([]);
+  const [ordersLoading, setOrdersLoading] = useState(false);
   const [timeRange, setTimeRange] = useState<'day' | 'week' | 'month'>('week');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
   const [tierFilter, setTierFilter] = useState<'all' | 'starter' | 'premium'>('all');
@@ -249,6 +251,8 @@ export default function AdminDashboard() {
       await loadLoyaltyData();
     } else if (activeSection === 'whatsapp') {
       await loadWhatsAppConfigs();
+    } else if (activeSection === 'orders') {
+      await loadQrOrders();
     } else {
       await loadMerchants();
     }
@@ -270,6 +274,38 @@ export default function AdminDashboard() {
       console.error('Error loading messages:', err);
     } finally {
       setMessagesLoading(false);
+    }
+  };
+
+  // Load QR support orders
+  const loadQrOrders = async () => {
+    setOrdersLoading(true);
+    try {
+      const response = await fetch('/api/qr-orders?all=true');
+      if (response.ok) {
+        const data = await response.json();
+        setQrOrders(data.orders || []);
+      }
+    } catch (err) {
+      console.error('Error loading qr orders:', err);
+    } finally {
+      setOrdersLoading(false);
+    }
+  };
+
+  // Update QR order status
+  const updateOrderStatus = async (id: string, status: string) => {
+    try {
+      const response = await fetch('/api/qr-orders', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status })
+      });
+      if (response.ok) {
+        await loadQrOrders();
+      }
+    } catch (err) {
+      console.error('Error updating order:', err);
     }
   };
 
@@ -491,6 +527,13 @@ export default function AdminDashboard() {
       loadMessages();
     }
   }, [activeSection, messageStatusFilter, user]);
+
+  // Load QR orders when switching to orders section
+  useEffect(() => {
+    if (activeSection === 'orders' && user) {
+      loadQrOrders();
+    }
+  }, [activeSection, user]);
 
   // Load loyalty data when switching to loyalty section or when filters change
   useEffect(() => {
@@ -816,6 +859,23 @@ export default function AdminDashboard() {
             <MessageCircle className="w-5 h-5" />
             <span className="font-medium">WhatsApp</span>
           </button>
+
+          <button
+            onClick={() => setActiveSection('orders')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+              activeSection === 'orders'
+                ? 'bg-purple-500/20 text-white border border-purple-500/30'
+                : 'text-white hover:bg-slate-800/50'
+            }`}
+          >
+            <ShoppingBag className="w-5 h-5" />
+            <span className="font-medium">Commandes QR</span>
+            {qrOrders.filter(o => o.status === 'pending').length > 0 && (
+              <span className="ml-auto bg-amber-500 text-white text-xs px-2 py-0.5 rounded-full">
+                {qrOrders.filter(o => o.status === 'pending').length}
+              </span>
+            )}
+          </button>
         </nav>
 
         {/* Sign Out */}
@@ -840,7 +900,8 @@ export default function AdminDashboard() {
                   {activeSection === 'dashboard' ? 'Tableau de Bord' :
                    activeSection === 'merchants' ? 'Gestion des Marchands' :
                    activeSection === 'loyalty' ? 'Cartes Fidélité' :
-                   activeSection === 'whatsapp' ? 'WhatsApp' : 'Messages'}
+                   activeSection === 'whatsapp' ? 'WhatsApp' :
+                   activeSection === 'orders' ? 'Commandes QR Code' : 'Messages'}
                 </h2>
                 <p className="text-white/70 text-sm mt-0.5">
                   {activeSection === 'dashboard'
@@ -851,6 +912,8 @@ export default function AdminDashboard() {
                     ? 'Gestion des cartes de fidélité clients'
                     : activeSection === 'whatsapp'
                     ? 'Configuration WhatsApp par marchand'
+                    : activeSection === 'orders'
+                    ? 'Commandes de supports imprimés (papier, plexiglas, DTF)'
                     : 'Demandes de contact Multi Store'}
                 </p>
               </div>
@@ -2101,6 +2164,130 @@ export default function AdminDashboard() {
                       </Button>
                     </div>
                   </div>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* QR Orders Section */}
+        {activeSection === 'orders' && (
+          <>
+            {ordersLoading ? (
+              <div className="flex items-center justify-center py-20">
+                <div className="w-10 h-10 border-4 border-teal-500 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {/* Stats */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 p-4">
+                    <p className="text-white/50 text-xs">Total commandes</p>
+                    <p className="text-2xl font-bold text-white mt-1">{qrOrders.length}</p>
+                  </div>
+                  <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 p-4">
+                    <p className="text-white/50 text-xs">En attente</p>
+                    <p className="text-2xl font-bold text-amber-400 mt-1">
+                      {qrOrders.filter(o => o.status === 'pending').length}
+                    </p>
+                  </div>
+                  <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 p-4">
+                    <p className="text-white/50 text-xs">En production</p>
+                    <p className="text-2xl font-bold text-purple-400 mt-1">
+                      {qrOrders.filter(o => o.status === 'production').length}
+                    </p>
+                  </div>
+                  <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 p-4">
+                    <p className="text-white/50 text-xs">Revenu total</p>
+                    <p className="text-2xl font-bold text-emerald-400 mt-1">
+                      {qrOrders.filter(o => o.status === 'delivered').reduce((s, o) => s + (o.amount_xaf || 0), 0).toLocaleString('fr-FR')}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Orders table */}
+                <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 overflow-hidden">
+                  <div className="px-6 py-4 border-b border-slate-700/50 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <ShoppingBag className="w-5 h-5 text-teal-400" />
+                      <h3 className="text-lg font-semibold text-white">Commandes de supports QR</h3>
+                    </div>
+                    <Badge className="bg-slate-700 text-white border-slate-600">
+                      {qrOrders.length} commandes
+                    </Badge>
+                  </div>
+
+                  {qrOrders.length === 0 ? (
+                    <div className="px-6 py-12 text-center text-white/50">
+                      <ShoppingBag className="w-10 h-10 mx-auto mb-3 opacity-30" />
+                      <p>Aucune commande pour le moment</p>
+                    </div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="bg-slate-900/50 text-left text-xs text-white/60 uppercase">
+                            <th className="px-4 py-3">Date</th>
+                            <th className="px-4 py-3">Marchand</th>
+                            <th className="px-4 py-3">Support</th>
+                            <th className="px-4 py-3">Qté</th>
+                            <th className="px-4 py-3">Montant</th>
+                            <th className="px-4 py-3">Adresse / Tel</th>
+                            <th className="px-4 py-3">Statut</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-700/50">
+                          {qrOrders.map((order) => {
+                            const supportLabels: Record<string, string> = {
+                              paper: 'Chevalet Papier',
+                              plexiglas: 'Chevalet Plexiglas',
+                              dtf: 'QR Code DTF',
+                            };
+                            return (
+                              <tr key={order.id} className="hover:bg-slate-900/30">
+                                <td className="px-4 py-3 text-white/80 text-xs">
+                                  {new Date(order.created_at).toLocaleDateString('fr-FR')}
+                                </td>
+                                <td className="px-4 py-3 text-white text-sm">
+                                  <div className="font-medium">{order.merchant_name || 'Sans nom'}</div>
+                                  <div className="text-white/50 text-xs">{order.merchant_email}</div>
+                                </td>
+                                <td className="px-4 py-3 text-white text-sm">
+                                  {supportLabels[order.support_type] || order.support_type}
+                                </td>
+                                <td className="px-4 py-3 text-white text-sm">{order.quantity}</td>
+                                <td className="px-4 py-3 text-white text-sm font-medium">
+                                  {order.amount_xaf === 0 ? (
+                                    <span className="text-green-400">Gratuit</span>
+                                  ) : (
+                                    `${order.amount_xaf.toLocaleString('fr-FR')} FCFA`
+                                  )}
+                                </td>
+                                <td className="px-4 py-3 text-white/70 text-xs max-w-xs">
+                                  <div className="truncate">{order.shipping_address || '—'}</div>
+                                  <div className="text-white/50">{order.phone || '—'}</div>
+                                </td>
+                                <td className="px-4 py-3">
+                                  <select
+                                    value={order.status}
+                                    onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                                    className="bg-slate-700 border border-slate-600 rounded-lg px-2 py-1 text-white text-xs focus:outline-none focus:ring-2 focus:ring-teal-500/50"
+                                  >
+                                    <option value="pending">En attente</option>
+                                    <option value="confirmed">Confirmée</option>
+                                    <option value="production">En production</option>
+                                    <option value="shipped">Expédiée</option>
+                                    <option value="delivered">Livrée</option>
+                                    <option value="cancelled">Annulée</option>
+                                  </select>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
