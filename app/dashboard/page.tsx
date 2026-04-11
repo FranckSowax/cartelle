@@ -42,6 +42,7 @@ interface ActivityItem {
   date: string;
   customer_email: string | null;
   customer_phone: string | null;
+  customer_name: string | null;
 }
 
 interface ChartDataItem {
@@ -117,6 +118,20 @@ export default function DashboardPage() {
         .eq('merchant_id', user.id)
         .order('created_at', { ascending: false });
 
+      // Load loyalty clients to reconcile names from phone/email
+      const { data: loyaltyClients } = await supabase
+        .from('loyalty_clients')
+        .select('name, phone, email')
+        .eq('merchant_id', user.id)
+        .not('name', 'is', null);
+
+      const loyaltyMap: Record<string, string> = {};
+      (loyaltyClients || []).forEach((c: { name: string | null; phone: string | null; email: string | null }) => {
+        if (!c.name) return;
+        if (c.phone) loyaltyMap[c.phone] = c.name;
+        if (c.email) loyaltyMap[c.email.toLowerCase()] = c.name;
+      });
+
       const { count: spinsCount } = await supabase
         .from('spins')
         .select('*', { count: 'exact', head: true })
@@ -158,15 +173,20 @@ export default function DashboardPage() {
         positiveRatio,
       });
 
-      const activity: ActivityItem[] = feedbackData?.slice(0, 5).map((f: { is_positive: boolean; rating: number; comment: string | null; created_at: string; customer_email: string | null; customer_phone: string | null }, idx: number) => ({
-        id: idx,
-        type: f.is_positive ? 'positive' as const : 'negative' as const,
-        rating: f.rating,
-        comment: f.comment,
-        date: f.created_at,
-        customer_email: f.customer_email,
-        customer_phone: f.customer_phone,
-      })) || [];
+      const activity: ActivityItem[] = feedbackData?.slice(0, 5).map((f: { is_positive: boolean; rating: number; comment: string | null; created_at: string; customer_email: string | null; customer_phone: string | null }, idx: number) => {
+        const phoneName = f.customer_phone ? loyaltyMap[f.customer_phone] : undefined;
+        const emailName = f.customer_email ? loyaltyMap[f.customer_email.toLowerCase()] : undefined;
+        return {
+          id: idx,
+          type: f.is_positive ? 'positive' as const : 'negative' as const,
+          rating: f.rating,
+          comment: f.comment,
+          date: f.created_at,
+          customer_email: f.customer_email,
+          customer_phone: f.customer_phone,
+          customer_name: phoneName || emailName || null,
+        };
+      }) || [];
 
       setRecentActivity(activity);
 
@@ -380,7 +400,7 @@ export default function DashboardPage() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                           <span className="text-xs font-medium text-gray-900 truncate">
-                            {activity.customer_email || activity.customer_phone || t('dashboard.recentReviews.anonymous')}
+                            {activity.customer_name || activity.customer_email || activity.customer_phone || t('dashboard.recentReviews.anonymous')}
                           </span>
                           <div className="flex items-center shrink-0">
                             {Array.from({ length: 5 }).map((_, i) => (

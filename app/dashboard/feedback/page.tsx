@@ -29,6 +29,7 @@ export default function FeedbackPage() {
   const [user, setUser] = useState<any>(null);
   const [merchant, setMerchant] = useState<any>(null);
   const [feedback, setFeedback] = useState<Feedback[]>([]);
+  const [loyaltyMap, setLoyaltyMap] = useState<Record<string, string>>({});
   const [filter, setFilter] = useState<'all' | 'positive' | 'negative'>('all');
 
   useEffect(() => {
@@ -63,6 +64,21 @@ export default function FeedbackPage() {
       .order('created_at', { ascending: false });
 
     setFeedback(data || []);
+
+    // Load loyalty clients to reconcile names from phone/email
+    const { data: loyaltyClients } = await supabase
+      .from('loyalty_clients')
+      .select('name, phone, email')
+      .eq('merchant_id', merchantId)
+      .not('name', 'is', null);
+
+    const map: Record<string, string> = {};
+    (loyaltyClients || []).forEach((c) => {
+      if (!c.name) return;
+      if (c.phone) map[c.phone] = c.name;
+      if (c.email) map[c.email.toLowerCase()] = c.name;
+    });
+    setLoyaltyMap(map);
   };
 
   const filteredFeedback = feedback.filter((f) => {
@@ -178,8 +194,9 @@ export default function FeedbackPage() {
             <span className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-teal-500 to-emerald-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
 
             {/* Table header */}
-            <div className="hidden md:grid md:grid-cols-[160px_minmax(0,1fr)_100px_100px_140px] gap-4 px-6 py-3 bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <div className="hidden md:grid md:grid-cols-[150px_140px_minmax(0,1fr)_100px_100px_140px] gap-4 px-6 py-3 bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase tracking-wider">
               <span>WhatsApp</span>
+              <span>Client</span>
               <span>{t('dashboardFeedback.colComment')}</span>
               <span className="text-center">{t('dashboardFeedback.colRating')}</span>
               <span className="text-center">{t('dashboardFeedback.colSentiment')}</span>
@@ -192,10 +209,13 @@ export default function FeedbackPage() {
                 const createdDate = new Date(f.created_at);
                 const dateStr = createdDate.toLocaleDateString('fr-FR');
                 const timeStr = createdDate.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+                const phoneName = f.customer_phone ? loyaltyMap[f.customer_phone] : undefined;
+                const emailName = f.customer_email ? loyaltyMap[f.customer_email.toLowerCase()] : undefined;
+                const reconciledName = phoneName || emailName || null;
                 return (
                   <div
                     key={f.id}
-                    className="grid grid-cols-1 md:grid-cols-[160px_minmax(0,1fr)_100px_100px_140px] gap-2 md:gap-4 px-6 py-4 hover:bg-gray-50/50 transition-colors items-center"
+                    className="grid grid-cols-1 md:grid-cols-[150px_140px_minmax(0,1fr)_100px_100px_140px] gap-2 md:gap-4 px-6 py-4 hover:bg-gray-50/50 transition-colors items-center"
                   >
                     {/* WhatsApp phone */}
                     <div className="flex items-center gap-1.5 min-w-0">
@@ -204,6 +224,15 @@ export default function FeedbackPage() {
                         <span className="text-xs font-mono text-gray-700 truncate">{f.customer_phone}</span>
                       ) : (
                         <span className="text-xs text-gray-400 italic">—</span>
+                      )}
+                    </div>
+
+                    {/* Customer name */}
+                    <div className="min-w-0">
+                      {reconciledName ? (
+                        <span className="text-xs font-medium text-gray-900 truncate block">{reconciledName}</span>
+                      ) : (
+                        <span className="text-xs text-gray-400 italic">Anonyme</span>
                       )}
                     </div>
 

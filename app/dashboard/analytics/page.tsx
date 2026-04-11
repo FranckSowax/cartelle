@@ -40,6 +40,7 @@ export default function AnalyticsPage() {
   const [user, setUser] = useState<any>(null);
   const [merchant, setMerchant] = useState<any>(null);
   const [feedbackData, setFeedbackData] = useState<FeedbackItem[]>([]);
+  const [loyaltyMap, setLoyaltyMap] = useState<Record<string, string>>({});
   const [ratingDistribution, setRatingDistribution] = useState<RatingDistribution>({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
   const [chartData, setChartData] = useState<Array<{ date: string; positive: number; negative: number }>>([]);
   const [stats, setStats] = useState({
@@ -80,6 +81,21 @@ export default function AnalyticsPage() {
         .select('*')
         .eq('merchant_id', user.id)
         .order('created_at', { ascending: false });
+
+      // Load loyalty clients to reconcile names from phone/email
+      const { data: loyaltyClients } = await supabase
+        .from('loyalty_clients')
+        .select('name, phone, email')
+        .eq('merchant_id', user.id)
+        .not('name', 'is', null);
+
+      const map: Record<string, string> = {};
+      (loyaltyClients || []).forEach((c) => {
+        if (!c.name) return;
+        if (c.phone) map[c.phone] = c.name;
+        if (c.email) map[c.email.toLowerCase()] = c.name;
+      });
+      setLoyaltyMap(map);
 
       const { data: spinsData } = await supabase
         .from('spins')
@@ -384,7 +400,11 @@ export default function AnalyticsPage() {
                       </td>
                       <td className="px-4 py-2.5 whitespace-nowrap">
                         <span className="text-xs text-gray-600">
-                          {feedback.customer_email || feedback.customer_phone || t('dashboardAnalytics.anonymous')}
+                          {(() => {
+                            const phoneName = feedback.customer_phone ? loyaltyMap[feedback.customer_phone] : undefined;
+                            const emailName = feedback.customer_email ? loyaltyMap[feedback.customer_email.toLowerCase()] : undefined;
+                            return phoneName || emailName || feedback.customer_email || feedback.customer_phone || t('dashboardAnalytics.anonymous');
+                          })()}
                         </span>
                       </td>
                       <td className="px-4 py-2.5 whitespace-nowrap">
