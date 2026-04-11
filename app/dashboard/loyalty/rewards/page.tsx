@@ -16,12 +16,13 @@ import {
   X,
   Check,
   AlertCircle,
-  ArrowLeft,
   Star,
   Percent,
   Package,
   Wrench,
-  DollarSign
+  DollarSign,
+  Settings,
+  Users,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -227,26 +228,43 @@ export default function RewardsPage() {
       <div className="space-y-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <Link href="/dashboard/loyalty">
-              <Button variant="ghost" size="sm" className="text-gray-500 hover:text-gray-700 h-8 w-8 p-0">
-                <ArrowLeft className="w-4 h-4" />
-              </Button>
-            </Link>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center">
-                  <Gift className="w-5 h-5" />
-                </div>
-                {t('loyalty.rewards.title')}
-              </h1>
-              <p className="text-gray-500 mt-1 ml-[52px]">{t('loyalty.rewards.subtitle')}</p>
-            </div>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center">
+                <Award className="w-5 h-5" />
+              </div>
+              {t('loyalty.title')}
+            </h1>
+            <p className="text-gray-500 mt-1 ml-[52px]">{t('loyalty.subtitle')}</p>
           </div>
           <Button onClick={openAddModal} className="bg-teal-600 hover:bg-teal-700 text-white">
             <Plus className="w-4 h-4 mr-2" />
             {t('loyalty.rewards.add')}
           </Button>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex gap-1 border-b border-gray-200">
+          <Link
+            href="/dashboard/loyalty"
+            className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium transition-all border-b-2 -mb-px text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
+          >
+            <Settings className="w-4 h-4" />
+            {t('loyalty.settings.title')}
+          </Link>
+          <Link
+            href="/dashboard/loyalty?tab=clients"
+            className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium transition-all border-b-2 -mb-px text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
+          >
+            <Users className="w-4 h-4" />
+            {t('loyalty.clients.title')}
+          </Link>
+          <button
+            className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium transition-all border-b-2 -mb-px text-teal-600 border-teal-600"
+          >
+            <Gift className="w-4 h-4" />
+            {t('loyalty.rewards.title')}
+          </button>
         </div>
 
         {/* Rewards Grid */}

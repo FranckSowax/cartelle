@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { useTranslation } from 'react-i18next';
@@ -38,13 +38,15 @@ import type { Merchant, LoyaltyClient, LoyaltyStats } from '@/lib/types/database
 export default function LoyaltyPage() {
   const { t } = useTranslation();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialTab = (searchParams.get('tab') === 'clients' ? 'clients' : 'config') as 'config' | 'clients';
   const [merchant, setMerchant] = useState<Merchant | null>(null);
   const [user, setUser] = useState<any>(null);
   const [clients, setClients] = useState<LoyaltyClient[]>([]);
   const [stats, setStats] = useState<LoyaltyStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState<'config' | 'clients'>('config');
+  const [activeTab, setActiveTab] = useState<'config' | 'clients'>(initialTab);
 
   // Loyalty settings state
   const [loyaltyEnabled, setLoyaltyEnabled] = useState(false);
@@ -254,14 +256,6 @@ export default function LoyaltyPage() {
             </h1>
             <p className="text-gray-500 mt-1 ml-[52px]">{t('loyalty.subtitle')}</p>
           </div>
-          {loyaltyEnabled && (
-            <Link href="/dashboard/loyalty/rewards">
-              <Button className="bg-teal-600 hover:bg-teal-700 text-white">
-                <Gift className="w-4 h-4 mr-2" />
-                {t('loyalty.rewards.title')}
-              </Button>
-            </Link>
-          )}
         </div>
 
         {/* Message */}
@@ -330,6 +324,13 @@ export default function LoyaltyPage() {
               <span className="ml-1 px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-600">
                 {clients.length}
               </span>
+            </button>
+            <button
+              onClick={() => router.push('/dashboard/loyalty/rewards')}
+              className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium transition-all border-b-2 -mb-px text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
+            >
+              <Gift className="w-4 h-4" />
+              {t('loyalty.rewards.title')}
             </button>
           </div>
         )}
