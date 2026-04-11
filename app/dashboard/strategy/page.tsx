@@ -569,73 +569,110 @@ export default function StrategyPage() {
                     </button>
 
                     {showGoogleTip && (
-                      <div className="mt-2 p-4 bg-amber-50 border border-amber-200 rounded-lg text-sm space-y-3 animate-[fadeIn_0.2s_ease-out]">
-                        <p className="font-semibold text-amber-800 flex items-center gap-2">
-                          <Lightbulb className="w-4 h-4" />
-                          {isFr ? 'Guide : Trouver votre lien Google Reviews' : 'Guide: Find your Google Reviews link'}
-                        </p>
-
-                        <ol className="list-decimal list-inside space-y-2 text-gray-700">
-                          <li>
-                            {isFr
-                              ? <>Ouvrez <strong>Google Maps</strong> sur votre ordinateur ou téléphone</>
-                              : <>Open <strong>Google Maps</strong> on your computer or phone</>}
-                          </li>
-                          <li>
-                            {isFr
-                              ? <>Recherchez le <strong>nom de votre établissement</strong></>
-                              : <>Search for <strong>your business name</strong></>}
-                          </li>
-                          <li>
-                            {isFr
-                              ? <>Cliquez sur votre fiche, puis sur le bouton <strong>&quot;Avis&quot;</strong> (ou <strong>&quot;Reviews&quot;</strong>)</>
-                              : <>Click on your listing, then on the <strong>&quot;Reviews&quot;</strong> button</>}
-                          </li>
-                          <li>
-                            {isFr
-                              ? <>Cliquez sur <strong>&quot;Donner un avis&quot;</strong> (ou <strong>&quot;Write a review&quot;</strong>)</>
-                              : <>Click on <strong>&quot;Write a review&quot;</strong></>}
-                          </li>
-                          <li>
-                            {isFr
-                              ? <>Copiez l&apos;<strong>URL complète</strong> de la barre d&apos;adresse de votre navigateur</>
-                              : <>Copy the <strong>full URL</strong> from your browser&apos;s address bar</>}
-                          </li>
-                          <li>
-                            {isFr
-                              ? <>Collez-la dans le champ ci-dessus</>
-                              : <>Paste it in the field above</>}
-                          </li>
-                        </ol>
-
-                        <div className="bg-white border border-amber-200 rounded-lg p-3 space-y-2">
-                          <p className="font-medium text-amber-800 text-xs">
-                            {isFr ? 'Méthode rapide (Google Business Profile) :' : 'Quick method (Google Business Profile):'}
-                          </p>
-                          <ol className="list-decimal list-inside space-y-1.5 text-gray-700 text-xs">
-                            <li>
+                      <div className="mt-2 p-4 bg-amber-50 border border-amber-200 rounded-lg text-sm space-y-4 animate-[fadeIn_0.2s_ease-out]">
+                        <div className="flex items-start gap-2">
+                          <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0">
+                            <Lightbulb className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <p className="font-semibold text-amber-900">
+                              {isFr ? 'Guide : Récupérer votre lien d\'avis Google' : 'Guide: Get your Google review link'}
+                            </p>
+                            <p className="text-xs text-amber-700 mt-0.5">
                               {isFr
-                                ? <>Allez sur <strong>business.google.com</strong></>
-                                : <>Go to <strong>business.google.com</strong></>}
-                            </li>
-                            <li>
-                              {isFr
-                                ? <>Cliquez sur <strong>&quot;Demander des avis&quot;</strong> dans le menu de gauche</>
-                                : <>Click on <strong>&quot;Ask for reviews&quot;</strong> in the left menu</>}
-                            </li>
-                            <li>
-                              {isFr
-                                ? <>Copiez le <strong>lien court</strong> qui s&apos;affiche (format : <code className="bg-amber-100 px-1 rounded">g.page/r/...</code>)</>
-                                : <>Copy the <strong>short link</strong> that appears (format: <code className="bg-amber-100 px-1 rounded">g.page/r/...</code>)</>}
-                            </li>
-                          </ol>
+                                ? 'Ce lien permet à vos clients d\'accéder directement au formulaire de notation et de commentaire, ce qui augmente vos chances de recevoir des avis positifs.'
+                                : 'This link lets your customers go straight to the rating form, increasing your chances of getting positive reviews.'}
+                            </p>
+                          </div>
                         </div>
 
-                        <p className="text-xs text-amber-700">
-                          {isFr
-                            ? 'Le lien doit ressembler à : https://g.page/r/CxxxxxxxxEBE/review ou https://search.google.com/local/writereview?placeid=...'
-                            : 'The link should look like: https://g.page/r/CxxxxxxxxEBE/review or https://search.google.com/local/writereview?placeid=...'}
-                        </p>
+                        {/* Étape 1 */}
+                        <div className="bg-white border border-amber-200 rounded-lg p-3 space-y-1.5">
+                          <p className="font-semibold text-amber-900 text-xs flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px]">1</span>
+                            {isFr ? 'Accéder à la fiche de votre établissement' : 'Access your business listing'}
+                          </p>
+                          <ul className="list-disc list-inside text-xs text-gray-700 space-y-1 ml-1">
+                            <li>{isFr ? 'Connectez-vous à votre compte Google lié à votre entreprise.' : 'Sign in to the Google account linked to your business.'}</li>
+                            <li>
+                              {isFr
+                                ? <>Recherchez le nom de votre établissement dans Google ou tapez <strong>&quot;mon établissement&quot;</strong>.</>
+                                : <>Search your business name in Google or type <strong>&quot;my business&quot;</strong>.</>}
+                            </li>
+                            <li>
+                              {isFr
+                                ? <>Vous devriez voir un encart indiquant <strong>&quot;Vous gérez cette fiche&quot;</strong>. Cliquez sur le bouton <strong>&quot;Voir la fiche&quot;</strong>.</>
+                                : <>You should see a panel saying <strong>&quot;You manage this Business Profile&quot;</strong>. Click <strong>&quot;View profile&quot;</strong>.</>}
+                            </li>
+                          </ul>
+                        </div>
+
+                        {/* Étape 2 */}
+                        <div className="bg-white border border-amber-200 rounded-lg p-3 space-y-1.5">
+                          <p className="font-semibold text-amber-900 text-xs flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px]">2</span>
+                            {isFr ? 'Trouver l\'option de partage' : 'Find the share option'}
+                          </p>
+                          <ul className="list-disc list-inside text-xs text-gray-700 space-y-1 ml-1">
+                            <li>
+                              {isFr
+                                ? <>Une fois sur le tableau de bord de votre établissement (icônes <strong>&quot;Éditer la fiche&quot;</strong>, <strong>&quot;Voir les avis&quot;</strong>, etc.), faites défiler les icônes vers la droite si nécessaire.</>
+                                : <>Once on your business dashboard (icons like <strong>&quot;Edit profile&quot;</strong>, <strong>&quot;Read reviews&quot;</strong>, etc.), scroll the icons to the right if needed.</>}
+                            </li>
+                            <li>
+                              {isFr
+                                ? <>Recherchez et cliquez sur l&apos;icône <strong>&quot;Demander des avis&quot;</strong> (elle ressemble à une enveloppe ou une bulle de dialogue).</>
+                                : <>Find and click the <strong>&quot;Ask for reviews&quot;</strong> icon (looks like an envelope or speech bubble).</>}
+                            </li>
+                          </ul>
+                        </div>
+
+                        {/* Étape 3 */}
+                        <div className="bg-white border border-amber-200 rounded-lg p-3 space-y-1.5">
+                          <p className="font-semibold text-amber-900 text-xs flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px]">3</span>
+                            {isFr ? 'Récupérer le lien' : 'Get the link'}
+                          </p>
+                          <ul className="list-disc list-inside text-xs text-gray-700 space-y-1 ml-1">
+                            <li>
+                              {isFr
+                                ? <>Une fenêtre intitulée <strong>&quot;Recueillez plus d&apos;avis&quot;</strong> s&apos;ouvre.</>
+                                : <>A window titled <strong>&quot;Get more reviews&quot;</strong> opens.</>}
+                            </li>
+                            <li>
+                              {isFr
+                                ? <>Vous y trouverez une section <strong>&quot;Lien de l&apos;avis&quot;</strong> avec une URL commençant par <code className="bg-amber-100 px-1 rounded">https://g.page/r/...</code></>
+                                : <>You&apos;ll find a <strong>&quot;Review link&quot;</strong> section with a URL starting with <code className="bg-amber-100 px-1 rounded">https://g.page/r/...</code></>}
+                            </li>
+                            <li>
+                              {isFr
+                                ? <>Copiez ce lien en cliquant sur l&apos;icône de copie à côté de l&apos;URL.</>
+                                : <>Copy this link by clicking the copy icon next to the URL.</>}
+                            </li>
+                          </ul>
+                        </div>
+
+                        {/* Étape 4 */}
+                        <div className="bg-white border border-amber-200 rounded-lg p-3 space-y-1.5">
+                          <p className="font-semibold text-amber-900 text-xs flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px]">4</span>
+                            {isFr ? 'Coller le lien dans Cartelle' : 'Paste the link in Cartelle'}
+                          </p>
+                          <p className="text-xs text-gray-700 ml-1">
+                            {isFr
+                              ? 'Collez le lien copié dans le champ Google Reviews ci-dessus, puis cliquez sur Sauvegarder. Vos clients seront désormais redirigés directement vers le formulaire d\'avis Google !'
+                              : 'Paste the copied link in the Google Reviews field above and click Save. Your customers will now be redirected straight to the Google review form!'}
+                          </p>
+                        </div>
+
+                        <div className="flex items-start gap-2 p-2 bg-amber-100/60 rounded-lg">
+                          <span className="text-amber-700 text-base leading-none">💡</span>
+                          <p className="text-xs text-amber-800">
+                            {isFr
+                              ? <>Le lien doit ressembler à : <code className="bg-white px-1 rounded">https://g.page/r/CxxxxxxxxEBE/review</code></>
+                              : <>The link should look like: <code className="bg-white px-1 rounded">https://g.page/r/CxxxxxxxxEBE/review</code></>}
+                          </p>
+                        </div>
                       </div>
                     )}
                   </div>
