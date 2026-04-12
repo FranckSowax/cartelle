@@ -9,7 +9,7 @@ import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Prize } from '@/lib/types/database';
-import { Plus, Trash2, AlertCircle, Upload, Image as ImageIcon, Percent, Pencil, X, Ban, RefreshCw, Lock, Palette, Gift, Settings2, BarChart3, Sparkles } from 'lucide-react';
+import { Plus, Trash2, AlertCircle, Upload, Image as ImageIcon, Percent, Pencil, X, Ban, RefreshCw, Lock, Palette, Gift, Settings2, BarChart3, Sparkles, Loader2 } from 'lucide-react';
 import { WheelPreview, PrizeWithQuantity } from '@/components/dashboard/WheelPreview';
 
 // Default segment colors (S1-S6 = prizes, S7 = #UNLUCKY#, S8 = #R&#xC9;ESSAYER#)
@@ -126,6 +126,8 @@ export default function PrizesPage() {
   const [migrationNeeded, setMigrationNeeded] = useState(false);
   const [segmentColors, setSegmentColors] = useState(DEFAULT_SEGMENT_COLORS);
   const [selectedTheme, setSelectedTheme] = useState<number | null>(null);
+  const [configSaved, setConfigSaved] = useState(false);
+  const [configSaving, setConfigSaving] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -357,6 +359,7 @@ export default function PrizesPage() {
   // Save segment quantities to merchant
   const saveSegmentQuantities = async () => {
     if (!user) return;
+    setConfigSaving(true);
 
     try {
       const { error } = await supabase
@@ -371,23 +374,17 @@ export default function PrizesPage() {
 
       if (error) throw error;
       setMigrationNeeded(false);
+      setConfigSaved(true);
+      setTimeout(() => setConfigSaved(false), 3000);
     } catch (error: unknown) {
       const err = error as { code?: string; message?: string };
       if (err.code === 'PGRST204' || err.message?.includes('quantity')) {
         setMigrationNeeded(true);
       }
+    } finally {
+      setConfigSaving(false);
     }
   };
-
-  // Auto-save when quantities change
-  useEffect(() => {
-    if (user) {
-      const timer = setTimeout(() => {
-        saveSegmentQuantities();
-      }, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [unluckyQuantity, retryQuantity, prizeQuantities, segmentColors, user]);
 
   const getChanceDescription = (prob: number) => {
     if (prob >= 50) return { text: isFr ? 'Tr\u00E8s fr\u00E9quent' : 'Very frequent', color: 'text-green-600', bg: 'bg-green-50' };
@@ -1042,6 +1039,29 @@ export default function PrizesPage() {
                   </div>
                 </div>
               </Card>
+
+              {/* Save button */}
+              <div className="flex items-center justify-end gap-3">
+                {configSaved && (
+                  <span className="text-sm text-teal-600 font-medium animate-in fade-in">
+                    {isFr ? '✓ Configuration sauvegardée !' : '✓ Configuration saved!'}
+                  </span>
+                )}
+                <Button
+                  onClick={saveSegmentQuantities}
+                  disabled={configSaving}
+                  className="bg-teal-600 hover:bg-teal-700 text-white px-6"
+                >
+                  {configSaving ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      {isFr ? 'Sauvegarde...' : 'Saving...'}
+                    </>
+                  ) : (
+                    isFr ? 'Sauvegarder la configuration' : 'Save configuration'
+                  )}
+                </Button>
+              </div>
             </div>
           )}
         </div>
