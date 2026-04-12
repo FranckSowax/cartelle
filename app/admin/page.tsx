@@ -167,11 +167,13 @@ export default function AdminDashboard() {
     totalSpins: 0,
   });
 
-  // Estimated monthly revenue per tier
+  // Estimated monthly revenue per tier (in FCFA)
   const TIER_PRICING: TierPricing = {
     'free': 0,
-    'starter': 0, // Essai Gratuit (Découverte)
-    'premium': 1000, // Pro Plan
+    'starter': 0,
+    'essentiel': 10000,
+    'premium': 25000,
+    'sur-mesure': 0,
   };
 
   const [selectedMerchant, setSelectedMerchant] = useState<string | null>(null);
@@ -1028,7 +1030,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
               <p className="text-white text-sm mb-2">Revenue Estimé (MRR)</p>
-              <p className="text-4xl font-bold text-white mb-1">{stats.totalRevenue.toFixed(0)}฿</p>
+              <p className="text-4xl font-bold text-white mb-1">{stats.totalRevenue.toLocaleString('fr-FR')} FCFA</p>
               <p className="text-xs text-white/60">Basé sur abonnements</p>
             </div>
           </div>
