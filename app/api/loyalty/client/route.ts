@@ -447,3 +447,38 @@ export async function PATCH(request: NextRequest) {
     );
   }
 }
+
+/**
+ * DELETE /api/loyalty/client?clientId=xxx
+ * Delete a loyalty client and all associated data (GDPR/APDPVP right to erasure)
+ */
+export async function DELETE(request: NextRequest) {
+  try {
+    const supabaseAdmin = getSupabaseAdmin();
+    if (!supabaseAdmin) {
+      return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
+    }
+
+    const clientId = request.nextUrl.searchParams.get('clientId');
+    if (!clientId) {
+      return NextResponse.json({ error: 'clientId is required' }, { status: 400 });
+    }
+
+    // Delete related data first (points_transactions, redeemed_rewards) then the client
+    // CASCADE should handle this, but let's be explicit
+    await supabaseAdmin.from('points_transactions').delete().eq('client_id', clientId);
+    await supabaseAdmin.from('redeemed_rewards').delete().eq('client_id', clientId);
+
+    const { error } = await supabaseAdmin.from('loyalty_clients').delete().eq('id', clientId);
+
+    if (error) {
+      console.error('[LOYALTY CLIENT DELETE] Error:', error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true, message: 'Données supprimées' });
+  } catch (error) {
+    console.error('[LOYALTY CLIENT DELETE] Error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}

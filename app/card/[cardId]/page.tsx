@@ -20,7 +20,9 @@ import {
   Globe,
   User,
   Cake,
-  Save
+  Save,
+  Trash2,
+  Shield,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import QRCode from 'react-qr-code';
@@ -1006,6 +1008,39 @@ export default function LoyaltyCardPage({ params }: PageProps) {
       </div>
 
       {/* Redemption QR Code Modal */}
+      {/* Privacy footer + delete */}
+      <div className="max-w-md mx-auto mt-8 px-4 pb-8 space-y-4">
+        <div className="border-t border-gray-200 pt-4 space-y-3">
+          <div className="flex items-center justify-center gap-4 text-xs text-gray-400">
+            <a href="/privacy" className="hover:text-gray-600 flex items-center gap-1">
+              <Shield className="w-3 h-3" /> Confidentialité
+            </a>
+            <span>·</span>
+            <a href="/terms" className="hover:text-gray-600">CGU</a>
+          </div>
+          <button
+            onClick={async () => {
+              if (!confirm('Êtes-vous sûr de vouloir supprimer toutes vos données (carte fidélité, points, récompenses) ? Cette action est irréversible.')) return;
+              try {
+                const res = await fetch(`/api/loyalty/client?clientId=${client?.id}`, { method: 'DELETE' });
+                if (res.ok) {
+                  alert('Vos données ont été supprimées. Merci de votre confiance.');
+                  window.location.href = '/';
+                } else {
+                  alert('Erreur lors de la suppression. Contactez-nous à contact@cartelle.app');
+                }
+              } catch {
+                alert('Erreur de connexion. Réessayez plus tard.');
+              }
+            }}
+            className="w-full text-center text-xs text-red-400 hover:text-red-600 transition-colors flex items-center justify-center gap-1"
+          >
+            <Trash2 className="w-3 h-3" />
+            Supprimer mes données
+          </button>
+        </div>
+      </div>
+
       {redemptionModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setRedemptionModal(null)}>
           <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl" onClick={(e) => e.stopPropagation()}>

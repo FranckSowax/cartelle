@@ -105,7 +105,7 @@ export async function GET(request: NextRequest) {
       const couponUrl = `${baseUrl}/coupon/${coupon.merchant_id}?code=${coupon.code}`;
       const prizeName = coupon.prize_name || 'votre prix';
 
-      const message = `⏰ Votre coupon ${prizeName} chez ${businessName} expire bientôt ! Utilisez-le avant qu'il ne soit trop tard : ${couponUrl}`;
+      const message = `⏰ Votre coupon ${prizeName} chez ${businessName} expire bientôt ! Utilisez-le avant qu'il ne soit trop tard : ${couponUrl}\n\n_Répondez STOP pour ne plus recevoir de messages._`;
 
       try {
         const { data: waConfig } = await supabaseAdmin

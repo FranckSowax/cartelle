@@ -506,6 +506,11 @@ export default function RatingPage() {
             </div>
           )}
         </div>
+
+        {/* Privacy link */}
+        <p className="text-center mt-4 text-xs text-white/40">
+          <a href="/privacy" className="underline hover:text-white/60">Politique de confidentialité</a>
+        </p>
       </div>
     </div>
   );

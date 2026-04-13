@@ -1012,6 +1012,13 @@ export default function LandingPage() {
                 </ul>
               </div>
               <div>
+                <h4 className="text-white/30 text-xs font-semibold uppercase tracking-widest mb-4">Légal</h4>
+                <ul className="space-y-2.5">
+                  <li><Link href="/privacy" className="text-white/60 text-sm hover:text-white transition-colors">Confidentialité</Link></li>
+                  <li><Link href="/terms" className="text-white/60 text-sm hover:text-white transition-colors">CGU</Link></li>
+                </ul>
+              </div>
+              <div>
                 <h4 className="text-white/30 text-xs font-semibold uppercase tracking-widest mb-4">Compte</h4>
                 <ul className="space-y-2.5">
                   <li><Link href="/auth/login" className="text-white/60 text-sm hover:text-white transition-colors">Connexion</Link></li>
@@ -1026,7 +1033,8 @@ export default function LandingPage() {
               <span className="flex items-center gap-1.5 text-white/20 text-xs">
                 <Shield className="w-3.5 h-3.5" /> SSL sécurisé
               </span>
-              <span className="text-white/20 text-xs">Mentions légales</span>
+              <Link href="/privacy" className="text-white/20 text-xs hover:text-white/40 transition-colors">Confidentialité</Link>
+              <Link href="/terms" className="text-white/20 text-xs hover:text-white/40 transition-colors">CGU</Link>
             </div>
           </div>
         </div>

@@ -86,7 +86,7 @@ export async function GET(request: NextRequest) {
       const businessName = merchant.business_name || 'votre commerce';
       const cardUrl = `${baseUrl}/card/${client.qr_code_data}`;
 
-      const message = `🎂 Joyeux anniversaire ${name} ! ${businessName} vous offre une surprise. Consultez votre carte fidélité !\n${cardUrl}`;
+      const message = `🎂 Joyeux anniversaire ${name} ! ${businessName} vous offre une surprise. Consultez votre carte fidélité !\n${cardUrl}\n\n_Répondez STOP pour ne plus recevoir de messages._`;
 
       try {
         // Check per-merchant Whapi key

@@ -88,7 +88,7 @@ export async function GET(request: NextRequest) {
       const businessName = merchant.business_name || 'votre commerce';
       const cardUrl = `${baseUrl}/card/${client.qr_code_data}`;
 
-      const message = `Bonjour ${name} ! Vous nous manquez chez ${businessName}. Revenez profiter de vos ${client.points || 0} points ! ${cardUrl}`;
+      const message = `Bonjour ${name} ! Vous nous manquez chez ${businessName}. Revenez profiter de vos ${client.points || 0} points ! ${cardUrl}\n\n_Répondez STOP pour ne plus recevoir de messages._`;
 
       try {
         const { data: waConfig } = await supabaseAdmin
