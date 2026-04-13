@@ -179,12 +179,12 @@ export default function LandingPage() {
     },
     {
       name: 'Essentiel', price: '65 000', period: 'FCFA / mois', desc: 'Le plus choisi par nos clients',
-      features: ['1 établissement', 'Roue + Carte fidélité', 'QR Code personnalisé', 'Statistiques avancées', 'Campagnes WhatsApp', 'Support prioritaire'],
+      features: ['1 établissement', 'Roue + Carte fidélité', 'QR Code personnalisé', '100 crédits WhatsApp / mois', 'Statistiques avancées', 'Support prioritaire'],
       cta: 'Activer mon essai', popular: true, accent: false,
     },
     {
       name: 'Premium', price: '150 000', period: 'FCFA / mois', desc: 'Performance maximale',
-      features: ['3 établissements', 'Toutes les fonctionnalités', 'Branding personnalisé', 'Wallet Apple & Google', 'Analytics avancés', 'Gestionnaire dédié'],
+      features: ['3 établissements', 'Toutes les fonctionnalités', '500 crédits WhatsApp / mois', 'Branding personnalisé', 'Wallet Apple & Google', 'Gestionnaire dédié'],
       cta: 'Activer mon essai', popular: false, accent: false,
     },
     {

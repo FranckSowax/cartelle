@@ -5,6 +5,7 @@ export interface SubscriptionPlan {
   period: string;
   description: string;
   max_locations: number;
+  monthly_credits: number;
   features: string[];
   popular?: boolean;
   accent?: boolean;
@@ -18,13 +19,14 @@ export const PLANS: Record<string, SubscriptionPlan> = {
     period: 'FCFA / mois',
     description: 'Le plus choisi par nos clients',
     max_locations: 1,
+    monthly_credits: 100,
     popular: true,
     features: [
       '1 établissement',
       'Roue + Carte fidélité',
       'QR Code personnalisé',
+      '100 crédits WhatsApp / mois',
       'Statistiques avancées',
-      'Campagnes WhatsApp',
       'Support prioritaire',
     ],
   },
@@ -35,12 +37,13 @@ export const PLANS: Record<string, SubscriptionPlan> = {
     period: 'FCFA / mois',
     description: 'Performance maximale',
     max_locations: 3,
+    monthly_credits: 500,
     features: [
       '3 établissements',
       'Toutes les fonctionnalités',
+      '500 crédits WhatsApp / mois',
       'Branding personnalisé',
       'Wallet Apple & Google',
-      'Analytics avancés',
       'Gestionnaire dédié',
     ],
   },
@@ -51,12 +54,13 @@ export const PLANS: Record<string, SubscriptionPlan> = {
     period: '',
     description: 'Réseaux multi-sites',
     max_locations: -1,
+    monthly_credits: 0,
     accent: true,
     features: [
       'Établissements illimités',
+      'Crédits WhatsApp sur mesure',
       'API & intégrations',
       'White label',
-      'SLA garanti',
       'Accompagnement stratégique',
       'Formation équipes',
     ],

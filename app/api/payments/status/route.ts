@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { validatePaymentToken, markTokenUsed } from '@/lib/payments/tokens';
 import { checkPaymentStatus } from '@/lib/payments/ebilling';
+import { getPlan } from '@/lib/payments/plans';
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -63,13 +64,27 @@ export async function GET(request: NextRequest) {
         .update({ status: 'completed', paid_at: now })
         .eq('id', payment.id);
 
-      // Update merchant subscription
+      // Get monthly credits for this plan
+      const plan = getPlan(payment.tier);
+      const monthlyCredits = plan?.monthly_credits || 0;
+
+      // Get current credits to add on top
+      const { data: currentMerchant } = await supabaseAdmin
+        .from('merchants')
+        .select('campaign_credits')
+        .eq('id', payment.merchant_id)
+        .single();
+
+      const newCredits = (currentMerchant?.campaign_credits || 0) + monthlyCredits;
+
+      // Update merchant subscription + credit their account
       await supabaseAdmin
         .from('merchants')
         .update({
           subscription_tier: payment.tier,
           subscription_started_at: now,
           subscription_expires_at: expiresAt,
+          campaign_credits: newCredits,
         })
         .eq('id', payment.merchant_id);
 
