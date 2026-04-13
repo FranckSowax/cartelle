@@ -171,8 +171,8 @@ export default function AdminDashboard() {
   const TIER_PRICING: TierPricing = {
     'free': 0,
     'starter': 0,
-    'essentiel': 10000,
-    'premium': 25000,
+    'essentiel': 65000,
+    'premium': 150000,
     'sur-mesure': 0,
   };
 

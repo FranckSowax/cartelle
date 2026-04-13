@@ -178,12 +178,12 @@ export default function LandingPage() {
       cta: 'Créer mon compte gratuit', popular: false, accent: false,
     },
     {
-      name: 'Essentiel', price: '10 000', period: 'FCFA / mois', desc: 'Le plus choisi par nos clients',
+      name: 'Essentiel', price: '65 000', period: 'FCFA / mois', desc: 'Le plus choisi par nos clients',
       features: ['1 établissement', 'Roue + Carte fidélité', 'QR Code personnalisé', 'Statistiques avancées', 'Campagnes WhatsApp', 'Support prioritaire'],
       cta: 'Activer mon essai', popular: true, accent: false,
     },
     {
-      name: 'Premium', price: '25 000', period: 'FCFA / mois', desc: 'Performance maximale',
+      name: 'Premium', price: '150 000', period: 'FCFA / mois', desc: 'Performance maximale',
       features: ['3 établissements', 'Toutes les fonctionnalités', 'Branding personnalisé', 'Wallet Apple & Google', 'Analytics avancés', 'Gestionnaire dédié'],
       cta: 'Activer mon essai', popular: false, accent: false,
     },

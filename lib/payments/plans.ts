@@ -14,7 +14,7 @@ export const PLANS: Record<string, SubscriptionPlan> = {
   essentiel: {
     key: 'essentiel',
     name: 'Essentiel',
-    price_xaf: 10000,
+    price_xaf: 65000,
     period: 'FCFA / mois',
     description: 'Le plus choisi par nos clients',
     max_locations: 1,
@@ -31,7 +31,7 @@ export const PLANS: Record<string, SubscriptionPlan> = {
   premium: {
     key: 'premium',
     name: 'Premium',
-    price_xaf: 25000,
+    price_xaf: 150000,
     period: 'FCFA / mois',
     description: 'Performance maximale',
     max_locations: 3,

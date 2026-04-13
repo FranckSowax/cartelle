@@ -73,8 +73,8 @@ CREATE POLICY "Service role full access on subscription_tokens"
 -- ─── Update subscription_tiers with XAF pricing ────────────────────────────
 INSERT INTO subscription_tiers (tier_name, max_locations, price, features)
 VALUES
-  ('essentiel', 1, 10000, '{"price_xaf": 10000}'::jsonb),
-  ('premium', 3, 25000, '{"price_xaf": 25000}'::jsonb),
+  ('essentiel', 1, 65000, '{"price_xaf": 65000}'::jsonb),
+  ('premium', 3, 150000, '{"price_xaf": 150000}'::jsonb),
   ('sur-mesure', -1, 0, '{"price_xaf": 0}'::jsonb)
 ON CONFLICT (tier_name) DO UPDATE SET
   price = EXCLUDED.price,
