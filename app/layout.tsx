@@ -92,7 +92,7 @@ export default function RootLayout({
           <QueryProvider>
             <I18nProvider>
               {children}
-              <InstallPrompt />
+              {/* <InstallPrompt /> */}
               <CookieConsent />
             </I18nProvider>
           </QueryProvider>
