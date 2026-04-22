@@ -23,8 +23,9 @@ export async function GET(request: NextRequest) {
     }
 
     let tokenToUse = userToken;
+    let scopedMerchantId: string | null = null;
 
-    // If clientId provided, look up the user_token
+    // If clientId provided, look up the user_token AND merchant_id (scope)
     if (clientId && !tokenToUse) {
       const { data: client } = await supabaseAdmin
         .from('loyalty_clients')
@@ -36,18 +37,25 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ prizes: [] });
       }
       tokenToUse = client.user_token;
+      scopedMerchantId = client.merchant_id;
     }
 
     if (!tokenToUse) {
       return NextResponse.json({ prizes: [] });
     }
 
-    // Find all spins with this user_token
-    const { data: spins } = await supabaseAdmin
+    // Find spins with this user_token — SCOPED BY MERCHANT to avoid cross-merchant leakage
+    let spinsQuery = supabaseAdmin
       .from('spins')
       .select('id, merchant_id, prize_id, created_at')
       .eq('user_token', tokenToUse)
       .not('prize_id', 'is', null);
+
+    if (scopedMerchantId) {
+      spinsQuery = spinsQuery.eq('merchant_id', scopedMerchantId);
+    }
+
+    const { data: spins } = await spinsQuery;
 
     if (!spins || spins.length === 0) {
       return NextResponse.json({ prizes: [] });
