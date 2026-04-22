@@ -153,8 +153,9 @@ export function PhoneInputWithCountry({
     // Auto-correct: remove leading 0 if present (common user mistake)
     // The country dial code already replaces the leading 0
     // e.g., for France: 0612345678 should become 612345678
-    // Exception: Gabon (+241) keeps the leading 0
-    if (newPhone.startsWith('0') && selectedCountry.dialCode !== '+241') {
+    // Exceptions: Gabon (+241) et Côte d'Ivoire (+225) gardent le 0 initial
+    const COUNTRIES_KEEPING_LEADING_ZERO = ['+241', '+225'];
+    if (newPhone.startsWith('0') && !COUNTRIES_KEEPING_LEADING_ZERO.includes(selectedCountry.dialCode)) {
       newPhone = newPhone.substring(1);
     }
 
