@@ -105,21 +105,34 @@ export const spinRepository = {
   },
 
   /**
-   * Check if user has already spun today
+   * Check if user has already spun within the merchant's cooldown window.
+   * cooldownHours = 0 means unlimited (no check).
    */
-  async hasSpunToday(merchantId: string, userToken: string): Promise<boolean> {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+  async hasSpunRecently(
+    merchantId: string,
+    userToken: string,
+    cooldownHours: number = 24
+  ): Promise<boolean> {
+    if (cooldownHours <= 0) return false;
+
+    const cutoff = new Date(Date.now() - cooldownHours * 3600 * 1000);
 
     const { count, error } = await supabase
       .from('spins')
       .select('*', { count: 'exact', head: true })
       .eq('merchant_id', merchantId)
       .eq('user_token', userToken)
-      .gte('created_at', today.toISOString());
+      .gte('created_at', cutoff.toISOString());
 
     if (error) return false;
     return (count ?? 0) > 0;
+  },
+
+  /**
+   * @deprecated Use hasSpunRecently with cooldownHours=24 instead.
+   */
+  async hasSpunToday(merchantId: string, userToken: string): Promise<boolean> {
+    return this.hasSpunRecently(merchantId, userToken, 24);
   },
 
   /**

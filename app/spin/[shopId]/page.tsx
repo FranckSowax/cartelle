@@ -156,28 +156,38 @@ export default function SpinPage() {
     const checkSpinEligibility = async () => {
       const userToken = localStorage.getItem('user_token');
 
-      if (userToken) {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        const { data } = await supabase
-          .from('spins')
-          .select('*')
-          .eq('merchant_id', shopId)
-          .eq('user_token', userToken)
-          .gte('created_at', today.toISOString())
-          .single();
-
-        if (data) {
-          setHasSpun(true);
-        }
-      }
-
+      // Charger d'abord le marchand pour connaître son cooldown + email
       const { data: merchantData } = await supabase
         .from('merchants')
         .select('*')
         .eq('id', shopId)
         .single();
+
+      // Cooldown configurable, défaut 24h. 0 = illimité (mode démo).
+      const cooldownHours = typeof merchantData?.spin_cooldown_hours === 'number'
+        ? merchantData.spin_cooldown_hours
+        : 24;
+
+      // Exempter les comptes démo (illimité)
+      const merchantEmail = (merchantData?.email || '').toLowerCase();
+      const isDemoMerchant = merchantEmail === 'demo@cartelle.io' || cooldownHours === 0;
+
+      if (userToken && !isDemoMerchant && cooldownHours > 0) {
+        const cutoff = new Date(Date.now() - cooldownHours * 3600 * 1000);
+
+        const { data } = await supabase
+          .from('spins')
+          .select('id')
+          .eq('merchant_id', shopId)
+          .eq('user_token', userToken)
+          .gte('created_at', cutoff.toISOString())
+          .limit(1)
+          .maybeSingle();
+
+        if (data) {
+          setHasSpun(true);
+        }
+      }
 
       if (merchantData) {
         setMerchant(merchantData);

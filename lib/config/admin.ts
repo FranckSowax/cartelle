@@ -18,7 +18,22 @@ export const ADMIN_EMAILS: string[] = [
 export const EXEMPT_EMAILS: string[] = [
   'sowaxcom@gmail.com',
   'contact@switchoncss.com',
+  'demo@cartelle.io',
 ];
+
+/**
+ * Demo accounts — autorisent des tours de roue illimités pour démonstration.
+ */
+export const DEMO_EMAILS: string[] = [
+  'demo@cartelle.io',
+];
+
+const allDemoEmails = DEMO_EMAILS.map(e => e.toLowerCase());
+
+export function isDemoEmail(email: string | null | undefined): boolean {
+  if (!email) return false;
+  return allDemoEmails.includes(email.toLowerCase());
+}
 
 const allExemptEmails = EXEMPT_EMAILS.map(e => e.toLowerCase());
 

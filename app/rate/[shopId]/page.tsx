@@ -391,6 +391,11 @@ export default function RatingPage() {
                       {phoneError}
                     </p>
                   )}
+                  <p className="text-xs text-gray-500 leading-relaxed">
+                    📱 Saisissez exactement le numéro WhatsApp où vous voulez recevoir le message.
+                    <br />
+                    <span className="text-gray-400">🇬🇦 Gabon : suite à la nouvelle numérotation, si votre numéro commence par <strong>04</strong>, ne mettez pas <strong>64</strong>. Reprenez le numéro affiché dans votre WhatsApp.</span>
+                  </p>
                 </div>
               ) : (
                 <div className="space-y-2">
@@ -458,7 +463,11 @@ export default function RatingPage() {
                       {phoneError}
                     </p>
                   )}
-                  <p className="text-xs text-gray-500">{t('form.phoneHint')}</p>
+                  <p className="text-xs text-gray-500 leading-relaxed">
+                    📱 Saisissez exactement le numéro WhatsApp où vous voulez recevoir le message.
+                    <br />
+                    <span className="text-gray-400">🇬🇦 Gabon : suite à la nouvelle numérotation, si votre numéro commence par <strong>04</strong>, ne mettez pas <strong>64</strong>. Reprenez le numéro affiché dans votre WhatsApp.</span>
+                  </p>
                 </div>
               ) : (
                 // Web Mode - Email Input
