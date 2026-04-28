@@ -8,7 +8,7 @@ import { supabase } from '@/lib/supabase/client';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check, X, Loader2, Calendar, MapPin, Star, Music, Instagram as InstagramIcon, Globe, MessageCircle, Palette, Link2, Route, Lightbulb, ChevronDown, MessageSquare } from 'lucide-react';
+import { Check, X, Loader2, Calendar, MapPin, Star, Music, Instagram as InstagramIcon, Globe, MessageCircle, Palette, Link2, Route, Lightbulb, ChevronDown, MessageSquare, RotateCw, Infinity as InfinityIcon } from 'lucide-react';
 
 const PLATFORMS = [
   { value: 'google_maps', label: 'Google Reviews', icon: MapPin, color: 'bg-red-500' },
@@ -57,6 +57,9 @@ export default function StrategyPage() {
   const [instagramUrl, setInstagramUrl] = useState('');
   const [whatsappChannelUrl, setWhatsappChannelUrl] = useState('');
 
+  // Roue : cooldown entre 2 tours pour un même client (en heures)
+  const [spinCooldownHours, setSpinCooldownHours] = useState<number>(24);
+
   // Weekly schedule: array of 7 days, each with a platform
   const [weeklySchedule, setWeeklySchedule] = useState<string[]>(
     Array(7).fill('google_maps')
@@ -104,6 +107,13 @@ export default function StrategyPage() {
       setInstagramUrl(merchantData?.instagram_url || '');
       setWhatsappChannelUrl(merchantData?.whatsapp_channel_url || '');
 
+      // Load spin cooldown (default 24h if missing)
+      setSpinCooldownHours(
+        typeof merchantData?.spin_cooldown_hours === 'number'
+          ? merchantData.spin_cooldown_hours
+          : 24
+      );
+
       // Load weekly schedule
       if (merchantData?.weekly_schedule) {
         try {
@@ -142,6 +152,7 @@ export default function StrategyPage() {
         instagram_url: instagramUrl || null,
         whatsapp_channel_url: whatsappChannelUrl || null,
         weekly_schedule: JSON.stringify(weeklySchedule),
+        spin_cooldown_hours: spinCooldownHours,
       };
 
       const { error } = await supabase
@@ -179,6 +190,9 @@ export default function StrategyPage() {
     setTiktokUrl(merchant.tiktok_url || '');
     setInstagramUrl(merchant.instagram_url || '');
     setWhatsappChannelUrl(merchant.whatsapp_channel_url || '');
+    setSpinCooldownHours(
+      typeof merchant.spin_cooldown_hours === 'number' ? merchant.spin_cooldown_hours : 24
+    );
     if (merchant.weekly_schedule) {
       try {
         const schedule = JSON.parse(merchant.weekly_schedule);
@@ -458,6 +472,93 @@ export default function StrategyPage() {
                     ))}
                   </div>
                 </div>
+              </Card>
+
+              {/* ═══ Roue : Fréquence des tours ═══ */}
+              <Card className="group relative p-6 border border-gray-200 rounded-xl overflow-hidden transition-all duration-300 hover:border-gray-300 hover:shadow-md">
+                <span className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-teal-500 to-emerald-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-10 h-10 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center">
+                    <RotateCw className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-semibold text-gray-900">
+                      {isFr ? 'Fréquence des tours de roue' : 'Wheel spin frequency'}
+                    </h3>
+                    <p className="text-xs text-gray-500">
+                      {isFr
+                        ? 'Délai entre 2 tours pour un même client'
+                        : 'Delay between 2 spins for the same customer'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Presets */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+                  {[
+                    { hours: 0, label: isFr ? 'Illimité' : 'Unlimited', desc: isFr ? 'Mode démo' : 'Demo mode' },
+                    { hours: 24, label: isFr ? '1 par jour' : '1 per day', desc: '24h' },
+                    { hours: 168, label: isFr ? '1 par semaine' : '1 per week', desc: '168h' },
+                    { hours: 720, label: isFr ? '1 par mois' : '1 per month', desc: '720h' },
+                  ].map((preset) => {
+                    const isActive = spinCooldownHours === preset.hours;
+                    return (
+                      <button
+                        key={preset.hours}
+                        type="button"
+                        onClick={() => setSpinCooldownHours(preset.hours)}
+                        className={`p-3 rounded-lg border-2 text-left transition-all ${
+                          isActive
+                            ? 'border-teal-500 bg-teal-50'
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                      >
+                        <div className="flex items-center gap-1.5 mb-0.5">
+                          {preset.hours === 0 ? (
+                            <InfinityIcon className={`w-4 h-4 ${isActive ? 'text-teal-600' : 'text-gray-400'}`} />
+                          ) : (
+                            <RotateCw className={`w-3.5 h-3.5 ${isActive ? 'text-teal-600' : 'text-gray-400'}`} />
+                          )}
+                          <p className={`text-sm font-semibold ${isActive ? 'text-teal-700' : 'text-gray-700'}`}>
+                            {preset.label}
+                          </p>
+                        </div>
+                        <p className={`text-xs ${isActive ? 'text-teal-600/70' : 'text-gray-400'}`}>
+                          {preset.desc}
+                        </p>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Custom value */}
+                <div className="flex items-center gap-3 pt-2 border-t border-gray-100">
+                  <label className="text-sm text-gray-600">
+                    {isFr ? 'Personnalisé :' : 'Custom:'}
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="8760"
+                    value={spinCooldownHours}
+                    onChange={(e) => setSpinCooldownHours(Math.max(0, parseInt(e.target.value) || 0))}
+                    className="w-24 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                  />
+                  <span className="text-sm text-gray-500">
+                    {isFr ? 'heures' : 'hours'}
+                  </span>
+                </div>
+
+                {spinCooldownHours === 0 && (
+                  <div className="mt-3 flex items-start gap-2 p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800">
+                    <Lightbulb className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
+                    <span>
+                      {isFr
+                        ? 'Mode illimité activé : tout client peut tourner la roue à chaque visite. Recommandé pour les démos uniquement.'
+                        : 'Unlimited mode: any customer can spin every visit. Recommended for demos only.'}
+                    </span>
+                  </div>
+                )}
               </Card>
             </div>
           )}
