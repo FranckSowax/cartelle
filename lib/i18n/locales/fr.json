@@ -173,8 +173,8 @@
     "emailPlaceholder": "exemple@email.com",
     "yourPhone": "Votre numéro WhatsApp",
     "phoneRequired": "Le numéro de téléphone est obligatoire",
-    "phoneInvalid": "Format invalide (ex: +33612345678)",
-    "phonePlaceholder": "+33612345678",
+    "phoneInvalid": "Format invalide (ex: 612345678)",
+    "phonePlaceholder": "612345678",
     "phoneHint": "Vous recevrez le lien vers la roue par WhatsApp"
   },
   "whatsapp": {

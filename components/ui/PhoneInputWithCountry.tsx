@@ -117,6 +117,17 @@ export function PhoneInputWithCountry({
 
   const phoneNumber = getPhoneWithoutDialCode(value);
 
+  // Placeholder dynamique selon le pays sélectionné (sans indicatif)
+  const dynamicPlaceholder: Record<string, string> = {
+    '+241': '077123456',     // Gabon — garde le 0
+    '+225': '0712345678',    // Côte d'Ivoire — garde le 0
+    '+237': '670123456',     // Cameroun
+    '+221': '770123456',     // Sénégal
+    '+33': '612345678',      // France
+    '+1': '5551234567',      // US/Canada
+    '+44': '7700900123',     // UK
+  };
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -182,7 +193,7 @@ export function PhoneInputWithCountry({
           type="tel"
           value={phoneNumber}
           onChange={handlePhoneChange}
-          placeholder={placeholder}
+          placeholder={dynamicPlaceholder[selectedCountry.dialCode] || placeholder}
           className="flex-1 px-4 py-2 border border-slate-200 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
         />
       </div>
