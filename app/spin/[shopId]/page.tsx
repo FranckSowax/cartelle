@@ -462,8 +462,20 @@ export default function SpinPage() {
       setResult(t('wheel.retry'));
       setSpinsRemaining(prev => prev + 1);
     } else {
+      // Unlucky : sauvegarder le spin en DB pour bloquer les retentes
+      // mais NE PAS basculer hasSpun=true tout de suite (laisser voir le résultat)
       setResult(t('wheel.unlucky'));
-      setHasSpun(true);
+      try {
+        const userToken = localStorage.getItem('user_token') || crypto.randomUUID();
+        localStorage.setItem('user_token', userToken);
+        await supabase.from('spins').insert({
+          merchant_id: shopId,
+          prize_id: null,
+          user_token: userToken,
+        });
+      } catch (err) {
+        console.error('[SPIN] Failed to save unlucky spin:', err);
+      }
     }
   };
 
@@ -522,16 +534,105 @@ export default function SpinPage() {
               className="absolute inset-0 bg-cover bg-center"
               style={{ backgroundImage: `url(${merchant.background_url})` }}
             />
-            <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
           </>
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900"></div>
         )}
         <div className="relative z-10 bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            {t('wheel.alreadySpun')}
+          {/* Logo */}
+          {merchant?.logo_url && (
+            <img
+              src={merchant.logo_url}
+              alt={merchant.business_name}
+              className="h-16 w-auto mx-auto mb-4 object-contain"
+            />
+          )}
+
+          {/* Icon */}
+          <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center mb-4 shadow-lg">
+            <span className="text-4xl">🎰</span>
+          </div>
+
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            Déjà joué aujourd&apos;hui !
           </h1>
-          <p className="text-gray-600">{t('wheel.tryAgainTomorrow')}</p>
+          <p className="text-gray-600 text-sm mb-6">
+            Revenez à votre prochaine visite chez{' '}
+            <span className="font-bold text-gray-900">{merchant?.business_name || 'nous'}</span>{' '}
+            pour retenter votre chance 🍀
+          </p>
+
+          {/* Astuces / CTAs */}
+          <div className="space-y-2 text-left">
+            <div className="flex items-start gap-3 p-3 rounded-xl bg-amber-50 border border-amber-100">
+              <div className="w-9 h-9 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0">
+                ⭐
+              </div>
+              <div className="text-xs">
+                <p className="font-semibold text-gray-900">Continuez à cumuler des points</p>
+                <p className="text-gray-500">À chaque visite, votre carte de fidélité progresse</p>
+              </div>
+            </div>
+
+            {merchant?.google_maps_url && (
+              <a
+                href={merchant.google_maps_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start gap-3 p-3 rounded-xl bg-blue-50 border border-blue-100 hover:bg-blue-100 transition-colors"
+              >
+                <div className="w-9 h-9 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0">
+                  📍
+                </div>
+                <div className="text-xs flex-1">
+                  <p className="font-semibold text-gray-900">Laisser un avis Google</p>
+                  <p className="text-gray-500">Aidez-nous à grandir, ça prend 30 secondes</p>
+                </div>
+              </a>
+            )}
+
+            {merchant?.instagram_url && (
+              <a
+                href={merchant.instagram_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start gap-3 p-3 rounded-xl bg-pink-50 border border-pink-100 hover:bg-pink-100 transition-colors"
+              >
+                <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-pink-500 to-purple-500 text-white flex items-center justify-center flex-shrink-0">
+                  📸
+                </div>
+                <div className="text-xs flex-1">
+                  <p className="font-semibold text-gray-900">Suivez-nous sur Instagram</p>
+                  <p className="text-gray-500">Promos, nouveautés, événements</p>
+                </div>
+              </a>
+            )}
+
+            {merchant?.whatsapp_channel_url && (
+              <a
+                href={merchant.whatsapp_channel_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start gap-3 p-3 rounded-xl bg-green-50 border border-green-100 hover:bg-green-100 transition-colors"
+              >
+                <div className="w-9 h-9 rounded-lg bg-green-500 text-white flex items-center justify-center flex-shrink-0">
+                  💬
+                </div>
+                <div className="text-xs flex-1">
+                  <p className="font-semibold text-gray-900">Rejoignez notre WhatsApp</p>
+                  <p className="text-gray-500">Recevez nos meilleures offres</p>
+                </div>
+              </a>
+            )}
+          </div>
+
+          <button
+            onClick={() => router.push('/')}
+            className="mt-5 text-xs text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            Fermer
+          </button>
         </div>
       </div>
     );
@@ -791,14 +892,47 @@ export default function SpinPage() {
             )}
             {resultType === 'lost' && (
               <>
-                <p className="text-2xl font-black text-red-300 mb-2">😢 PERDU</p>
-                <p className="text-white text-sm mb-3">Meilleure chance la prochaine fois !</p>
-                <button
-                  onClick={() => router.push('/')}
-                  className="w-full py-3 px-6 bg-white/20 text-white font-bold rounded-xl hover:bg-white/30 transition-colors"
-                >
-                  Retour
-                </button>
+                <div className="text-5xl mb-2">🍀</div>
+                <p className="text-xl font-black text-white mb-1">Pas de chance cette fois !</p>
+                <p className="text-white/90 text-sm mb-1">
+                  Mais bonne nouvelle :
+                </p>
+                <p className="text-amber-200 text-sm font-semibold mb-4">
+                  ⭐ Vous avez gagné des points fidélité !
+                </p>
+                <p className="text-white/70 text-xs mb-4">
+                  Tentez votre chance à votre prochaine visite chez{' '}
+                  <span className="font-bold text-white">{merchant?.business_name || 'nous'}</span>
+                </p>
+                <div className="flex flex-col gap-2">
+                  {phoneFromUrl && (
+                    <button
+                      onClick={() => {
+                        // Récupérer la carte fidélité si disponible
+                        window.location.href = `https://wa.me/?text=${encodeURIComponent(`Merci ${merchant?.business_name || ''} ! 🙏`)}`;
+                      }}
+                      className="w-full py-3 px-6 bg-white text-gray-900 font-bold rounded-xl hover:bg-gray-100 transition-colors"
+                    >
+                      💬 Partager sur WhatsApp
+                    </button>
+                  )}
+                  {merchant?.google_maps_url && (
+                    <a
+                      href={merchant.google_maps_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block w-full py-3 px-6 bg-white/20 text-white font-bold rounded-xl hover:bg-white/30 transition-colors text-center"
+                    >
+                      ⭐ Laisser un avis Google
+                    </a>
+                  )}
+                  <button
+                    onClick={() => router.push('/')}
+                    className="w-full py-2 px-6 text-white/70 font-medium text-sm hover:text-white transition-colors"
+                  >
+                    Fermer
+                  </button>
+                </div>
               </>
             )}
           </div>
