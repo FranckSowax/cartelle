@@ -123,11 +123,14 @@ export default function SpinPage() {
 
   const phoneFromUrl = searchParams.get('phone');
   const langFromUrl = searchParams.get('lang');
+  const fromPlatform = searchParams.get('from'); // plateforme déjà engagée
   const currentLang = langFromUrl || i18n.language || 'en';
 
   const [prizes, setPrizes] = useState<Prize[]>([]);
   const [merchant, setMerchant] = useState<any>(null);
   const [hasSpun, setHasSpun] = useState(false);
+  const [engagedPlatforms, setEngagedPlatforms] = useState<string[]>([]);
+  const [bonusToast, setBonusToast] = useState<{ platform: string; points: number } | null>(null);
   const [spinsRemaining, setSpinsRemaining] = useState(1);
   const [loading, setLoading] = useState(true);
   const [isClient, setIsClient] = useState(false);
@@ -171,6 +174,28 @@ export default function SpinPage() {
       // Exempter les comptes démo (illimité)
       const merchantEmail = (merchantData?.email || '').toLowerCase();
       const isDemoMerchant = merchantEmail === 'demo@cartelle.io' || cooldownHours === 0;
+
+      // Récupérer les engagements bonus déjà reçus (pour ne pas les re-proposer)
+      if (userToken) {
+        try {
+          const engRes = await fetch(`/api/loyalty/engagement?merchantId=${shopId}&userToken=${userToken}`);
+          if (engRes.ok) {
+            const engData = await engRes.json();
+            const platforms = (engData.platforms || []) as string[];
+            // Inclure aussi la plateforme `from` (déjà visitée mais pas tracée comme bonus)
+            if (fromPlatform && !platforms.includes(fromPlatform)) {
+              platforms.push(fromPlatform);
+            }
+            setEngagedPlatforms(platforms);
+          } else if (fromPlatform) {
+            setEngagedPlatforms([fromPlatform]);
+          }
+        } catch {
+          if (fromPlatform) setEngagedPlatforms([fromPlatform]);
+        }
+      } else if (fromPlatform) {
+        setEngagedPlatforms([fromPlatform]);
+      }
 
       if (userToken && !isDemoMerchant && cooldownHours > 0) {
         const cutoff = new Date(Date.now() - cooldownHours * 3600 * 1000);
@@ -479,6 +504,56 @@ export default function SpinPage() {
     }
   };
 
+  /**
+   * Crédite un bonus engagement (50 pts) et ouvre l'URL.
+   * Idempotent côté serveur : un même (merchant, user, platform) ne crédite qu'une seule fois.
+   */
+  const handleEngagement = async (platform: string, url: string) => {
+    const userToken = localStorage.getItem('user_token');
+    if (!userToken) {
+      window.open(url, '_blank');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/loyalty/engagement', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          merchantId: shopId,
+          userToken,
+          platform,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.pointsAwarded > 0) {
+          setBonusToast({ platform, points: data.pointsAwarded });
+          setTimeout(() => setBonusToast(null), 6000);
+        }
+        setEngagedPlatforms((prev) => [...new Set([...prev, platform])]);
+      }
+    } catch (err) {
+      console.error('[ENGAGEMENT] Error:', err);
+    }
+    window.open(url, '_blank');
+  };
+
+  /**
+   * Liste les plateformes alternatives pour gagner un bonus (excluant celles déjà faites).
+   */
+  const getBonusOptions = () => {
+    if (!merchant) return [];
+    const all = [
+      { key: 'google_maps', url: merchant.google_maps_url, label: 'Avis Google', emoji: '⭐', color: 'bg-blue-50 border-blue-100 hover:bg-blue-100', iconBg: 'bg-blue-100 text-blue-600' },
+      { key: 'instagram', url: merchant.instagram_url, label: 'Suivre Instagram', emoji: '📸', color: 'bg-pink-50 border-pink-100 hover:bg-pink-100', iconBg: 'bg-gradient-to-br from-pink-500 to-purple-500 text-white' },
+      { key: 'tiktok', url: merchant.tiktok_url, label: 'Suivre TikTok', emoji: '🎵', color: 'bg-gray-50 border-gray-200 hover:bg-gray-100', iconBg: 'bg-black text-white' },
+      { key: 'tripadvisor', url: merchant.tripadvisor_url, label: 'Avis TripAdvisor', emoji: '🦉', color: 'bg-green-50 border-green-100 hover:bg-green-100', iconBg: 'bg-[#34E0A1] text-black' },
+      { key: 'whatsapp_channel', url: merchant.whatsapp_channel_url, label: 'Rejoindre WhatsApp', emoji: '💬', color: 'bg-green-50 border-green-100 hover:bg-green-100', iconBg: 'bg-green-500 text-white' },
+    ];
+    return all.filter((opt) => opt.url && !engagedPlatforms.includes(opt.key));
+  };
+
   // SVG helpers
   const createSegmentPath = (index: number, outerRadius: number, innerRadius: number) => {
     const startAngle = (index * segmentAngle - 90) * Math.PI / 180;
@@ -555,77 +630,53 @@ export default function SpinPage() {
           </div>
 
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Déjà joué aujourd&apos;hui !
+            Déjà joué !
           </h1>
-          <p className="text-gray-600 text-sm mb-6">
+          <p className="text-gray-600 text-sm mb-4">
             Revenez à votre prochaine visite chez{' '}
             <span className="font-bold text-gray-900">{merchant?.business_name || 'nous'}</span>{' '}
             pour retenter votre chance 🍀
           </p>
 
-          {/* Astuces / CTAs */}
-          <div className="space-y-2 text-left">
-            <div className="flex items-start gap-3 p-3 rounded-xl bg-amber-50 border border-amber-100">
-              <div className="w-9 h-9 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0">
-                ⭐
-              </div>
-              <div className="text-xs">
-                <p className="font-semibold text-gray-900">Continuez à cumuler des points</p>
-                <p className="text-gray-500">À chaque visite, votre carte de fidélité progresse</p>
-              </div>
+          {/* Bonus options pour gagner 50 pts */}
+          {(() => {
+            const bonusOptions = getBonusOptions();
+            if (bonusOptions.length === 0) return null;
+
+            return (
+              <>
+                <div className="bg-gradient-to-r from-amber-400 to-orange-400 text-amber-950 rounded-xl px-4 py-3 mb-3 shadow-md">
+                  <p className="font-bold text-base">🎁 Gagnez 50 points</p>
+                  <p className="text-xs">par action effectuée ci-dessous</p>
+                </div>
+
+                <div className="space-y-2 text-left mb-3">
+                  {bonusOptions.map((opt) => (
+                    <button
+                      key={opt.key}
+                      onClick={() => handleEngagement(opt.key, opt.url)}
+                      className={`w-full flex items-start gap-3 p-3 rounded-xl border transition-colors ${opt.color}`}
+                    >
+                      <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 text-lg ${opt.iconBg}`}>
+                        {opt.emoji}
+                      </div>
+                      <div className="text-xs flex-1 text-left">
+                        <p className="font-semibold text-gray-900">{opt.label}</p>
+                        <p className="text-amber-600 font-semibold">+50 points 🎁</p>
+                      </div>
+                      <span className="text-gray-400">→</span>
+                    </button>
+                  ))}
+                </div>
+              </>
+            );
+          })()}
+
+          {engagedPlatforms.length > 0 && (
+            <div className="text-xs text-emerald-600 bg-emerald-50 border border-emerald-100 rounded-lg p-2 mb-3">
+              ✓ Vous avez déjà engagé {engagedPlatforms.length} action(s) — bravo !
             </div>
-
-            {merchant?.google_maps_url && (
-              <a
-                href={merchant.google_maps_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-start gap-3 p-3 rounded-xl bg-blue-50 border border-blue-100 hover:bg-blue-100 transition-colors"
-              >
-                <div className="w-9 h-9 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0">
-                  📍
-                </div>
-                <div className="text-xs flex-1">
-                  <p className="font-semibold text-gray-900">Laisser un avis Google</p>
-                  <p className="text-gray-500">Aidez-nous à grandir, ça prend 30 secondes</p>
-                </div>
-              </a>
-            )}
-
-            {merchant?.instagram_url && (
-              <a
-                href={merchant.instagram_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-start gap-3 p-3 rounded-xl bg-pink-50 border border-pink-100 hover:bg-pink-100 transition-colors"
-              >
-                <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-pink-500 to-purple-500 text-white flex items-center justify-center flex-shrink-0">
-                  📸
-                </div>
-                <div className="text-xs flex-1">
-                  <p className="font-semibold text-gray-900">Suivez-nous sur Instagram</p>
-                  <p className="text-gray-500">Promos, nouveautés, événements</p>
-                </div>
-              </a>
-            )}
-
-            {merchant?.whatsapp_channel_url && (
-              <a
-                href={merchant.whatsapp_channel_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-start gap-3 p-3 rounded-xl bg-green-50 border border-green-100 hover:bg-green-100 transition-colors"
-              >
-                <div className="w-9 h-9 rounded-lg bg-green-500 text-white flex items-center justify-center flex-shrink-0">
-                  💬
-                </div>
-                <div className="text-xs flex-1">
-                  <p className="font-semibold text-gray-900">Rejoignez notre WhatsApp</p>
-                  <p className="text-gray-500">Recevez nos meilleures offres</p>
-                </div>
-              </a>
-            )}
-          </div>
+          )}
 
           <button
             onClick={() => router.push('/')}
@@ -634,12 +685,38 @@ export default function SpinPage() {
             Fermer
           </button>
         </div>
+
+        {/* Toast bonus engagement */}
+        {bonusToast && (
+          <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[110] animate-in slide-in-from-top duration-500">
+            <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 min-w-[280px]">
+              <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-2xl">🎉</div>
+              <div>
+                <p className="font-bold">+{bonusToast.points} points crédités !</p>
+                <p className="text-xs text-white/90">Bonus engagement débloqué 🎁</p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
 
   return (
     <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-4">
+      {/* Toast bonus engagement */}
+      {bonusToast && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[110] animate-in slide-in-from-top duration-500">
+          <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 min-w-[280px]">
+            <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-2xl">🎉</div>
+            <div>
+              <p className="font-bold">+{bonusToast.points} points crédités !</p>
+              <p className="text-xs text-white/90">Bonus engagement débloqué 🎁</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Confetti canvas */}
       <canvas
         ref={canvasRef}
@@ -890,51 +967,55 @@ export default function SpinPage() {
                 </button>
               </>
             )}
-            {resultType === 'lost' && (
-              <>
-                <div className="text-5xl mb-2">🍀</div>
-                <p className="text-xl font-black text-white mb-1">Pas de chance cette fois !</p>
-                <p className="text-white/90 text-sm mb-1">
-                  Mais bonne nouvelle :
-                </p>
-                <p className="text-amber-200 text-sm font-semibold mb-4">
-                  ⭐ Vous avez gagné des points fidélité !
-                </p>
-                <p className="text-white/70 text-xs mb-4">
-                  Tentez votre chance à votre prochaine visite chez{' '}
-                  <span className="font-bold text-white">{merchant?.business_name || 'nous'}</span>
-                </p>
-                <div className="flex flex-col gap-2">
-                  {phoneFromUrl && (
-                    <button
-                      onClick={() => {
-                        // Récupérer la carte fidélité si disponible
-                        window.location.href = `https://wa.me/?text=${encodeURIComponent(`Merci ${merchant?.business_name || ''} ! 🙏`)}`;
-                      }}
-                      className="w-full py-3 px-6 bg-white text-gray-900 font-bold rounded-xl hover:bg-gray-100 transition-colors"
-                    >
-                      💬 Partager sur WhatsApp
-                    </button>
+            {resultType === 'lost' && (() => {
+              const bonusOptions = getBonusOptions();
+              return (
+                <>
+                  <div className="text-5xl mb-2">🍀</div>
+                  <p className="text-xl font-black text-white mb-2">Pas de chance cette fois !</p>
+                  {bonusOptions.length > 0 ? (
+                    <>
+                      <div className="bg-amber-400 text-amber-950 rounded-xl px-4 py-3 mb-4 shadow-lg">
+                        <p className="font-bold text-lg">🎁 Gagnez 50 points</p>
+                        <p className="text-xs">en effectuant une action ci-dessous</p>
+                      </div>
+                      <div className="space-y-2 mb-3">
+                        {bonusOptions.slice(0, 3).map((opt) => (
+                          <button
+                            key={opt.key}
+                            onClick={() => handleEngagement(opt.key, opt.url)}
+                            className={`w-full p-3 rounded-xl border-2 transition-all flex items-center gap-3 text-left ${opt.color}`}
+                          >
+                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0 ${opt.iconBg}`}>
+                              {opt.emoji}
+                            </div>
+                            <div className="flex-1">
+                              <p className="font-bold text-sm text-gray-900">{opt.label}</p>
+                              <p className="text-xs text-amber-700 font-semibold">+50 points 🎁</p>
+                            </div>
+                            <span className="text-gray-400 text-xl">→</span>
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  ) : (
+                    <p className="text-amber-200 text-sm font-semibold mb-4">
+                      ⭐ Merci de votre fidélité !
+                    </p>
                   )}
-                  {merchant?.google_maps_url && (
-                    <a
-                      href={merchant.google_maps_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block w-full py-3 px-6 bg-white/20 text-white font-bold rounded-xl hover:bg-white/30 transition-colors text-center"
-                    >
-                      ⭐ Laisser un avis Google
-                    </a>
-                  )}
+                  <p className="text-white/70 text-xs mb-3">
+                    Tentez votre chance à votre prochaine visite chez{' '}
+                    <span className="font-bold text-white">{merchant?.business_name || 'nous'}</span>
+                  </p>
                   <button
                     onClick={() => router.push('/')}
                     className="w-full py-2 px-6 text-white/70 font-medium text-sm hover:text-white transition-colors"
                   >
                     Fermer
                   </button>
-                </div>
-              </>
-            )}
+                </>
+              );
+            })()}
           </div>
         )}
       </div>

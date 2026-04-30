@@ -405,8 +405,8 @@ export default function RedirectPage() {
   };
 
   const handleLaunchWheel = () => {
-    // Redirect to wheel/spin page with phone number and language
-    let spinUrl = `/spin/${shopId}?lang=${currentLang}`;
+    // Redirect to wheel/spin page with phone, language, and the platform already engaged
+    let spinUrl = `/spin/${shopId}?lang=${currentLang}&from=${strategy}`;
     if (phoneNumber) {
       spinUrl += `&phone=${encodeURIComponent(phoneNumber)}`;
     }
