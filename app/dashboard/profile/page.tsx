@@ -47,6 +47,13 @@ export default function ProfilePage() {
   const [managerName, setManagerName] = useState('');
   const [managerPhone, setManagerPhone] = useState('');
 
+  // Social & Review URLs (synchronisé avec /dashboard/strategy)
+  const [googleMapsUrl, setGoogleMapsUrl] = useState('');
+  const [tripadvisorUrl, setTripadvisorUrl] = useState('');
+  const [tiktokUrl, setTiktokUrl] = useState('');
+  const [instagramUrl, setInstagramUrl] = useState('');
+  const [whatsappChannelUrl, setWhatsappChannelUrl] = useState('');
+
 
   // Appearance state
   const [logoBackgroundColor, setLogoBackgroundColor] = useState('#FFFFFF');
@@ -79,6 +86,11 @@ export default function ProfilePage() {
         setWebsite(merchantData?.website || '');
         setManagerName(merchantData?.manager_name || '');
         setManagerPhone(merchantData?.manager_phone || '');
+        setGoogleMapsUrl(merchantData?.google_maps_url || '');
+        setTripadvisorUrl(merchantData?.tripadvisor_url || '');
+        setTiktokUrl(merchantData?.tiktok_url || '');
+        setInstagramUrl(merchantData?.instagram_url || '');
+        setWhatsappChannelUrl(merchantData?.whatsapp_channel_url || '');
         setLogoBackgroundColor(merchantData.logo_background_color || '#FFFFFF');
         if (merchantData.logo_url) setLogoPreview(merchantData.logo_url);
         if (merchantData.background_url) setBackgroundPreview(merchantData.background_url);
@@ -172,6 +184,11 @@ export default function ProfilePage() {
         updates.website = website || null;
         updates.manager_name = managerName || null;
         updates.manager_phone = managerPhone || null;
+        updates.google_maps_url = googleMapsUrl || null;
+        updates.tripadvisor_url = tripadvisorUrl || null;
+        updates.tiktok_url = tiktokUrl || null;
+        updates.instagram_url = instagramUrl || null;
+        updates.whatsapp_channel_url = whatsappChannelUrl || null;
       } else if (activeTab === 'appearance') {
         updates.logo_background_color = logoBackgroundColor || '#FFFFFF';
 
@@ -471,6 +488,97 @@ CREATE POLICY "Auth Update" ON storage.objects FOR UPDATE USING ( bucket_id = 'm
                     />
                   </div>
                 </div>
+              </Card>
+
+              {/* Réseaux sociaux & Avis */}
+              <Card className="group relative p-6 border border-gray-200 rounded-xl overflow-hidden transition-all duration-300 hover:border-gray-300 hover:shadow-md">
+                <span className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-teal-500 to-emerald-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-10 h-10 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+                  </div>
+                  <div>
+                    <h3 className="text-base font-semibold text-gray-900">
+                      {isFr ? 'Réseaux sociaux & Avis' : 'Social & Reviews'}
+                    </h3>
+                    <p className="text-xs text-gray-500">
+                      {isFr ? 'Liens utilisés par le routage de la stratégie' : 'Links used by the strategy routing'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      🔴 Google Reviews
+                    </label>
+                    <input
+                      type="url"
+                      value={googleMapsUrl}
+                      onChange={(e) => setGoogleMapsUrl(e.target.value)}
+                      placeholder="https://g.page/r/..."
+                      className={inputClass}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      🟢 TripAdvisor
+                    </label>
+                    <input
+                      type="url"
+                      value={tripadvisorUrl}
+                      onChange={(e) => setTripadvisorUrl(e.target.value)}
+                      placeholder="https://www.tripadvisor.com/..."
+                      className={inputClass}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      ⚫ TikTok
+                    </label>
+                    <input
+                      type="url"
+                      value={tiktokUrl}
+                      onChange={(e) => setTiktokUrl(e.target.value)}
+                      placeholder="https://www.tiktok.com/@..."
+                      className={inputClass}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      🟣 Instagram
+                    </label>
+                    <input
+                      type="url"
+                      value={instagramUrl}
+                      onChange={(e) => setInstagramUrl(e.target.value)}
+                      placeholder="https://www.instagram.com/..."
+                      className={inputClass}
+                    />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      💬 {isFr ? 'Chaîne / Groupe WhatsApp' : 'WhatsApp Channel / Group'}
+                    </label>
+                    <input
+                      type="url"
+                      value={whatsappChannelUrl}
+                      onChange={(e) => setWhatsappChannelUrl(e.target.value)}
+                      placeholder="https://whatsapp.com/channel/..."
+                      className={inputClass}
+                    />
+                  </div>
+                </div>
+
+                <p className="text-xs text-gray-400 mt-4">
+                  💡 {isFr
+                    ? 'Ces liens sont aussi modifiables depuis la page Stratégie. Toute modification est synchronisée des deux côtés.'
+                    : 'These links can also be edited from the Strategy page. Any change syncs both ways.'}
+                </p>
               </Card>
             </div>
           )}
