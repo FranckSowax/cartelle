@@ -401,21 +401,49 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
+    // Récupérer l'état actuel du client (pour vérifier birthday existant)
+    let existingClientQuery = supabaseAdmin
+      .from('loyalty_clients')
+      .select('id, merchant_id, birthday, points');
+
+    if (qrCode) {
+      existingClientQuery = existingClientQuery.eq('qr_code_data', qrCode);
+    } else {
+      existingClientQuery = existingClientQuery.eq('id', clientId).eq('merchant_id', merchantId);
+    }
+
+    const { data: existingClient } = await existingClientQuery.single();
+
     // Champs autorisés pour mise à jour
     const allowedFields = ['name', 'phone', 'email', 'birthday', 'status', 'preferred_language'];
     const sanitizedUpdates: Record<string, any> = {};
+    let birthdayJustSet = false; // True si birthday est défini pour la 1ère fois
 
     for (const key of allowedFields) {
       if (updates[key] !== undefined) {
         if (key === 'email') {
           sanitizedUpdates[key] = updates[key]?.toLowerCase() || null;
         } else if (key === 'birthday') {
-          // Valider le format de date
-          sanitizedUpdates[key] = updates[key] || null;
+          // Anti-fraude : on ne peut définir le birthday qu'une seule fois.
+          // S'il existe déjà (non null), on ignore la mise à jour.
+          if (existingClient?.birthday) {
+            // Ignore — already locked
+            continue;
+          }
+          if (updates[key]) {
+            sanitizedUpdates[key] = updates[key];
+            birthdayJustSet = true;
+          }
         } else {
           sanitizedUpdates[key] = updates[key];
         }
       }
+    }
+
+    // Bonus : +50 points la première fois que le birthday est défini
+    const BIRTHDAY_BONUS = 50;
+    if (birthdayJustSet && existingClient) {
+      sanitizedUpdates.points = (existingClient.points || 0) + BIRTHDAY_BONUS;
     }
 
     let query = supabaseAdmin
@@ -438,7 +466,22 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ client: data });
+    // Tracer la transaction de points si bonus appliqué
+    if (birthdayJustSet && existingClient) {
+      await supabaseAdmin.from('points_transactions').insert({
+        client_id: existingClient.id,
+        merchant_id: existingClient.merchant_id,
+        type: 'bonus',
+        points: BIRTHDAY_BONUS,
+        balance_after: sanitizedUpdates.points,
+        description: 'Bonus profil complété (date de naissance)',
+      });
+    }
+
+    return NextResponse.json({
+      client: data,
+      birthdayBonusAwarded: birthdayJustSet ? BIRTHDAY_BONUS : 0,
+    });
   } catch (error) {
     console.error('[LOYALTY CLIENT PATCH] Error:', error);
     return NextResponse.json(

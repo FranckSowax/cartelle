@@ -64,6 +64,8 @@ export default function LoyaltyCardPage({ params }: PageProps) {
   const [editPhone, setEditPhone] = useState('');
   const [editBirthday, setEditBirthday] = useState('');
   const [savingProfile, setSavingProfile] = useState(false);
+  const [showProfilePrompt, setShowProfilePrompt] = useState(false);
+  const [bonusToast, setBonusToast] = useState<{ points: number } | null>(null);
 
   // Change language function
   const changeLanguage = (langCode: string) => {
@@ -148,8 +150,15 @@ export default function LoyaltyCardPage({ params }: PageProps) {
       setEditEmail(client.email || '');
       setEditPhone(client.phone || '');
       setEditBirthday(client.birthday || '');
+
+      // Afficher le popup d'incitation si profil incomplet (et jamais dismissé)
+      const dismissed = localStorage.getItem(`cartelle_profile_prompt_dismissed_${cardId}`);
+      const isProfileIncomplete = !client.name || !client.birthday;
+      if (isProfileIncomplete && !dismissed) {
+        setTimeout(() => setShowProfilePrompt(true), 1500);
+      }
     }
-  }, [client]);
+  }, [client, cardId]);
 
   // Save profile function
   const handleSaveProfile = async () => {
@@ -180,7 +189,15 @@ export default function LoyaltyCardPage({ params }: PageProps) {
       if (res.ok) {
         const data = await res.json();
         setClient(data.client);
-        alert(t('loyalty.card.profileSaved'));
+        setShowProfilePrompt(false);
+
+        // Bonus anniversaire débloqué ?
+        if (data.birthdayBonusAwarded > 0) {
+          setBonusToast({ points: data.birthdayBonusAwarded });
+          setTimeout(() => setBonusToast(null), 6000);
+        } else {
+          alert(t('loyalty.card.profileSaved'));
+        }
       } else {
         alert(t('loyalty.card.profileError'));
       }
@@ -903,19 +920,37 @@ export default function LoyaltyCardPage({ params }: PageProps) {
                         />
                       </div>
 
-                      {/* Birthday */}
+                      {/* Birthday — éditable une seule fois */}
                       <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">
                           <Cake className="w-4 h-4 inline mr-1" />
                           {t('loyalty.card.birthday')}
+                          {client?.birthday && (
+                            <span className="ml-2 text-xs font-semibold text-emerald-600">
+                              🔒 Verrouillé
+                            </span>
+                          )}
                         </label>
                         <input
                           type="date"
                           value={editBirthday}
                           onChange={(e) => setEditBirthday(e.target.value)}
-                          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all"
+                          disabled={!!client?.birthday}
+                          className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${
+                            client?.birthday
+                              ? 'bg-slate-50 border-slate-200 text-slate-500 cursor-not-allowed'
+                              : 'border-slate-200 focus:ring-2 focus:ring-amber-500 focus:border-transparent'
+                          }`}
                         />
-                        <p className="text-xs text-slate-500 mt-1">{t('loyalty.card.birthdayDesc')}</p>
+                        {client?.birthday ? (
+                          <p className="text-xs text-emerald-600 mt-1">
+                            ✓ Date enregistrée. Modifiable une seule fois pour éviter les fraudes — contactez le commerce si besoin.
+                          </p>
+                        ) : (
+                          <p className="text-xs text-amber-600 mt-1 font-medium">
+                            🎁 +50 points bonus + cadeau le jour de votre anniversaire ! (date enregistrée définitivement)
+                          </p>
+                        )}
                       </div>
 
                       {/* Save Button */}
@@ -1040,6 +1075,95 @@ export default function LoyaltyCardPage({ params }: PageProps) {
           </button>
         </div>
       </div>
+
+      {/* Popup d'incitation à compléter le profil */}
+      {showProfilePrompt && client && !client.birthday && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden animate-in zoom-in-95 duration-300">
+            {/* Header festif */}
+            <div className="relative bg-gradient-to-br from-amber-400 via-orange-400 to-pink-500 px-6 py-8 text-white text-center overflow-hidden">
+              <div className="absolute top-2 left-4 text-3xl animate-bounce" style={{ animationDelay: '0s' }}>🎂</div>
+              <div className="absolute top-4 right-6 text-2xl animate-bounce" style={{ animationDelay: '0.3s' }}>🎁</div>
+              <div className="absolute bottom-2 left-8 text-2xl animate-bounce" style={{ animationDelay: '0.6s' }}>✨</div>
+              <div className="absolute bottom-4 right-4 text-3xl animate-bounce" style={{ animationDelay: '0.9s' }}>🎉</div>
+              <div className="relative">
+                <div className="w-20 h-20 mx-auto rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-3 shadow-lg">
+                  <Cake className="w-10 h-10" />
+                </div>
+                <h2 className="text-2xl font-bold mb-1">Recevez un cadeau le jour J !</h2>
+                <p className="text-white/90 text-sm">Complétez votre profil et débloquez vos avantages</p>
+              </div>
+            </div>
+
+            {/* Body */}
+            <div className="p-6 space-y-4">
+              <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 text-center">
+                <p className="text-3xl font-extrabold text-amber-600 mb-1">+50 points</p>
+                <p className="text-sm text-amber-800">offerts dès maintenant en complétant votre profil</p>
+              </div>
+
+              <div className="space-y-2.5 pt-1">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center text-sm flex-shrink-0">🎂</div>
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900">Cadeau d&apos;anniversaire surprise</p>
+                    <p className="text-xs text-slate-500">Le commerce vous offre un cadeau le jour de votre fête</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-sm flex-shrink-0">⭐</div>
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900">+50 points bonus immédiats</p>
+                    <p className="text-xs text-slate-500">Crédités automatiquement sur votre carte</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-sm flex-shrink-0">🔒</div>
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900">Sécurisé & confidentiel</p>
+                    <p className="text-xs text-slate-500">Date enregistrée une seule fois (anti-fraude)</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* CTA */}
+              <div className="space-y-2 pt-2">
+                <Button
+                  onClick={() => {
+                    setShowProfilePrompt(false);
+                    setActiveTab('profile');
+                  }}
+                  className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white py-3 rounded-xl font-semibold shadow-lg"
+                >
+                  Compléter mon profil →
+                </Button>
+                <button
+                  onClick={() => {
+                    localStorage.setItem(`cartelle_profile_prompt_dismissed_${cardId}`, '1');
+                    setShowProfilePrompt(false);
+                  }}
+                  className="w-full text-xs text-slate-400 hover:text-slate-600 py-2"
+                >
+                  Plus tard
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Toast bonus anniversaire débloqué */}
+      {bonusToast && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[110] animate-in slide-in-from-top duration-500">
+          <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 min-w-[280px]">
+            <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-2xl">🎉</div>
+            <div>
+              <p className="font-bold">+{bonusToast.points} points crédités !</p>
+              <p className="text-xs text-white/90">Cadeau anniversaire activé 🎂</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {redemptionModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setRedemptionModal(null)}>
