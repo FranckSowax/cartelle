@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cartelle — Plaquette commerciale | Fidélisez. Convertissez. Grandissez.</title>
+<meta name="description" content="Cartelle transforme chaque client en ambassadeur via roue de la fortune, carte de fidélité digitale, campagnes WhatsApp et avis Google. À partir de 40 000 FCFA/mois." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+          display: ['Sora', 'sans-serif'],
+        },
+        colors: {
+          brand: {
+            50: '#F0FDFA', 100: '#CCFBF1', 200: '#99F6E4',
+            500: '#14B8A6', 600: '#0D9488', 700: '#0F766E',
+            800: '#115E59', 900: '#134E4A',
+          },
+          gold: { 400: '#FACC15', 500: '#EAB308', 600: '#CA8A04' },
+        },
+        animation: {
+          'fade-up': 'fadeUp 0.7s ease-out forwards',
+          'float': 'float 4s ease-in-out infinite',
+        },
+        keyframes: {
+          fadeUp: { '0%': { opacity: 0, transform: 'translateY(20px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } },
+          float: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-12px)' } },
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+  h1,h2,h3,.font-display { font-family: 'Sora', sans-serif; letter-spacing: -0.02em; }
+  .gradient-text { background: linear-gradient(135deg,#0D9488 0%,#10B981 50%,#14B8A6 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .pattern-bg { background-image: url('./plaquette-assets/pattern.jpg'); background-size: 600px; background-position: center; opacity: 0.07; }
+  .feature-card { transition: all .35s cubic-bezier(.4,0,.2,1); }
+  .feature-card:hover { transform: translateY(-6px); box-shadow: 0 25px 50px -12px rgba(13,148,136,0.18); }
+  .glow { box-shadow: 0 0 60px rgba(13,148,136,0.25); }
+  @media print {
+    .no-print { display: none !important; }
+    body { font-size: 11pt; }
+    section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body class="bg-white text-slate-900 overflow-x-hidden">
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- NAV                                                                   -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<header class="no-print fixed top-0 inset-x-0 z-50 bg-white/85 backdrop-blur-xl border-b border-slate-100">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+    <a href="#top" class="flex items-center gap-2.5">
+      <img src="./plaquette-assets/logo.png" alt="Cartelle" class="h-9 w-auto" />
+      <span class="font-display font-bold text-xl text-slate-900">Cartelle</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600">
+      <a href="#parcours" class="hover:text-brand-600 transition-colors">Parcours client</a>
+      <a href="#fonctions" class="hover:text-brand-600 transition-colors">Fonctionnalités</a>
+      <a href="#tarifs" class="hover:text-brand-600 transition-colors">Tarifs</a>
+      <a href="#faq" class="hover:text-brand-600 transition-colors">FAQ</a>
+    </nav>
+    <a href="#tarifs" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-emerald-500 text-white text-sm font-semibold hover:shadow-lg hover:shadow-brand-500/30 transition-all">
+      Démarrer →
+    </a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="top" class="relative pt-32 pb-20 px-5 sm:px-8 overflow-hidden">
+  <div class="absolute inset-0 pattern-bg pointer-events-none"></div>
+  <div class="absolute -top-40 -right-40 w-96 h-96 bg-brand-200/40 rounded-full blur-3xl"></div>
+  <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-emerald-200/40 rounded-full blur-3xl"></div>
+  <div class="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+    <div class="animate-fade-up">
+      <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 text-brand-700 text-xs font-bold uppercase tracking-wider border border-brand-200">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        Solution n°1 de fidélisation en Afrique francophone
+      </span>
+      <h1 class="mt-6 text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold leading-[1.05]">
+        Transformez chaque client en
+        <span class="gradient-text">ambassadeur</span>
+        de votre commerce.
+      </h1>
+      <p class="mt-6 text-lg text-slate-600 leading-relaxed max-w-xl">
+        Cartelle combine <strong>roue de la fortune gamifiée</strong>, <strong>carte de fidélité digitale</strong>, <strong>campagnes WhatsApp</strong> et <strong>capture d'avis Google</strong>. Le tout à partir d'un simple QR code, sans app à télécharger pour vos clients.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a href="#tarifs" class="px-7 py-4 rounded-2xl bg-gradient-to-r from-brand-600 to-emerald-500 text-white font-semibold shadow-xl shadow-brand-500/30 hover:shadow-2xl hover:scale-[1.02] transition-all">
+          Démarrer pour 40 000 FCFA/mois
+        </a>
+        <a href="#parcours" class="px-7 py-4 rounded-2xl bg-white border-2 border-slate-200 text-slate-700 font-semibold hover:border-brand-500 hover:text-brand-700 transition-all">
+          Voir le parcours →
+        </a>
+      </div>
+      <div class="mt-10 grid grid-cols-3 gap-6 max-w-md">
+        <div><div class="text-3xl font-display font-extrabold gradient-text">+3×</div><div class="text-xs text-slate-500 mt-1">d'avis Google collectés</div></div>
+        <div><div class="text-3xl font-display font-extrabold gradient-text">98%</div><div class="text-xs text-slate-500 mt-1">de taux d'ouverture WhatsApp</div></div>
+        <div><div class="text-3xl font-display font-extrabold gradient-text">40%</div><div class="text-xs text-slate-500 mt-1">de clients qui reviennent</div></div>
+      </div>
+    </div>
+    <div class="relative animate-fade-up">
+      <div class="absolute inset-0 bg-gradient-to-br from-brand-100 to-emerald-100 rounded-[3rem] rotate-3 scale-95 blur-xl opacity-60"></div>
+      <img src="./plaquette-assets/hero.jpg" alt="Cartelle en action" class="relative w-full h-auto rounded-3xl shadow-2xl glow" />
+    </div>
+  </div>
+</section>
+
+<!-- LE PROBLÈME -->
+<section class="relative py-20 px-5 sm:px-8 bg-gradient-to-b from-white to-slate-50">
+  <div class="max-w-5xl mx-auto text-center">
+    <span class="inline-block px-4 py-1.5 rounded-full bg-red-50 text-red-700 text-xs font-bold uppercase tracking-wider border border-red-200">Le constat</span>
+    <h2 class="mt-5 text-3xl sm:text-4xl font-display font-extrabold">
+      Vos clients sont satisfaits.<br/>
+      <span class="text-red-600">Mais Google n'en sait rien.</span>
+    </h2>
+    <p class="mt-5 text-lg text-slate-600 max-w-2xl mx-auto">
+      Sur 100 clients ravis qui sortent de chez vous, seulement <strong class="text-red-600">4 laissent un avis Google</strong>. Les 96 autres ? Ils sont partis. Vous n'avez ni leur contact, ni leur fidélité, ni leur recommandation.
+    </p>
+    <div class="mt-12 grid sm:grid-cols-3 gap-6">
+      <div class="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm">
+        <div class="text-4xl mb-3">😶</div>
+        <h3 class="font-bold text-slate-900">Les silencieux</h3>
+        <p class="text-sm text-slate-500 mt-2">Adorent votre service mais oublient de laisser un avis.</p>
+      </div>
+      <div class="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm">
+        <div class="text-4xl mb-3">😡</div>
+        <h3 class="font-bold text-slate-900">Les mécontents</h3>
+        <p class="text-sm text-slate-500 mt-2">3× plus motivés à laisser un avis pour se plaindre. Plombent votre note.</p>
+      </div>
+      <div class="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm">
+        <div class="text-4xl mb-3">👻</div>
+        <h3 class="font-bold text-slate-900">Les fantômes</h3>
+        <p class="text-sm text-slate-500 mt-2">Reviennent 1 fois puis disparaissent. Aucun moyen de les rappeler.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARCOURS -->
+<section id="parcours" class="py-24 px-5 sm:px-8 bg-white">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto">
+      <span class="inline-block px-4 py-1.5 rounded-full bg-brand-50 text-brand-700 text-xs font-bold uppercase tracking-wider border border-brand-200">Le parcours Cartelle</span>
+      <h2 class="mt-5 text-3xl sm:text-5xl font-display font-extrabold">
+        De client de passage à <span class="gradient-text">ambassadeur fidèle</span>, en 5 étapes magiques.
+      </h2>
+      <p class="mt-5 text-lg text-slate-600">Chaque interaction est conçue pour générer un avis, capturer un contact, ou ramener le client. Rien n'est laissé au hasard.</p>
+    </div>
+    <div class="mt-16 grid grid-cols-2 lg:grid-cols-5 gap-6">
+      <div class="text-center"><div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500 to-emerald-500 text-white font-display font-extrabold text-2xl shadow-lg shadow-brand-500/30">1</div><h3 class="mt-4 font-display font-bold">Le client scanne</h3><p class="mt-2 text-xs text-slate-500">Un QR code visible en caisse, table ou vitrine. Aucune app à installer.</p></div>
+      <div class="text-center"><div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-white font-display font-extrabold text-2xl shadow-lg shadow-orange-500/30">2</div><h3 class="mt-4 font-display font-bold">Il évalue sa visite</h3><p class="mt-2 text-xs text-slate-500">5 étoiles + commentaire. L'écran s'adapte selon la note.</p></div>
+      <div class="text-center"><div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 text-white font-display font-extrabold text-2xl shadow-lg shadow-purple-500/30">3</div><h3 class="mt-4 font-display font-bold">Cartelle l'oriente</h3><p class="mt-2 text-xs text-slate-500">Vers Google, Instagram, TikTok, TripAdvisor ou WhatsApp Channel selon votre stratégie du jour.</p></div>
+      <div class="text-center"><div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-500 text-white font-display font-extrabold text-2xl shadow-lg shadow-blue-500/30">4</div><h3 class="mt-4 font-display font-bold">Il tourne la roue</h3><p class="mt-2 text-xs text-slate-500">Gagne un cadeau, un coupon ou des points fidélité instantanément.</p></div>
+      <div class="text-center"><div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-rose-500 to-red-500 text-white font-display font-extrabold text-2xl shadow-lg shadow-rose-500/30">5</div><h3 class="mt-4 font-display font-bold">Il revient</h3><p class="mt-2 text-xs text-slate-500">Vous le relancez par WhatsApp à son anniversaire, à l'inactivité, ou pour une promo ciblée.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FONCTIONNALITÉS -->
+<section id="fonctions" class="relative py-24 px-5 sm:px-8 bg-gradient-to-b from-slate-50 to-white">
+  <div class="absolute inset-0 pattern-bg pointer-events-none"></div>
+  <div class="relative max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto">
+      <span class="inline-block px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wider border border-emerald-200">14 fonctionnalités, 1 plateforme</span>
+      <h2 class="mt-5 text-3xl sm:text-5xl font-display font-extrabold">
+        Chaque fonction = <span class="gradient-text">un levier de croissance</span>.
+      </h2>
+      <p class="mt-5 text-lg text-slate-600">Pour chaque outil : ce que c'est, un exemple concret, et le gain mesurable.</p>
+    </div>
+
+    <div class="mt-16 space-y-8">
+      <!-- F1: QR Code -->
+      <article class="feature-card bg-white rounded-3xl border border-slate-200 p-8 lg:p-10 shadow-sm">
+        <div class="grid lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-1">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-500 to-emerald-500 text-white text-2xl shadow-lg">📱</div>
+            <h3 class="mt-4 text-2xl font-display font-extrabold">QR Code & supports physiques</h3>
+            <p class="mt-3 text-sm text-slate-500">Le point d'entrée vers tout votre univers digital, en 1 scan.</p>
+          </div>
+          <div class="lg:col-span-2 grid sm:grid-cols-3 gap-4">
+            <div class="p-5 rounded-2xl bg-blue-50 border border-blue-100"><p class="text-xs font-bold text-blue-700 uppercase mb-2">📖 Comment ça marche</p><p class="text-sm text-slate-700">QR code unique pour votre commerce. Affiché en caisse, sur les tables, dans la vitrine. Le client scanne → il accède à votre univers Cartelle.</p></div>
+            <div class="p-5 rounded-2xl bg-amber-50 border border-amber-100"><p class="text-xs font-bold text-amber-700 uppercase mb-2">💡 Exemple concret</p><p class="text-sm text-slate-700">Maman Lyne (restaurant à Libreville) commande 4 chevalets plexiglas. Posés sur chaque table. Résultat : <strong>+38 scans/jour</strong>.</p></div>
+            <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-100"><p class="text-xs font-bold text-emerald-700 uppercase mb-2">🎯 Gain</p><p class="text-sm text-slate-700">3 supports proposés : <strong>Papier offert</strong>, Plexiglas (5 000 F), DTF stickers (10 000 F les 4). Premier scan = client capturé à vie.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- F2: Notation -->
+      <article class="feature-card bg-white rounded-3xl border border-slate-200 p-8 lg:p-10 shadow-sm">
+        <div class="grid lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-1">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-white text-2xl shadow-lg">⭐</div>
+            <h3 class="mt-4 text-2xl font-display font-extrabold">Notation 5 étoiles intelligente</h3>
+            <p class="mt-3 text-sm text-slate-500">Le filtre invisible qui protège votre note Google.</p>
+          </div>
+          <div class="lg:col-span-2 grid sm:grid-cols-3 gap-4">
+            <div class="p-5 rounded-2xl bg-blue-50 border border-blue-100"><p class="text-xs font-bold text-blue-700 uppercase mb-2">📖 Comment ça marche</p><p class="text-sm text-slate-700">Le client note de 1 à 5 étoiles. <strong>4-5 étoiles</strong> → orienté vers Google ou réseaux sociaux. <strong>1-3 étoiles</strong> → formulaire privé interne.</p></div>
+            <div class="p-5 rounded-2xl bg-amber-50 border border-amber-100"><p class="text-xs font-bold text-amber-700 uppercase mb-2">💡 Exemple concret</p><p class="text-sm text-slate-700">Un client a attendu 30 min. Il met 2 étoiles. <strong>Cartelle ne l'envoie pas sur Google</strong> — il atterrit sur un message bienveillant et un formulaire interne.</p></div>
+            <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-100"><p class="text-xs font-bold text-emerald-700 uppercase mb-2">🎯 Gain</p><p class="text-sm text-slate-700">Votre note Google passe de <strong>3,8 à 4,7</strong> en 3 mois. Les insatisfaits viennent vous parler en privé.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- F3: Routage -->
+      <article class="feature-card bg-white rounded-3xl border border-slate-200 p-8 lg:p-10 shadow-sm">
+        <div class="grid lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-1">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 text-white text-2xl shadow-lg">🗺️</div>
+            <h3 class="mt-4 text-2xl font-display font-extrabold">Routage hebdomadaire intelligent</h3>
+            <p class="mt-3 text-sm text-slate-500">Lundi Google, mardi Instagram, mercredi WhatsApp. Vous décidez.</p>
+          </div>
+          <div class="lg:col-span-2 grid sm:grid-cols-3 gap-4">
+            <div class="p-5 rounded-2xl bg-blue-50 border border-blue-100"><p class="text-xs font-bold text-blue-700 uppercase mb-2">📖 Comment ça marche</p><p class="text-sm text-slate-700">Planning sur 7 jours. Lundi → Google Reviews, Mardi → Instagram, Mercredi → TikTok, Jeudi → TripAdvisor, Vendredi → Chaîne WhatsApp.</p></div>
+            <div class="p-5 rounded-2xl bg-amber-50 border border-amber-100"><p class="text-xs font-bold text-amber-700 uppercase mb-2">💡 Exemple concret</p><p class="text-sm text-slate-700">200 avis Google mais 50 abonnés Insta ? <strong>Bascule la roue sur Insta 2 semaines</strong>. Votre Insta explose, Google reprend après.</p></div>
+            <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-100"><p class="text-xs font-bold text-emerald-700 uppercase mb-2">🎯 Gain</p><p class="text-sm text-slate-700">Visibilité équilibrée sur <strong>5 plateformes</strong> au lieu d'1 seule. Diversification = pérennité.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- F4: Roue -->
+      <article class="feature-card bg-white rounded-3xl border border-slate-200 p-8 lg:p-10 shadow-sm">
+        <div class="grid lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-1">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-500 to-red-500 text-white text-2xl shadow-lg">🎰</div>
+            <h3 class="mt-4 text-2xl font-display font-extrabold">Roue de la fortune gamifiée</h3>
+            <p class="mt-3 text-sm text-slate-500">Le moment "wow" qui crée la dépendance émotionnelle.</p>
+          </div>
+          <div class="lg:col-span-2 grid sm:grid-cols-3 gap-4">
+            <div class="p-5 rounded-2xl bg-blue-50 border border-blue-100"><p class="text-xs font-bold text-blue-700 uppercase mb-2">📖 Comment ça marche</p><p class="text-sm text-slate-700">Roue jusqu'à 8 segments. Probabilités, couleurs, lots <strong>100% personnalisables</strong>. Cooldown configurable (1 tour/jour, semaine, mois).</p></div>
+            <div class="p-5 rounded-2xl bg-amber-50 border border-amber-100"><p class="text-xs font-bold text-amber-700 uppercase mb-2">💡 Exemple concret</p><p class="text-sm text-slate-700">Salon : 50% soin gratuit, 30% –10%, 20% café offert. Le client filme, poste sur Insta. <strong>Bouche-à-oreille gratuit.</strong></p></div>
+            <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-100"><p class="text-xs font-bold text-emerald-700 uppercase mb-2">🎯 Gain</p><p class="text-sm text-slate-700">Avis = événement viral. <strong>Coupon = retour garanti.</strong> Coupon avec date d'expiration = retour rapide.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- F5: Carte fidélité -->
+      <article class="feature-card bg-white rounded-3xl border border-slate-200 p-8 lg:p-10 shadow-sm">
+        <div class="grid lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-1">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-500 text-white text-2xl shadow-lg">💳</div>
+            <h3 class="mt-4 text-2xl font-display font-extrabold">Carte de fidélité digitale</h3>
+            <p class="mt-3 text-sm text-slate-500">Plus de cartes papier perdues. Une carte par client, à vie.</p>
+          </div>
+          <div class="lg:col-span-2 grid sm:grid-cols-3 gap-4">
+            <div class="p-5 rounded-2xl bg-blue-50 border border-blue-100"><p class="text-xs font-bold text-blue-700 uppercase mb-2">📖 Comment ça marche</p><p class="text-sm text-slate-700">Chaque client : QR unique, solde de points, historique d'achats, récompenses débloquées. Accessible 24/7 sur son téléphone.</p></div>
+            <div class="p-5 rounded-2xl bg-amber-50 border border-amber-100"><p class="text-xs font-bold text-amber-700 uppercase mb-2">💡 Exemple concret</p><p class="text-sm text-slate-700">Restaurant : "1 point pour 5 000 FCFA d'achat". Le client scanne sa carte, vous validez, points ajoutés. <strong>Aucun ticket papier.</strong></p></div>
+            <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-100"><p class="text-xs font-bold text-emerald-700 uppercase mb-2">🎯 Gain</p><p class="text-sm text-slate-700">Le client passe de "1 fois et basta" à <strong>4-5 visites/mois</strong>. Vous augmentez la fréquence ET le panier moyen.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- F6: Récompenses -->
+      <article class="feature-card bg-white rounded-3xl border border-slate-200 p-8 lg:p-10 shadow-sm">
+        <div class="grid lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-1">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-gold-500 to-amber-500 text-white text-2xl shadow-lg">🎁</div>
+            <h3 class="mt-4 text-2xl font-display font-extrabold">Catalogue de récompenses</h3>
+            <p class="mt-3 text-sm text-slate-500">Vous décidez ce que valent les points. Liberté totale.</p>
+          </div>
+          <div class="lg:col-span-2 grid sm:grid-cols-3 gap-4">
+            <div class="p-5 rounded-2xl bg-blue-50 border border-blue-100"><p class="text-xs font-bold text-blue-700 uppercase mb-2">📖 Comment ça marche</p><p class="text-sm text-slate-700">Récompenses libres : réduction, produit gratuit, cashback, service premium. Coût en points configurable. Quantité limitée ou illimitée.</p></div>
+            <div class="p-5 rounded-2xl bg-amber-50 border border-amber-100"><p class="text-xs font-bold text-amber-700 uppercase mb-2">💡 Exemple concret</p><p class="text-sm text-slate-700">Pâtisserie : "100 pts = 1 viennoiserie", "300 pts = 1 gâteau", "1000 pts = anniversaire offert". Code à scanner en caisse.</p></div>
+            <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-100"><p class="text-xs font-bold text-emerald-700 uppercase mb-2">🎯 Gain</p><p class="text-sm text-slate-700">Vos clients fidèles deviennent un <strong>portefeuille de revenus prévisible</strong>. Plus ils accumulent, plus ils reviennent.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- F7: WhatsApp -->
+      <article class="feature-card bg-white rounded-3xl border border-slate-200 p-8 lg:p-10 shadow-sm">
+        <div class="grid lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-1">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 text-white text-2xl shadow-lg">💬</div>
+            <h3 class="mt-4 text-2xl font-display font-extrabold">Capture WhatsApp natif</h3>
+            <p class="mt-3 text-sm text-slate-500">Pas d'email à taper sur un petit clavier. Just WhatsApp.</p>
+          </div>
+          <div class="lg:col-span-2 grid sm:grid-cols-3 gap-4">
+            <div class="p-5 rounded-2xl bg-blue-50 border border-blue-100"><p class="text-xs font-bold text-blue-700 uppercase mb-2">📖 Comment ça marche</p><p class="text-sm text-slate-700">Mode WhatsApp activé par défaut. Le client tape son numéro, reçoit instantanément 2 boutons : <strong>Tourner la roue</strong> + <strong>Ma carte fidélité</strong>.</p></div>
+            <div class="p-5 rounded-2xl bg-amber-50 border border-amber-100"><p class="text-xs font-bold text-amber-700 uppercase mb-2">💡 Exemple concret</p><p class="text-sm text-slate-700">Numéro vérifié dans WhatsApp Business. Vous pouvez le relancer, lui envoyer une promo, lui souhaiter son anniversaire. <strong>Aucune perte de contact.</strong></p></div>
+            <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-100"><p class="text-xs font-bold text-emerald-700 uppercase mb-2">🎯 Gain</p><p class="text-sm text-slate-700">Capture <strong>×4 par rapport à l'email</strong>. Africains préfèrent WhatsApp à 92%. Indicatif Gabon, CI, Cameroun, Sénégal, France.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- F8: Campagnes WhatsApp avec image -->
+      <article class="feature-card bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
+        <div class="grid lg:grid-cols-2">
+          <div class="p-8 lg:p-10">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 text-white text-2xl shadow-lg">📤</div>
+            <h3 class="mt-4 text-2xl font-display font-extrabold">Campagnes WhatsApp marketing</h3>
+            <p class="mt-3 text-sm text-slate-500">Un message à toute votre base, en 30 secondes.</p>
+            <div class="mt-6 space-y-4">
+              <div class="p-4 rounded-xl bg-blue-50 border border-blue-100"><p class="text-xs font-bold text-blue-700 uppercase mb-1">📖 Comment ça marche</p><p class="text-sm text-slate-700">Templates Meta validés (texte, image, vidéo, carrousel). Sélection des destinataires (clients fidèles, positifs, ou tous), prévisualisation, lancement. <strong>100 ou 500 crédits/mois</strong> selon plan, max 2 campagnes/semaine.</p></div>
+              <div class="p-4 rounded-xl bg-amber-50 border border-amber-100"><p class="text-xs font-bold text-amber-700 uppercase mb-1">💡 Exemple concret</p><p class="text-sm text-slate-700">Boutique mode : carrousel de 5 nouveautés, bouton "Voir le produit". <strong>45% de clics, 3× plus de conversions</strong> qu'un post Instagram.</p></div>
+              <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-100"><p class="text-xs font-bold text-emerald-700 uppercase mb-1">🎯 Gain</p><p class="text-sm text-slate-700"><strong>98% taux d'ouverture</strong> (vs 22% en email). Activé seulement à partir de 100 clients fidèles, pour garantir un ROI.</p></div>
+            </div>
+          </div>
+          <div class="relative bg-gradient-to-br from-emerald-50 to-green-50 lg:flex items-center justify-center p-8">
+            <img src="./plaquette-assets/whatsapp.jpg" alt="Campagnes WhatsApp Cartelle" class="w-full h-full object-contain max-h-[500px]" />
+          </div>
+        </div>
+      </article>
+
+      <!-- F9: Notifications auto -->
+      <article class="feature-card bg-white rounded-3xl border border-slate-200 p-8 lg:p-10 shadow-sm">
+        <div class="grid lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-1">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 text-white text-2xl shadow-lg">🤖</div>
+            <h3 class="mt-4 text-2xl font-display font-extrabold">Notifications automatiques</h3>
+            <p class="mt-3 text-sm text-slate-500">Le rappel qu'il faut, au bon moment, sans rien faire.</p>
+          </div>
+          <div class="lg:col-span-2 grid sm:grid-cols-2 gap-4">
+            <div class="p-5 rounded-2xl bg-pink-50 border border-pink-100"><p class="text-xs font-bold text-pink-700 uppercase mb-2">🎂 Anniversaire</p><p class="text-sm text-slate-700">Le jour J, message + cadeau. <strong>+50 points bonus</strong> à l'inscription. Date verrouillée à vie (anti-fraude).</p></div>
+            <div class="p-5 rounded-2xl bg-amber-50 border border-amber-100"><p class="text-xs font-bold text-amber-700 uppercase mb-2">😴 Inactivité</p><p class="text-sm text-slate-700">Pas vu depuis 30 jours ? "On vous manque chez [vous] !" avec ses points en attente. <strong>+25% de retour</strong>.</p></div>
+            <div class="p-5 rounded-2xl bg-purple-50 border border-purple-100"><p class="text-xs font-bold text-purple-700 uppercase mb-2">⭐ Paliers de points</p><p class="text-sm text-slate-700">Atteint 100, 200, 500 points ? Notification automatique avec déblocage de récompenses. Effet "level up" addictif.</p></div>
+            <div class="p-5 rounded-2xl bg-red-50 border border-red-100"><p class="text-xs font-bold text-red-700 uppercase mb-2">⏰ Coupon qui expire</p><p class="text-sm text-slate-700">Coupon dans 3 jours ? Rappel automatique. <strong>+60% de taux d'utilisation</strong> vs sans rappel.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- F10: Bonus engagement -->
+      <article class="feature-card bg-white rounded-3xl border border-slate-200 p-8 lg:p-10 shadow-sm">
+        <div class="grid lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-1">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 text-white text-2xl shadow-lg">🎯</div>
+            <h3 class="mt-4 text-2xl font-display font-extrabold">Bonus +50 pts par plateforme</h3>
+            <p class="mt-3 text-sm text-slate-500">Quand le client perd à la roue, il peut quand même gagner.</p>
+          </div>
+          <div class="lg:col-span-2 grid sm:grid-cols-3 gap-4">
+            <div class="p-5 rounded-2xl bg-blue-50 border border-blue-100"><p class="text-xs font-bold text-blue-700 uppercase mb-2">📖 Comment ça marche</p><p class="text-sm text-slate-700">Si le client perd : "Suis-nous sur Insta = +50 pts", "Avis TripAdvisor = +50 pts". Chaque plateforme = 1 bonus unique.</p></div>
+            <div class="p-5 rounded-2xl bg-amber-50 border border-amber-100"><p class="text-xs font-bold text-amber-700 uppercase mb-2">💡 Exemple concret</p><p class="text-sm text-slate-700">Un client a fait Google Reviews. Il perd à la roue. On lui propose Insta + TikTok. <strong>100 pts en 30 secondes</strong> sans rien acheter.</p></div>
+            <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-100"><p class="text-xs font-bold text-emerald-700 uppercase mb-2">🎯 Gain</p><p class="text-sm text-slate-700">Vos abonnés Insta/TikTok explosent <strong>sans budget pub</strong>. Chaque client perdant devient ambassadeur multi-canal.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- F11: Multi-établissements -->
+      <article class="feature-card bg-white rounded-3xl border border-slate-200 p-8 lg:p-10 shadow-sm">
+        <div class="grid lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-1">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-500 text-white text-2xl shadow-lg">🏪</div>
+            <h3 class="mt-4 text-2xl font-display font-extrabold">Multi-établissements</h3>
+            <p class="mt-3 text-sm text-slate-500">Plusieurs points de vente ? Pilotez tout au même endroit.</p>
+          </div>
+          <div class="lg:col-span-2 grid sm:grid-cols-3 gap-4">
+            <div class="p-5 rounded-2xl bg-blue-50 border border-blue-100"><p class="text-xs font-bold text-blue-700 uppercase mb-2">📖 Comment ça marche</p><p class="text-sm text-slate-700">Démarrage = 1 établissement. Premium = 3. Sur-mesure = illimité. Chaque établissement a son QR, sa stratégie, ses lots, mais le même dashboard.</p></div>
+            <div class="p-5 rounded-2xl bg-amber-50 border border-amber-100"><p class="text-xs font-bold text-amber-700 uppercase mb-2">💡 Exemple concret</p><p class="text-sm text-slate-700">3 salons coiffure (Akanda, Glass, PK5). Chaque salon a sa roue avec ses lots locaux. Total des avis, clients, CA <strong>en 1 clic</strong>.</p></div>
+            <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-100"><p class="text-xs font-bold text-emerald-700 uppercase mb-2">🎯 Gain</p><p class="text-sm text-slate-700">Comparaison entre établissements. Vous identifiez les <strong>champions et les sous-performants</strong> en temps réel.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- F12: Dashboard -->
+      <article class="feature-card bg-white rounded-3xl border border-slate-200 p-8 lg:p-10 shadow-sm">
+        <div class="grid lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-1">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-500 text-white text-2xl shadow-lg">📊</div>
+            <h3 class="mt-4 text-2xl font-display font-extrabold">Dashboard analytics</h3>
+            <p class="mt-3 text-sm text-slate-500">Toutes vos données dans 1 écran. Décisions basées sur du concret.</p>
+          </div>
+          <div class="lg:col-span-2 grid sm:grid-cols-3 gap-4">
+            <div class="p-5 rounded-2xl bg-blue-50 border border-blue-100"><p class="text-xs font-bold text-blue-700 uppercase mb-2">📖 Comment ça marche</p><p class="text-sm text-slate-700">Total avis, % positifs, note moyenne, tours de roue, cartes actives, points distribués, top clients, distribution des notes, évolution mensuelle.</p></div>
+            <div class="p-5 rounded-2xl bg-amber-50 border border-amber-100"><p class="text-xs font-bold text-amber-700 uppercase mb-2">💡 Exemple concret</p><p class="text-sm text-slate-700">Avis chutent les week-ends ? Campagne WhatsApp "promo dimanche". <strong>+40% d'avis le week-end</strong> en 2 mois.</p></div>
+            <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-100"><p class="text-xs font-bold text-emerald-700 uppercase mb-2">🎯 Gain</p><p class="text-sm text-slate-700">Plus de gestion "à l'instinct". <strong>Vous pilotez avec des chiffres.</strong> Comme une grande marque.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- F13: Onboarding -->
+      <article class="feature-card bg-white rounded-3xl border border-slate-200 p-8 lg:p-10 shadow-sm">
+        <div class="grid lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-1">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-teal-500 to-cyan-500 text-white text-2xl shadow-lg">🎓</div>
+            <h3 class="mt-4 text-2xl font-display font-extrabold">Onboarding guidé</h3>
+            <p class="mt-3 text-sm text-slate-500">Opérationnel en 24h, sans formation technique.</p>
+          </div>
+          <div class="lg:col-span-2 grid sm:grid-cols-3 gap-4">
+            <div class="p-5 rounded-2xl bg-blue-50 border border-blue-100"><p class="text-xs font-bold text-blue-700 uppercase mb-2">📖 Comment ça marche</p><p class="text-sm text-slate-700">Pop-up "Premiers pas" en 5 étapes : Profil → Stratégie → Prix & Lots → Fidélité → QR Code. Astuces intégrées (ex: trouver son lien Google Reviews).</p></div>
+            <div class="p-5 rounded-2xl bg-amber-50 border border-amber-100"><p class="text-xs font-bold text-amber-700 uppercase mb-2">💡 Exemple concret</p><p class="text-sm text-slate-700">Nouveau marchand <strong>opérationnel en 17 minutes</strong> en moyenne. Pas de formation présentielle. Pas de notice à lire.</p></div>
+            <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-100"><p class="text-xs font-bold text-emerald-700 uppercase mb-2">🎯 Gain</p><p class="text-sm text-slate-700">Aucun mois "perdu" entre l'achat et l'utilisation. <strong>ROI dès la première semaine.</strong></p></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- F14: Conformité -->
+      <article class="feature-card bg-white rounded-3xl border border-slate-200 p-8 lg:p-10 shadow-sm">
+        <div class="grid lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-1">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-700 to-slate-900 text-white text-2xl shadow-lg">🛡️</div>
+            <h3 class="mt-4 text-2xl font-display font-extrabold">Conformité APDPVP / RGPD</h3>
+            <p class="mt-3 text-sm text-slate-500">Vos clients vous font confiance, vos régulateurs aussi.</p>
+          </div>
+          <div class="lg:col-span-2 grid sm:grid-cols-3 gap-4">
+            <div class="p-5 rounded-2xl bg-blue-50 border border-blue-100"><p class="text-xs font-bold text-blue-700 uppercase mb-2">📖 Comment ça marche</p><p class="text-sm text-slate-700">Pages /privacy + /terms intégrées, opt-out (STOP) automatique, droit à l'effacement, conservation limitée. Conforme à la loi gabonaise.</p></div>
+            <div class="p-5 rounded-2xl bg-amber-50 border border-amber-100"><p class="text-xs font-bold text-amber-700 uppercase mb-2">💡 Exemple concret</p><p class="text-sm text-slate-700">L'APDPVP vous contrôle ? Vous avez un <strong>rapport d'audit prêt</strong> + toutes les preuves de consentement et d'opt-out.</p></div>
+            <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-100"><p class="text-xs font-bold text-emerald-700 uppercase mb-2">🎯 Gain</p><p class="text-sm text-slate-700">Aucun risque d'amende. Vos clients voient une <strong>marque pro et sérieuse</strong>. Crédibilité immédiate.</p></div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- BANDEAU CHIFFRES -->
+<section class="relative py-20 px-5 sm:px-8 bg-gradient-to-r from-brand-700 via-brand-600 to-emerald-600 text-white overflow-hidden">
+  <div class="absolute inset-0 opacity-20">
+    <img src="./plaquette-assets/pattern.jpg" alt="" class="w-full h-full object-cover" />
+  </div>
+  <div class="relative max-w-6xl mx-auto text-center">
+    <h2 class="text-3xl sm:text-5xl font-display font-extrabold">Les chiffres qui parlent</h2>
+    <p class="mt-4 text-brand-100 text-lg max-w-2xl mx-auto">Moyennes constatées chez nos marchands après 3 mois d'utilisation</p>
+    <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div><div class="text-5xl sm:text-6xl font-display font-extrabold">×3</div><div class="mt-2 text-brand-100 text-sm uppercase tracking-wider">avis Google</div></div>
+      <div><div class="text-5xl sm:text-6xl font-display font-extrabold">98%</div><div class="mt-2 text-brand-100 text-sm uppercase tracking-wider">ouverture WhatsApp</div></div>
+      <div><div class="text-5xl sm:text-6xl font-display font-extrabold">+40%</div><div class="mt-2 text-brand-100 text-sm uppercase tracking-wider">clients récurrents</div></div>
+      <div><div class="text-5xl sm:text-6xl font-display font-extrabold">+22%</div><div class="mt-2 text-brand-100 text-sm uppercase tracking-wider">chiffre d'affaires</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TARIFS -->
+<section id="tarifs" class="py-24 px-5 sm:px-8 bg-white">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto mb-14">
+      <span class="inline-block px-4 py-1.5 rounded-full bg-brand-50 text-brand-700 text-xs font-bold uppercase tracking-wider border border-brand-200">Tarifs simples et transparents</span>
+      <h2 class="mt-5 text-3xl sm:text-5xl font-display font-extrabold">À partir de <span class="gradient-text">40 000 FCFA/mois</span>.</h2>
+      <p class="mt-5 text-lg text-slate-600">Pas de frais cachés. Pas de commission sur vos ventes. Pas d'engagement. Annulez en 1 clic.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- Découverte -->
+      <div class="rounded-3xl border-2 border-slate-200 p-8 bg-white hover:border-brand-300 transition-colors">
+        <h3 class="font-display font-extrabold text-xl">Découverte</h3>
+        <p class="text-sm text-slate-500 mt-1">Pour tester sans risque</p>
+        <div class="mt-6"><span class="text-4xl font-display font-extrabold">Gratuit</span><p class="text-xs text-slate-400 mt-1">14 jours d'essai</p></div>
+        <ul class="mt-7 space-y-3 text-sm text-slate-700">
+          <li class="flex gap-2"><span class="text-brand-500">✓</span> 1 établissement</li>
+          <li class="flex gap-2"><span class="text-brand-500">✓</span> Roue + Carte fidélité</li>
+          <li class="flex gap-2"><span class="text-brand-500">✓</span> QR Code personnalisé</li>
+          <li class="flex gap-2"><span class="text-brand-500">✓</span> Capture WhatsApp</li>
+          <li class="flex gap-2"><span class="text-slate-300">—</span> <span class="text-slate-400">Pas de campagnes WhatsApp</span></li>
+          <li class="flex gap-2"><span class="text-slate-300">—</span> <span class="text-slate-400">Support email seulement</span></li>
+        </ul>
+      </div>
+
+      <!-- Démarrage 40 000 -->
+      <div class="relative rounded-3xl border-2 border-brand-500 p-8 bg-gradient-to-br from-brand-50/30 to-emerald-50/30 shadow-2xl shadow-brand-500/20">
+        <span class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-brand-600 to-emerald-500 text-white text-xs font-bold tracking-wide uppercase shadow-lg">🔥 Le plus choisi</span>
+        <h3 class="font-display font-extrabold text-xl text-brand-700">Démarrage</h3>
+        <p class="text-sm text-slate-500 mt-1">Le pack idéal pour 90% des commerces</p>
+        <div class="mt-6">
+          <span class="text-4xl font-display font-extrabold gradient-text">40 000</span>
+          <span class="text-sm text-slate-500 ml-1">FCFA / mois</span>
+          <p class="text-xs text-emerald-600 font-medium mt-1">Économisez 25% par rapport au mensuel</p>
+        </div>
+        <ul class="mt-7 space-y-3 text-sm text-slate-700">
+          <li class="flex gap-2"><span class="text-brand-500 font-bold">✓</span> 1 établissement</li>
+          <li class="flex gap-2"><span class="text-brand-500 font-bold">✓</span> Roue + Carte fidélité illimitée</li>
+          <li class="flex gap-2"><span class="text-brand-500 font-bold">✓</span> Routage hebdomadaire intelligent</li>
+          <li class="flex gap-2"><span class="text-brand-500 font-bold">✓</span> <strong>100 crédits WhatsApp/mois</strong></li>
+          <li class="flex gap-2"><span class="text-brand-500 font-bold">✓</span> Notifications auto (anniversaire, inactivité, paliers, coupons)</li>
+          <li class="flex gap-2"><span class="text-brand-500 font-bold">✓</span> Bonus engagement +50pts/plateforme</li>
+          <li class="flex gap-2"><span class="text-brand-500 font-bold">✓</span> Statistiques avancées</li>
+          <li class="flex gap-2"><span class="text-brand-500 font-bold">✓</span> Support prioritaire WhatsApp</li>
+        </ul>
+        <a href="#" class="mt-8 block text-center py-4 rounded-2xl bg-gradient-to-r from-brand-600 to-emerald-500 text-white font-semibold shadow-xl shadow-brand-500/30 hover:shadow-2xl transition-all">Démarrer maintenant</a>
+      </div>
+
+      <!-- Premium -->
+      <div class="rounded-3xl border-2 border-slate-200 p-8 bg-white hover:border-brand-300 transition-colors">
+        <h3 class="font-display font-extrabold text-xl">Premium</h3>
+        <p class="text-sm text-slate-500 mt-1">Pour les chaînes ambitieuses</p>
+        <div class="mt-6"><span class="text-4xl font-display font-extrabold">120 000</span><span class="text-sm text-slate-500 ml-1">FCFA / mois</span></div>
+        <ul class="mt-7 space-y-3 text-sm text-slate-700">
+          <li class="flex gap-2"><span class="text-brand-500 font-bold">✓</span> Tout le pack <strong>Démarrage</strong>, et :</li>
+          <li class="flex gap-2"><span class="text-brand-500 font-bold">✓</span> <strong>Jusqu'à 3 établissements</strong></li>
+          <li class="flex gap-2"><span class="text-brand-500 font-bold">✓</span> <strong>500 crédits WhatsApp/mois</strong></li>
+          <li class="flex gap-2"><span class="text-brand-500 font-bold">✓</span> Branding entièrement personnalisé</li>
+          <li class="flex gap-2"><span class="text-brand-500 font-bold">✓</span> Wallet Apple & Google</li>
+          <li class="flex gap-2"><span class="text-brand-500 font-bold">✓</span> Analytics multi-établissements</li>
+          <li class="flex gap-2"><span class="text-brand-500 font-bold">✓</span> Account manager dédié</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="mt-10 text-center text-sm text-slate-500">
+      🛡️ <strong>Garantie 14 jours satisfait ou remboursé.</strong> Aucune carte bancaire requise pour commencer. Paiement Mobile Money & Carte bancaire via E-Billing.
+    </p>
+  </div>
+</section>
+
+<!-- TÉMOIGNAGES -->
+<section class="py-24 px-5 sm:px-8 bg-slate-50">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-14">
+      <span class="inline-block px-4 py-1.5 rounded-full bg-amber-50 text-amber-700 text-xs font-bold uppercase tracking-wider border border-amber-200">Ils ont essayé. Ils en parlent.</span>
+      <h2 class="mt-5 text-3xl sm:text-4xl font-display font-extrabold">Vrais commerces, vrais résultats.</h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="bg-white p-7 rounded-3xl border border-slate-200 shadow-sm">
+        <div class="flex gap-1 text-amber-400">★★★★★</div>
+        <p class="mt-4 text-slate-700 leading-relaxed">"En 6 semaines, on est passés de 28 à 94 avis Google. La roue, c'est devenu LE truc dont les clients parlent à leurs potes. C'est viral."</p>
+        <div class="mt-5 flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-500 to-emerald-500 flex items-center justify-center text-white font-bold">A</div>
+          <div><div class="font-bold text-sm">Amadou K.</div><div class="text-xs text-slate-500">Le Baobab — Restaurant, Douala</div></div>
+        </div>
+      </div>
+      <div class="bg-white p-7 rounded-3xl border border-slate-200 shadow-sm">
+        <div class="flex gap-1 text-amber-400">★★★★★</div>
+        <p class="mt-4 text-slate-700 leading-relaxed">"La carte fidélité digitale a remplacé nos vieilles cartes en carton qu'on perdait. Maintenant je connais TOUS mes clients réguliers et je peux leur écrire en 2 clics."</p>
+        <div class="mt-5 flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">F</div>
+          <div><div class="font-bold text-sm">Fatou D.</div><div class="text-xs text-slate-500">Beauté Divine — Salon, Dakar</div></div>
+        </div>
+      </div>
+      <div class="bg-white p-7 rounded-3xl border border-slate-200 shadow-sm">
+        <div class="flex gap-1 text-amber-400">★★★★★</div>
+        <p class="mt-4 text-slate-700 leading-relaxed">"On a vu notre CA mensuel grimper de 22% en 5 mois grâce aux campagnes WhatsApp et aux relances anniversaire. Le ROI a été net dès le 2e mois."</p>
+        <div class="mt-5 flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-white font-bold">JP</div>
+          <div><div class="font-bold text-sm">Jean-Pierre M.</div><div class="text-xs text-slate-500">Afro Chic — Boutique, Abidjan</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="py-24 px-5 sm:px-8 bg-white">
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-12">
+      <span class="inline-block px-4 py-1.5 rounded-full bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider border border-slate-200">Questions fréquentes</span>
+      <h2 class="mt-5 text-3xl sm:text-4xl font-display font-extrabold">Tout ce que vous voulez savoir.</h2>
+    </div>
+    <div class="space-y-3">
+      <details class="group p-6 bg-white rounded-2xl border border-slate-200 hover:border-brand-300 transition-colors">
+        <summary class="flex justify-between items-center cursor-pointer font-display font-bold text-slate-900">Mes clients doivent télécharger une application ?<span class="ml-4 text-brand-500 transition-transform group-open:rotate-45 text-2xl">+</span></summary>
+        <p class="mt-4 text-slate-600 leading-relaxed">Non. Zéro app à installer. Vos clients scannent simplement le QR code avec l'appareil photo de leur téléphone. La page Cartelle s'ouvre directement dans le navigateur. C'est la même chose qu'ouvrir un menu QR au restaurant.</p>
+      </details>
+      <details class="group p-6 bg-white rounded-2xl border border-slate-200 hover:border-brand-300 transition-colors">
+        <summary class="flex justify-between items-center cursor-pointer font-display font-bold text-slate-900">Combien de temps pour être opérationnel ?<span class="ml-4 text-brand-500 transition-transform group-open:rotate-45 text-2xl">+</span></summary>
+        <p class="mt-4 text-slate-600 leading-relaxed">Entre 15 minutes et 24 heures. L'onboarding guidé vous accompagne en 5 étapes. Notre équipe vous appelle si besoin d'aide. Vous recevez votre QR code physique en 24-48h.</p>
+      </details>
+      <details class="group p-6 bg-white rounded-2xl border border-slate-200 hover:border-brand-300 transition-colors">
+        <summary class="flex justify-between items-center cursor-pointer font-display font-bold text-slate-900">Combien coûtent les cadeaux que je distribue à la roue ?<span class="ml-4 text-brand-500 transition-transform group-open:rotate-45 text-2xl">+</span></summary>
+        <p class="mt-4 text-slate-600 leading-relaxed">Vous décidez. Café offert, -10%, dessert gratuit... Vous contrôlez 100% des lots, des probabilités et des quantités. La règle d'or : un lot doit coûter moins cher qu'il ne génère de bouche-à-oreille.</p>
+      </details>
+      <details class="group p-6 bg-white rounded-2xl border border-slate-200 hover:border-brand-300 transition-colors">
+        <summary class="flex justify-between items-center cursor-pointer font-display font-bold text-slate-900">Puis-je arrêter à tout moment ?<span class="ml-4 text-brand-500 transition-transform group-open:rotate-45 text-2xl">+</span></summary>
+        <p class="mt-4 text-slate-600 leading-relaxed">Oui. Aucun engagement, aucune durée minimale. Vous arrêtez quand vous voulez depuis votre dashboard. Vous gardez accès jusqu'à la fin du mois payé. Vos données sont conservées 12 mois si vous changez d'avis.</p>
+      </details>
+      <details class="group p-6 bg-white rounded-2xl border border-slate-200 hover:border-brand-300 transition-colors">
+        <summary class="flex justify-between items-center cursor-pointer font-display font-bold text-slate-900">Comment je paie ?<span class="ml-4 text-brand-500 transition-transform group-open:rotate-45 text-2xl">+</span></summary>
+        <p class="mt-4 text-slate-600 leading-relaxed">Mobile Money (Airtel Money, Moov Money) ou carte bancaire via notre partenaire E-Billing. Paiement sécurisé en FCFA, reçu fiscal automatique. Vous payez après les 14 jours d'essai gratuit.</p>
+      </details>
+      <details class="group p-6 bg-white rounded-2xl border border-slate-200 hover:border-brand-300 transition-colors">
+        <summary class="flex justify-between items-center cursor-pointer font-display font-bold text-slate-900">Mes données sont-elles protégées ?<span class="ml-4 text-brand-500 transition-transform group-open:rotate-45 text-2xl">+</span></summary>
+        <p class="mt-4 text-slate-600 leading-relaxed">Oui. Hébergement sécurisé, chiffrement TLS, isolation par marchand. Conforme à la loi gabonaise sur la protection des données personnelles (APDPVP). Politique de confidentialité publique sur notre site.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="relative py-24 px-5 sm:px-8 bg-gradient-to-br from-brand-700 via-brand-600 to-emerald-600 text-white overflow-hidden">
+  <div class="absolute inset-0 opacity-15"><img src="./plaquette-assets/pattern.jpg" alt="" class="w-full h-full object-cover" /></div>
+  <div class="relative max-w-4xl mx-auto text-center">
+    <h2 class="text-3xl sm:text-5xl font-display font-extrabold leading-tight">
+      Pendant que vous lisez ceci,<br/>
+      <span class="text-amber-300">vos concurrents agissent.</span>
+    </h2>
+    <p class="mt-6 text-lg text-brand-100 max-w-2xl mx-auto">14 jours gratuits, aucun engagement. À 40 000 FCFA/mois après l'essai. Pas de carte bancaire requise pour commencer.</p>
+    <div class="mt-10 flex flex-wrap gap-4 justify-center">
+      <a href="#" class="px-8 py-4 rounded-2xl bg-white text-brand-700 font-bold shadow-2xl hover:scale-105 transition-transform">Démarrer mon essai gratuit →</a>
+      <a href="mailto:contact@cartelle.app" class="px-8 py-4 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/30 text-white font-semibold hover:bg-white/20 transition-colors">✉️ Parler à un conseiller</a>
+    </div>
+    <p class="mt-8 text-xs text-brand-200">🛡️ Garantie 14 jours satisfait ou remboursé · Annulez en 1 clic · Support en français</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="py-12 px-5 sm:px-8 bg-slate-900 text-slate-400">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid md:grid-cols-4 gap-8">
+      <div>
+        <div class="flex items-center gap-2.5 mb-4">
+          <img src="./plaquette-assets/logo.png" alt="Cartelle" class="h-9 w-auto brightness-0 invert" />
+          <span class="font-display font-bold text-xl text-white">Cartelle</span>
+        </div>
+        <p class="text-sm leading-relaxed">La plateforme de fidélisation et gamification pour les commerces africains. Édité par Studia Labs.</p>
+      </div>
+      <div>
+        <h4 class="text-white font-display font-bold mb-3">Produit</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#parcours" class="hover:text-white transition-colors">Parcours client</a></li>
+          <li><a href="#fonctions" class="hover:text-white transition-colors">Fonctionnalités</a></li>
+          <li><a href="#tarifs" class="hover:text-white transition-colors">Tarifs</a></li>
+          <li><a href="#faq" class="hover:text-white transition-colors">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white font-display font-bold mb-3">Contact</h4>
+        <ul class="space-y-2 text-sm">
+          <li>📧 contact@cartelle.app</li>
+          <li>🌍 cartelle.io</li>
+          <li>🏢 Libreville · Douala · Abidjan · Dakar</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white font-display font-bold mb-3">Légal</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="/privacy" class="hover:text-white transition-colors">Politique de confidentialité</a></li>
+          <li><a href="/terms" class="hover:text-white transition-colors">Conditions d'utilisation</a></li>
+          <li>Conforme APDPVP / RGPD</li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-10 pt-6 border-t border-slate-800 text-xs text-center">© 2026 Cartelle by Studia Labs. Tous droits réservés.</div>
+  </div>
+</footer>
+
+<button onclick="window.print()" class="no-print fixed bottom-6 right-6 px-4 py-3 rounded-full bg-slate-900 text-white text-sm font-medium shadow-lg hover:bg-slate-800 transition-colors flex items-center gap-2 z-40">🖨️ Imprimer / PDF</button>
+
+</body>
+</html>
