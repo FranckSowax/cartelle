@@ -87,14 +87,14 @@ export default function RedirectPage() {
 
   const [merchant, setMerchant] = useState<any>(null);
   const [isClient, setIsClient] = useState(false);
-  const [countdown, setCountdown] = useState(10);
+  const [countdown, setCountdown] = useState(25);
   const [canProceed, setCanProceed] = useState(false);
   const [redirectUrl, setRedirectUrl] = useState('');
   const [strategy, setStrategy] = useState('google_maps');
   const [hasClickedSocial, setHasClickedSocial] = useState(false);
 
   // WhatsApp workflow states
-  const [whatsappCountdown, setWhatsappCountdown] = useState(10);
+  const [whatsappCountdown, setWhatsappCountdown] = useState(25);
   const [whatsappSending, setWhatsappSending] = useState(false);
   const [whatsappSent, setWhatsappSent] = useState(false);
   const [whatsappError, setWhatsappError] = useState('');
