@@ -206,8 +206,8 @@ export async function POST(request: NextRequest) {
         .eq('recipient_phone', recipient.phone)
         .eq('status', 'queued');
 
-      // Rate limiting (anti-spam Whapi/Meta) — 25s entre chaque message
-      await new Promise(resolve => setTimeout(resolve, 25000));
+      // Rate limiting
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
 
     // 7. Deduct credits (only for successfully sent messages)
