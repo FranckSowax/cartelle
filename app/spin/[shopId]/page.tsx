@@ -51,7 +51,10 @@ const splitTextForSegment = (text: string): string[] => {
   return [text.slice(0, cutIndex), text.slice(cutIndex + 1)];
 };
 
-// Confetti hook
+// Confetti hook — optimisé mobile (DPR cap, particules réduites, batch par couleur)
+const CONFETTI_COLORS = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#FFD93D', '#6C5CE7'];
+const MAX_PARTICLES = 180;
+
 const useConfetti = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Array<{
@@ -59,24 +62,53 @@ const useConfetti = () => {
     color: string; size: number; rotation: number; rotationSpeed: number;
   }>>([]);
   const animationRef = useRef<number | null>(null);
-  const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#FFD93D', '#6C5CE7'];
+  const dprRef = useRef<number>(1);
+  const reducedMotionRef = useRef<boolean>(false);
 
-  const createParticles = useCallback((x: number, y: number, count: number = 60) => {
-    const particles = [];
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    reducedMotionRef.current = typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+    const setupCanvas = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dprRef.current = dpr;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+      const ctx = canvas.getContext('2d');
+      if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+
+    setupCanvas();
+    window.addEventListener('resize', setupCanvas, { passive: true });
+    return () => window.removeEventListener('resize', setupCanvas);
+  }, []);
+
+  const createParticles = useCallback((x: number, y: number, count: number) => {
+    const additions = [];
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
       const velocity = 3 + Math.random() * 5;
-      particles.push({
+      additions.push({
         x, y,
         vx: Math.cos(angle) * velocity,
         vy: Math.sin(angle) * velocity - 4,
-        color: colors[Math.floor(Math.random() * colors.length)],
+        color: CONFETTI_COLORS[(Math.random() * CONFETTI_COLORS.length) | 0],
         size: 3 + Math.random() * 5,
         rotation: Math.random() * Math.PI * 2,
         rotationSpeed: (Math.random() - 0.5) * 0.2,
       });
     }
-    particlesRef.current = particles;
+    const merged = particlesRef.current.concat(additions);
+    particlesRef.current = merged.length > MAX_PARTICLES
+      ? merged.slice(merged.length - MAX_PARTICLES)
+      : merged;
   }, []);
 
   const animate = useCallback(() => {
@@ -84,27 +116,55 @@ const useConfetti = () => {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particlesRef.current = particlesRef.current.filter(p => {
-      p.x += p.vx; p.y += p.vy; p.vy += 0.25; p.vx *= 0.99; p.rotation += p.rotationSpeed;
-      if (p.y > canvas.height + 50) return false;
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.rotation);
-      ctx.fillStyle = p.color;
-      ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
-      ctx.restore();
-      return true;
-    });
-    if (particlesRef.current.length > 0) {
+
+    const cssWidth = canvas.width / dprRef.current;
+    const cssHeight = canvas.height / dprRef.current;
+    ctx.clearRect(0, 0, cssWidth, cssHeight);
+
+    const alive: typeof particlesRef.current = [];
+    const particles = particlesRef.current;
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.25;
+      p.vx *= 0.99;
+      p.rotation += p.rotationSpeed;
+      if (p.y <= cssHeight + 50) alive.push(p);
+    }
+    particlesRef.current = alive;
+
+    if (alive.length > 0) {
+      const byColor: Record<string, typeof alive> = {};
+      for (let i = 0; i < alive.length; i++) {
+        const p = alive[i];
+        (byColor[p.color] ||= []).push(p);
+      }
+      for (const color in byColor) {
+        ctx.fillStyle = color;
+        const group = byColor[color];
+        for (let i = 0; i < group.length; i++) {
+          const p = group[i];
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rotation);
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+          ctx.restore();
+        }
+      }
       animationRef.current = requestAnimationFrame(animate);
+    } else {
+      animationRef.current = null;
     }
   }, []);
 
   const trigger = useCallback((x: number, y: number) => {
-    createParticles(x, y, 50);
-    if (animationRef.current !== null) cancelAnimationFrame(animationRef.current);
-    animate();
+    if (reducedMotionRef.current) return;
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    createParticles(x, y, isMobile ? 25 : 50);
+    if (animationRef.current === null) {
+      animationRef.current = requestAnimationFrame(animate);
+    }
   }, [createParticles, animate]);
 
   useEffect(() => () => {
@@ -717,12 +777,10 @@ export default function SpinPage() {
         </div>
       )}
 
-      {/* Confetti canvas */}
+      {/* Confetti canvas — sizing handled by useConfetti (DPR-aware) */}
       <canvas
         ref={canvasRef}
         className="fixed inset-0 pointer-events-none z-50"
-        width={typeof window !== 'undefined' ? window.innerWidth : 1920}
-        height={typeof window !== 'undefined' ? window.innerHeight : 1080}
       />
 
       {/* Background */}
