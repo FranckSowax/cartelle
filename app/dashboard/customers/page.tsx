@@ -13,6 +13,7 @@ import { Users, TrendingUp, Star, Search, Mail, Calendar, Filter, Phone, Message
 
 interface Customer {
   user_token: string;
+  name: string | null;
   email: string | null;
   phone: string | null;
   first_visit: string;
@@ -40,16 +41,23 @@ function CustomerDetailsModal({ customer, onClose, isFr }: CustomerDetailsModalP
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-4">
               <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-xl font-bold shadow-lg ${
-                customer.email || customer.phone
+                customer.name || customer.email || customer.phone
                   ? 'bg-white text-teal-600'
                   : 'bg-teal-500 text-white'
               }`}>
-                {customer.email ? customer.email[0].toUpperCase() : customer.phone ? '📱' : '?'}
+                {customer.name
+                  ? customer.name[0].toUpperCase()
+                  : customer.email
+                    ? customer.email[0].toUpperCase()
+                    : customer.phone ? '📱' : '?'}
               </div>
               <div>
                 <h2 className="text-lg font-bold">
-                  {customer.email || customer.phone || (isFr ? 'Client Anonyme' : 'Anonymous Customer')}
+                  {customer.name || customer.email || customer.phone || (isFr ? 'Client Anonyme' : 'Anonymous Customer')}
                 </h2>
+                {customer.name && (customer.email || customer.phone) && (
+                  <p className="text-teal-100 text-xs">{customer.email || customer.phone}</p>
+                )}
                 <p className="text-teal-100 text-sm font-mono">
                   ID: {customer.user_token.substring(0, 12)}...
                 </p>
@@ -225,6 +233,7 @@ export default function CustomersPage() {
         if (!existing) {
           map.set(key, {
             user_token: feedback.user_token,
+            name: null,
             email: feedback.customer_email || null,
             phone: feedback.customer_phone || null,
             first_visit: feedback.created_at,
@@ -250,6 +259,34 @@ export default function CustomersPage() {
         }
       });
 
+      // Réconcilier avec les noms saisis sur la carte de fidélité
+      const { data: loyaltyClients } = await supabase
+        .from('loyalty_clients')
+        .select('name, phone, email, user_token')
+        .eq('merchant_id', user.id);
+
+      if (loyaltyClients && loyaltyClients.length > 0) {
+        const byToken = new Map<string, string>();
+        const byPhone = new Map<string, string>();
+        const byEmail = new Map<string, string>();
+        for (const lc of loyaltyClients) {
+          if (!lc.name) continue;
+          if (lc.user_token) byToken.set(lc.user_token, lc.name);
+          if (lc.phone) byPhone.set(lc.phone, lc.name);
+          if (lc.email) byEmail.set(lc.email.toLowerCase(), lc.name);
+        }
+        const enrich = (map: Map<string, Customer>) => {
+          for (const c of map.values()) {
+            const fromToken = c.user_token ? byToken.get(c.user_token) : undefined;
+            const fromPhone = c.phone ? byPhone.get(c.phone) : undefined;
+            const fromEmail = c.email ? byEmail.get(c.email.toLowerCase()) : undefined;
+            c.name = fromToken || fromPhone || fromEmail || null;
+          }
+        };
+        enrich(webCustomersMap);
+        enrich(whatsappCustomersMap);
+      }
+
       setWebCustomers(Array.from(webCustomersMap.values()));
       setWhatsappCustomers(Array.from(whatsappCustomersMap.values()));
       setLoading(false);
@@ -267,11 +304,14 @@ export default function CustomersPage() {
     } else {
       const query = searchQuery.toLowerCase();
       const filtered = customers.filter(c => {
+        const nameMatch = c.name && c.name.toLowerCase().includes(query);
         if (activeTab === 'web') {
-          return (c.email && c.email.toLowerCase().includes(query)) ||
+          return nameMatch ||
+                 (c.email && c.email.toLowerCase().includes(query)) ||
                  c.user_token.toLowerCase().includes(query);
         } else {
-          return (c.phone && c.phone.includes(query)) ||
+          return nameMatch ||
+                 (c.phone && c.phone.includes(query)) ||
                  c.user_token.toLowerCase().includes(query);
         }
       });
@@ -420,20 +460,24 @@ export default function CustomersPage() {
                                 ? 'bg-emerald-50 text-emerald-600'
                                 : 'bg-gray-100 text-gray-400'
                           }`}>
-                            {activeTab === 'web'
-                              ? (customer.email ? customer.email[0].toUpperCase() : '?')
-                              : (customer.phone ? '📱' : '?')
+                            {customer.name
+                              ? customer.name[0].toUpperCase()
+                              : activeTab === 'web'
+                                ? (customer.email ? customer.email[0].toUpperCase() : '?')
+                                : (customer.phone ? '📱' : '?')
                             }
                           </div>
                           <div>
                             <p className="text-sm font-medium text-gray-900">
-                              {activeTab === 'web'
+                              {customer.name || (activeTab === 'web'
                                 ? (customer.email || (isFr ? 'Client Anonyme' : 'Anonymous Customer'))
-                                : (customer.phone || (isFr ? 'Client Anonyme' : 'Anonymous Customer'))
+                                : (customer.phone || (isFr ? 'Client Anonyme' : 'Anonymous Customer')))
                               }
                             </p>
                             <p className="text-xs text-gray-400 font-mono">
-                              {customer.user_token.substring(0, 8)}...
+                              {customer.name
+                                ? (activeTab === 'web' ? (customer.email || customer.user_token.substring(0, 8) + '...') : (customer.phone || customer.user_token.substring(0, 8) + '...'))
+                                : customer.user_token.substring(0, 8) + '...'}
                             </p>
                           </div>
                         </div>
