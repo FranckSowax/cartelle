@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { getWhatsAppConfig } from '@/lib/whatsapp/config';
-import { sendTemplateMessage } from '@/lib/whatsapp/client';
+import { sendTemplateMessage, validatePhoneFormat } from '@/lib/whatsapp/client';
 import { isExemptEmail } from '@/lib/config/admin';
 
 const MIN_LOYALTY_CLIENTS = 100;
@@ -169,24 +169,34 @@ export async function POST(request: NextRequest) {
     for (const recipient of recipients) {
       const phone = recipient.phone.replace(/^\+/, '');
 
-      const result = await sendTemplateMessage(config, {
-        to: phone,
-        templateName: template.name,
-        languageCode: template.language,
-        components: templateComponents,
-      });
-
       const updateData: any = {};
-      if (result.success) {
-        updateData.status = 'sent';
-        updateData.sent_at = new Date().toISOString();
-        updateData.meta_message_id = result.messageId;
-        sent++;
-      } else {
+
+      // Pré-validation du format (longueur par indicatif pays)
+      const formatCheck = validatePhoneFormat(phone);
+      if (!formatCheck.valid) {
         updateData.status = 'failed';
         updateData.failed_at = new Date().toISOString();
-        updateData.error_message = result.error;
+        updateData.error_message = `[FORMAT_INVALID] ${formatCheck.reason}`;
         failed++;
+      } else {
+        const result = await sendTemplateMessage(config, {
+          to: phone,
+          templateName: template.name,
+          languageCode: template.language,
+          components: templateComponents,
+        });
+
+        if (result.success) {
+          updateData.status = 'sent';
+          updateData.sent_at = new Date().toISOString();
+          updateData.meta_message_id = result.messageId;
+          sent++;
+        } else {
+          updateData.status = 'failed';
+          updateData.failed_at = new Date().toISOString();
+          updateData.error_message = result.error;
+          failed++;
+        }
       }
 
       await supabaseAdmin
@@ -196,8 +206,8 @@ export async function POST(request: NextRequest) {
         .eq('recipient_phone', recipient.phone)
         .eq('status', 'queued');
 
-      // Rate limiting
-      await new Promise(resolve => setTimeout(resolve, 100));
+      // Rate limiting (anti-spam Whapi/Meta) — 25s entre chaque message
+      await new Promise(resolve => setTimeout(resolve, 25000));
     }
 
     // 7. Deduct credits (only for successfully sent messages)

@@ -12,6 +12,76 @@ const WHAPI_BASE = 'https://gate.whapi.cloud';
 const WHAPI_INTERACTIVE_URL = `${WHAPI_BASE}/messages/interactive`;
 const WHAPI_TEXT_URL = `${WHAPI_BASE}/messages/text`;
 const WHAPI_CAROUSEL_URL = `${WHAPI_BASE}/messages/carousel`;
+const WHAPI_CONTACTS_URL = `${WHAPI_BASE}/contacts`;
+
+// ─── Validation longueur par indicatif pays (E.164 sans +) ──────────────────
+const COUNTRY_PHONE_LENGTHS: Record<string, { min: number; max: number }> = {
+  '241': { min: 11, max: 12 },  // Gabon
+  '225': { min: 13, max: 13 },  // Côte d'Ivoire (depuis 2021) : 225 + 10 chiffres
+  '237': { min: 12, max: 12 },  // Cameroun
+  '221': { min: 12, max: 12 },  // Sénégal
+  '33':  { min: 11, max: 11 },  // France
+  '44':  { min: 12, max: 13 },  // UK
+  '1':   { min: 11, max: 11 },  // US/CA
+};
+
+/** Valide la longueur d'un numéro selon son indicatif. */
+export function validatePhoneFormat(phoneE164: string): { valid: boolean; reason?: string } {
+  const cleaned = (phoneE164 || '').replace(/[^\d]/g, '');
+  if (!cleaned) return { valid: false, reason: 'Numéro vide' };
+
+  const sortedCodes = Object.keys(COUNTRY_PHONE_LENGTHS).sort((a, b) => b.length - a.length);
+  for (const code of sortedCodes) {
+    if (cleaned.startsWith(code)) {
+      const { min, max } = COUNTRY_PHONE_LENGTHS[code];
+      if (cleaned.length < min || cleaned.length > max) {
+        return {
+          valid: false,
+          reason: `Longueur invalide pour +${code} (attendu ${min}-${max} chiffres, reçu ${cleaned.length})`,
+        };
+      }
+      return { valid: true };
+    }
+  }
+  if (cleaned.length < 8 || cleaned.length > 15) {
+    return { valid: false, reason: `Longueur ${cleaned.length} hors plage E.164 (8-15)` };
+  }
+  return { valid: true };
+}
+
+/**
+ * Vérifie via l'API Whapi si un numéro a un compte WhatsApp actif.
+ * Retourne hasWhatsApp=null en cas d'erreur API (ne bloque pas l'envoi).
+ */
+export async function checkWhatsAppContact(
+  apiKey: string,
+  phoneNumber: string
+): Promise<{ hasWhatsApp: boolean | null; waId?: string; error?: string }> {
+  if (!apiKey) return { hasWhatsApp: null, error: 'API key missing' };
+  const cleaned = (phoneNumber || '').replace(/[^\d]/g, '');
+  if (!cleaned) return { hasWhatsApp: null, error: 'Empty phone' };
+
+  try {
+    const response = await fetch(`${WHAPI_CONTACTS_URL}?phones=${cleaned}`, {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${apiKey}`, Accept: 'application/json' },
+    });
+
+    if (!response.ok) return { hasWhatsApp: null, error: `HTTP ${response.status}` };
+
+    const data = await response.json();
+    const contacts = data.contacts || [];
+    if (contacts.length === 0) return { hasWhatsApp: false };
+
+    const contact = contacts[0];
+    if (contact.status === 'valid' || contact.wa_id) {
+      return { hasWhatsApp: true, waId: contact.wa_id };
+    }
+    return { hasWhatsApp: false };
+  } catch (error: any) {
+    return { hasWhatsApp: null, error: error.message };
+  }
+}
 
 // ─── Meta Cloud API ────────────────────────────
 const META_API_VERSION = 'v21.0';

@@ -454,7 +454,7 @@ function SendCampaignPage() {
       setSendResults([...results]);
 
       if (i < selectedArray.length - 1) {
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, 25000));
       }
     }
 
