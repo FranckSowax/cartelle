@@ -160,8 +160,14 @@ const useConfetti = () => {
 
   const trigger = useCallback((x: number, y: number) => {
     if (reducedMotionRef.current) return;
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-    createParticles(x, y, isMobile ? 25 : 50);
+    if (typeof window === 'undefined') return;
+    const isMobile = window.innerWidth < 768;
+    const nav = navigator as Navigator & { deviceMemory?: number };
+    const isLowEnd =
+      (nav.hardwareConcurrency !== undefined && nav.hardwareConcurrency <= 4) ||
+      (nav.deviceMemory !== undefined && nav.deviceMemory <= 2);
+    const count = isLowEnd ? 15 : isMobile ? 25 : 50;
+    createParticles(x, y, count);
     if (animationRef.current === null) {
       animationRef.current = requestAnimationFrame(animate);
     }
